@@ -1,7 +1,7 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
 
-import Bio from "../components/bio"
+// import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm, scale } from "../utils/typography"
@@ -45,11 +45,11 @@ class BlogPostTemplate extends React.Component {
             }}
           />
           <footer>
-            <Bio />
+            {/* <Bio /> */}
           </footer>
         </article>
 
-        <nav>
+        {/* <nav>
           <ul
             style={{
               display: `flex`,
@@ -74,7 +74,7 @@ class BlogPostTemplate extends React.Component {
               )}
             </li>
           </ul>
-        </nav>
+        </nav> */}
       </Layout>
     )
   }
