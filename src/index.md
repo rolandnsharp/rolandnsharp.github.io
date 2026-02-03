@@ -13,11 +13,12 @@ layout: "base.njk"
     ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚══════╝ 
   </pre> -->
   <div class="neofetch-info">
-    <p><span class="neofetch-title">Blog</span>: <a href="https://rolandnsharp.github.io">rolandnsharp.github.io</a></p>
-    <p>--------------------</p>
-    <p><span class="neofetch-title">GitHub</span>: <a href="https://github.com/rolandnsharp" target="_blank" rel="noopener noreferrer">rolandnsharp</a></p>
-    <p><span class="neofetch-title">Email</span>: <a href="mailto:rolandnsharp@example.com">rolandnsharp@example.com</a></p>
-    <p><span class="neofetch-title">X</span>: <a href="https://twitter.com/rolandnsharp" target="_blank" rel="noopener noreferrer">@rolandnsharp</a></p>
+    <!-- <p><span class="neofetch-title">Blog</span></p>
+    <p>--------------------</p> -->
+    <p><span class="neofetch-title">Links:</span></p>
+    <p><a href="https://github.com/rolandnsharp" target="_blank" rel="noopener noreferrer">github.com/rolandnsharp</a></p>
+    <p><a href="mailto:rolandnsharp@gmail.com">rolandnsharp@gmail.com</a></p>
+    <p><a href="https://x.com/rolandnsharp" target="_blank" rel="noopener noreferrer">x.com/rolandnsharp</a></p>
   </div>
 </div>
 
