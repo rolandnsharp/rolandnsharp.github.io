@@ -1,0 +1,82 @@
+:root {
+  --background-color-dark: #2c2c2c; /* Dark gray */
+  --text-color-dark: #e0e0e0; /* Light gray */
+  --background-color-light: #f0f0f0; /* Light gray */
+  --text-color-light: #333333; /* Darker gray */
+}
+
+body {
+  font-family: 'Ubuntu Mono', monospace;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark {
+  background-color: var(--background-color-dark);
+  color: var(--text-color-dark);
+}
+
+body.light {
+  background-color: var(--background-color-light);
+  color: var(--text-color-light);
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+header {
+  padding: 1rem;
+  border-bottom: 1px solid;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#theme-switcher {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0.5rem 1rem;
+  filter: grayscale(1);
+}
+
+body.light #theme-switcher {
+  filter: grayscale(1) brightness(0.3); /* Darken moon for light theme */
+}
+
+main {
+  padding: 1rem;
+}
+
+/* Neofetch Styles */
+.neofetch-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.neofetch-ascii {
+  font-family: 'Ubuntu Mono', monospace;
+  white-space: pre;
+  color: var(--text-color-dark); /* Color for dark theme */
+}
+
+body.light .neofetch-ascii {
+  color: var(--text-color-light); /* Color for light theme */
+}
+
+.neofetch-info p {
+  margin: 0;
+}
+
+.neofetch-title {
+  font-weight: bold;
+}
+
