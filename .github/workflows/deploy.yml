@@ -15,10 +15,10 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci
+      - run: rm -rf _site
       - run: npm run build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-pages-artifact@v4
         with:
-          name: github-pages
           path: _site
 
   deploy:
