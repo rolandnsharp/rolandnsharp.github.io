@@ -5,7 +5,7 @@ layout: "base.njk"
 tags: post
 ---
 
-## Building "Spell": How Touch-Typing Forged My Spelling Memory
+## Introducing Spell: A CLI Spelling Trainer Using Touch-Typing
 
 ## Introduction: Beyond Spellcheck – Discovering Body Memory for Words
 
