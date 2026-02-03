@@ -67,4 +67,4 @@ Here's how `Spell` integrates seamlessly into your daily flow:
 
 `Spell` is a unique tool that combines two powerful learning techniques to improve not just what you know, but what you can *do*. It's for those who want to internalize words through physical repetition, building both a strong vocabulary and the fluency to use it effortlessly.
 
-Check out the project on [GitHub](https://github.com/rolandnsharp/spell) and start mastering your spelling and typing today.
+Check out the project on [GitHub](https://github.com/rolandnsharp/spell), or just run `npm install -g @rolandnsharp/spell` and start mastering your spelling and typing today.
