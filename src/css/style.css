@@ -8,6 +8,7 @@
 body {
   font-family: 'Ubuntu Mono', monospace;
   transition: background-color 0.3s, color 0.3s;
+  padding: 2rem 1rem; /* Add vertical padding to the body */
 }
 
 body.dark {
@@ -26,6 +27,8 @@ a {
 }
 
 header {
+  max-width: 800px; /* Limit header width to match main content */
+  margin: 0 auto; /* Center the header horizontally */
   padding: 1rem;
   border-bottom: 1px solid;
 }
@@ -51,6 +54,8 @@ body.light #theme-switcher {
 }
 
 main {
+  max-width: 800px; /* Limit content width for readability */
+  margin: 0 auto; /* Center the main content area */
   padding: 1rem;
 }
 
