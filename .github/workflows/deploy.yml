@@ -16,10 +16,12 @@ jobs:
           node-version: '20'
       - run: npm ci
       - run: npm run build
+      - name: Create deployment artifact
+        run: tar -czf artifact.tar.gz -C _site .
       - uses: actions/upload-artifact@v4
         with:
           name: github-pages
-          path: _site
+          path: artifact.tar.gz
 
   deploy:
     needs: build
@@ -34,5 +36,6 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: github-pages
+      - run: tar -xzf artifact.tar.gz
       - uses: actions/configure-pages@v4
       - uses: actions/deploy-pages@v4
