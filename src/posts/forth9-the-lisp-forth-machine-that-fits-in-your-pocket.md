@@ -4,11 +4,9 @@ date: 2026-02-17
 layout: "base.njk"
 tags: post
 ---
-# Forth9: The Lisp(Forth) Machine That Fits in Your Pocket
+# Forth9: The Lisp Machine That Fits in Your Pocket
 
-*Version 2*
-
-Three times in computing history, someone built a machine where one language was the entire system — the OS, the shell, the compiler, the applications, all one thing. Three times, the world chose something worse instead. The ideas survived. The machines didn't.
+Throughout computing history, people have built machines where one language was the entire system — the OS, the shell, the compiler, the applications, all one thing. Each time, the world chose something worse instead. The ideas survived. The machines didn't.
 
 The hardware to try again costs $60 now.
 
