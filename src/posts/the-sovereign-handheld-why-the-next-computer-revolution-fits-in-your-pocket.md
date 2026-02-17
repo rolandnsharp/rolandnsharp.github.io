@@ -1,3 +1,10 @@
+---
+title: "The Sovereign Handheld: Why the Next Computer Revolution Fits in Your Pocket"
+date: 2026-02-17
+layout: "base.njk"
+tags: post
+---
+
 # The Sovereign Handheld: Why the Next Computer Revolution Fits in Your Pocket
 
 There is a computer that should exist but doesn't. Not yet. Every piece of it is available — the chips, the radios, the screens, the keyboards, the software philosophy. The only thing missing is someone putting it together. This post is about what that computer looks like and why right now is the moment to build it.
