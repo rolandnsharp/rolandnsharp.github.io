@@ -149,7 +149,7 @@ This isn't new. The Lisp machines did it in 1985. Smalltalk did it. But nobody p
 
 ## Why Not Linux?
 
-Linux is a 30-second boot, millions of lines of code nobody fully understands, and an entire philosophy that assumes you have time to wait. Forth9 boots in microseconds. Power on, the CPU starts executing from flash, the kernel loads the image from SD, and you're at the REPL. No BIOS, no bootloader chain, no init system, no kernel modules, no filesystem check. You flip the switch like a flashlight.
+Linux is a 30-second boot, millions of lines of code nobody fully understands. Forth9 boots in microseconds. Power on, the CPU starts executing from flash, the kernel loads the image from SD, and you're at the REPL. No BIOS, no bootloader chain, no init system, no kernel modules, no filesystem check. You flip the switch like a flashlight.
 
 The Forth9 kernel is about 750 lines. One person can read it in an afternoon.
 
@@ -188,4 +188,4 @@ Everything is ready. Someone just has to build it.
 
 ---
 
-*Forth9 is open source. The project lives at [github.com/forth9](https://github.com/forth9).*
+*Forth9 is open source. The project lives at [github.com/forth9](https://github.com/rolandnsharp/forth9).*
