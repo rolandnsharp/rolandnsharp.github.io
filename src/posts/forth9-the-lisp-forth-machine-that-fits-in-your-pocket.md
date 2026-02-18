@@ -118,7 +118,7 @@ This is the Lisp machine lesson: don't add layers of "friendliness" that hide th
 
 ## Everything is a Named Stream
 
-From Plan 9 we take the insight that every device, every network resource, every piece of hardware should look the same. In Forth9, everything is a named stream:
+From Plan 9 we take the insight that every device, every network resource, every piece of hardware should respond to the same small set of operations. In Forth9, everything is a named stream:
 
 ```forth
 /dev/lora          ( the LoRa radio )
@@ -129,7 +129,11 @@ From Plan 9 we take the insight that every device, every network resource, every
 /net/alice         ( a mesh peer )
 ```
 
-If you can pipe text to the screen, you can pipe it to the radio. If you can read from a file, you can read from a peer. The interface is the same. The words `read`, `write`, `cat`, `ls` work on everything.
+These look like file paths, but there is no filesystem. No inodes, no directories, no mount points. Each of these is a word in the Forth dictionary. `/dev/lora` is a word — type it and it pushes a stream reference onto the stack. `cat`, `read`, `write`, `ls` are words that operate on that reference. The slash-separated naming is a convention borrowed from Plan 9 for familiarity, not a filesystem being resolved by a kernel.
+
+The insight worth keeping isn't "everything is a file." It's that a radio and a file and a peer and a screen all support the same operations. A uniform interface, implemented as dictionary words with a shared naming convention.
+
+Forth is a postfix language — the thing you're acting on comes first, the action comes after. Where bash writes `ls /dev/`, Forth writes `/dev/ ls`. Where bash writes `cat /dev/lora`, Forth writes `/dev/lora cat`. The object goes on the stack, then the verb consumes it. This feels backwards for about ten minutes. Then it feels natural, because it's how actions actually compose — each word transforms what the previous word left behind. No pipes needed for simple chains: `/dev/lora read encrypt @alice send` flows left to right, each word acting on the result of the last.
 
 Pipe the oscilloscope into the radio and you're streaming a waveform to a friend. Feed the signal generator into the tuner to calibrate it. Log sensor readings to SD while monitoring mesh traffic. Nothing prevents this because there are no app boundaries. There is only the dictionary.
 
