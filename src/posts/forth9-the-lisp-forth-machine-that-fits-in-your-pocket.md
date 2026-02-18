@@ -188,4 +188,4 @@ Everything is ready. Someone just has to build it.
 
 ---
 
-*Forth9 is open source. The project lives at [github.com/forth9](https://github.com/rolandnsharp/forth9).*
+*Forth9 is open source. The project lives at [github.com/rolandnsharp/forth9](https://github.com/rolandnsharp/forth9).*
