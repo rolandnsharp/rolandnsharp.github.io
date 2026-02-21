@@ -978,3 +978,5 @@ RL for continuing (non-episodic) tasks:
 *Compiled from [incompleteideas.net](http://incompleteideas.net/), the website
 of Rich Sutton, co-author of the RL textbook and co-recipient of the 2025
 ACM Turing Award for foundational contributions to reinforcement learning.*
+
+*Co-authored with [Claude](https://claude.ai/).*

@@ -151,3 +151,5 @@ debugger, your workflow. The learning curve is writing functions.
 
 *Aither runs on [Bun](https://bun.sh/). Source at
 [github.com/rolandnsharp/aither](https://github.com/rolandnsharp/aither).*
+
+*Co-authored with [Claude](https://claude.ai/).*

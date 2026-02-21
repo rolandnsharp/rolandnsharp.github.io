@@ -95,3 +95,5 @@ Bulk import from a file with `--import`. Manage your list interactively with `--
 ---
 
 *[GitHub](https://github.com/rolandnsharp/spell) / `npm install -g @rolandnsharp/spell`*
+
+*Co-authored with [Claude](https://claude.ai/).*

@@ -125,3 +125,5 @@ That's where the interesting work is. And you can do it from home.
 [Reinforcement Learning](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/),
 [Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/),
 [Aither](/posts/aither-live-coding-audio-synthesis-in-javascript/).*
+
+*Co-authored with [Claude](https://claude.ai/).*

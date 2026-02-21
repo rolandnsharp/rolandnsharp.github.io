@@ -271,3 +271,5 @@ Not there yet. But pointed in the right direction.
 *Vidya is written in OCaml with C FFI for BLAS-accelerated matrix operations.
 The source is at [github.com/rolandnsharp/vidya](https://github.com/rolandnsharp/vidya).
 It trains on a single CPU in about 30 minutes and generates text in real time.*
+
+*Co-authored with [Claude](https://claude.ai/).*
