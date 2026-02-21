@@ -74,7 +74,7 @@ Nobody has shipped a Lisp machine product — not in 1990, not in 2026. The reas
 
 **Forth builds wide, not tall.** Lisp systems accumulate layers of abstraction — macros on functions on macros, each layer more powerful, the base farther away. Six months later you must reconstruct the tower to read your own code. Forth builds a flat vocabulary where each word is one definition deep. You can always see the bottom. For a device you want to understand in its entirety, wide beats tall.
 
-The specific dialect is Forth9 — a fork of [Mecrisp Stellaris](https://mecrisp.sourceforge.net/) (a native ARM Forth compiler) with [RetroForth 12](http://retroforth.org/)'s syntax design. Mecrisp compiles Forth words directly to ARM Thumb-2 machine code. RetroForth contributes the prefix system, quotations, and namespace naming that make the language feel modern. One language, all the way down to the hardware registers.
+Forth9 is built on [Zeptoforth](https://github.com/tabemann/zeptoforth) — a native-code Forth for ARM microcontrollers that compiles words directly to Thumb-2 machine code with constant folding. Zeptoforth handles the hardware: drivers, preemptive multitasking, networking, storage. Forth9 adds the persistent application layer on top — the prefix system, the named streams, the image save/restore, the user's living dictionary.
 
 [William Edward Hahn, PhD](https://www.youtube.com/watch?v=a_6LPvtAUVE) describes Forth as "both a high-level language and a low-level language at the same time." That's an oxymoron to most programmers, but it's the precise quality a handheld OS demands. In one breath you poke a hardware register to check the radio. In the next you define a high-level protocol. No other language does both from the same prompt without a seam between them.
 
@@ -177,6 +177,52 @@ The [ClockworkPi PicoCalc](https://www.clockworkpi.com/) is a pocket computer wi
 Total hardware cost: roughly $60-80 for a complete device with a keyboard, a screen, a battery, and a mesh radio.
 
 Compare that to the Symbolics 3600 at $70,000 in 1985. The ideas are the same. The price has dropped by a factor of a thousand.
+
+---
+
+## The Architecture: A Conversation with Zeptoforth's Author
+
+I posted this manifesto on the [ClockworkPi forum](https://forum.clockworkpi.com/t/a-mystical-forth9-fantasy-a-picocalc-console-manifest/21579). The repo was empty. The PicoCalc was still in the mail. It was a fantasy.
+
+[tabemann](https://github.com/tabemann), the author of [Zeptoforth](https://github.com/tabemann/zeptoforth), showed up in the thread. What followed was the most useful conversation I've had about this project. It changed the architecture completely.
+
+### The original plan was wrong
+
+I was going to fork Mecrisp Stellaris and bolt on image persistence. tabemann pointed out the problem immediately: Zeptoforth already runs on the PicoCalc. It already has a native-code compiler, preemptive multitasking, WiFi, TCP/IP, SHA-256, display drivers, SD card support. Rebuilding all of that from scratch would be months of work for little gain.
+
+His recommendation: build Forth9 as an application layer on top of Zeptoforth. Like how uLisp creates a Lisp environment on top of C, or how Racket provides Scheme on top of Linux.
+
+My first reaction was resistance. The whole point was one language top to bottom — owning the entire stack. Having Zeptoforth as a substrate I don't fully own felt like it defeated the purpose.
+
+He was right though. The work wouldn't be worth the reward, and I'd lose access to future Zeptoforth improvements. Forth9 should be an app on Zeptoforth, not a competing kernel.
+
+### Image persistence
+
+This was the hardest question. I wanted Lisp machine-style persistence — save everything, power off, power on, be exactly where you left off.
+
+tabemann explained why that's hard to bolt onto an existing system. Hardware state can't be saved — timers, radio state, open file handles. Even if you dumped all of RAM to SD, anything hardware-related would be out of sync on restore. Every driver would need modification.
+
+The solution we arrived at: save only the user's world, not the system's. The PSRAM on the RP2350 is memory-mapped at a fixed base address. Compile native code directly into PSRAM, save the entire region to SD as a blob, restore it to the same address on boot. All branch targets stay valid because the base address never moves. Hardware state gets reinitialized from a boot word — the kernel handles hardware, the image handles everything else.
+
+No threaded code. No relocation. No GC. Just a region of memory that is the user's entire computing reality, serialized to a file.
+
+### The outer interpreter hook
+
+I asked if there was a way to intercept tokens before dictionary lookup — needed for the prefix system (`/dev/`, `@alice`, `~file.txt`). Zeptoforth already has exactly this hook. tabemann uses it for local variables. It's the entry point for Forth9's prefix dispatch.
+
+### Multitasking
+
+Since Forth9 has no garbage collector, there's no barrier to using Zeptoforth's preemptive multitasking directly. tabemann noted that cooperative multitasking (coroutines) has significant disadvantages — one misbehaving task locks up the whole system, and fair scheduling is hard. With no GC, there's no reason to accept those tradeoffs.
+
+### The two-language question
+
+This means Forth9 is technically two Forths — Zeptoforth underneath, Forth9 on top. Two dictionaries, two outer interpreters. tabemann didn't see this as a problem. It's the same pattern as uLisp (Lisp on C) or MicroPython (Python on C). The inner language handles the hardware. The outer language is where the user lives.
+
+The key insight: graphics, networking, storage, and anything timing-sensitive stays in Zeptoforth, accessed through bindings from Forth9. The persistent world never touches hardware directly. It asks Zeptoforth to do it. This is how the image stays clean — no stale file handles, no desynchronized hardware state, no driver code that needs saving.
+
+It's not one language all the way to the metal. It's one language all the way to the bindings, and the bindings are thin. For the user at the prompt, the seam is invisible.
+
+The [full conversation](https://forum.clockworkpi.com/t/a-mystical-forth9-fantasy-a-picocalc-console-manifest/21579) is worth reading. tabemann's experience building zeptoscript (a garbage-collected language on top of Zeptoforth) informed every recommendation — he'd already made the mistakes I was about to make.
 
 ---
 
