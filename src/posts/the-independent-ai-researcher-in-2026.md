@@ -14,7 +14,7 @@ file. Starting from that reference implementation, we built
 a neurosymbolic language model written in OCaml with a Forth interpreter
 that constrains generation at the logit level. It trains on a single CPU
 in 30 minutes. The process: Claude Code wrote most of the implementation,
-Roland directed the architecture, read every line, ran every test, and
+Roland directed the architecture, reviewed the output, and
 decided what to build next.
 
 This is what independent AI research looks like in 2026. A home PC, an
