@@ -31,7 +31,6 @@ layout: "base.njk"
     <a href="{{ post.url }}">
       {{ post.data.title }}
     </a>
-    - <span>{{ post.date | readableDate }}</span>
   </li>
   <br>
 {% endfor %}
