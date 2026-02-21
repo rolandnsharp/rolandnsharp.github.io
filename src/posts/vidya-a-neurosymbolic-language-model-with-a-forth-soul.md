@@ -114,20 +114,19 @@ and a structured knowledge base extracted from the same corpus the neural
 model trained on. Two views of the same data -- one learned through
 gradient descent, one extracted through counting and co-occurrence.
 
-## Why Forth and Not Something Else
+## Why Forth
 
-The neurosymbolic AI literature uses Prolog, Haskell, Python sandboxes,
-formal verification systems. They are all more complex than necessary.
+For the full case for Forth as a computing substrate, see
+[Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/).
+Here's why it matters specifically for neurosymbolic generation.
 
 ### Verification in microseconds
 
-Forth word definitions are validated by a single left-to-right scan. For
-each word in the body: is it in the dictionary? What's its stack effect?
-Update the running depth. If any word is missing or the stack underflows:
-reject. Otherwise: accept.
-
-This runs in microseconds. Always terminates. No theorem prover, no type
-inference, no sandbox. Compare:
+When a neural model proposes code, you want to check thousands of
+candidates per second. Forth word definitions are validated by a single
+left-to-right scan: is each word in the dictionary? What's its stack
+effect? If any word is missing or the stack underflows: reject. This runs
+in microseconds. Always terminates. No theorem prover, no sandbox.
 
 | Substrate | Verification | Can it hang? |
 |-----------|-------------|--------------|
@@ -137,64 +136,41 @@ inference, no sandbox. Compare:
 | SMT (Z3) | Constraint solving | Effectively yes |
 | **Forth** | **Dictionary lookup + stack count** | **No. Never.** |
 
-This matters because when a neural model proposes code, you want to check
-thousands of candidates per second. Forth lets you do that.
-
-### Composition is concatenation
+### Concatenation matches token generation
 
 In Forth, `A B C` is a valid program if A, B, and C are valid words. The
-composition operator is whitespace. No parentheses to balance, no argument
-order to learn, no nesting depth to track.
-
-This matters for neural generation because the model's output space is
-simpler. It generates sequences from a known vocabulary, separated by
-spaces. Complexity grows linearly, not combinatorially.
-
-### The dictionary is the knowledge base
-
-Not a knowledge base bolted onto a language. The dictionary IS the language
-AND the knowledge base. Words defined in terms of other words. Concepts
-linked to their associations. New words can be defined that compose
-existing ones. Knowledge accumulates through use.
-
-### Forth matches the temporal structure of generation
-
-Here's the deep argument. Text generation is sequential. Tokens arrive one
-at a time, left to right. The model processes them incrementally. There is
-no "whole expression" to evaluate -- just the next token and the context
-so far.
-
-Forth evaluates left to right. Each word executes as soon as it's
-encountered. The stack accumulates context and releases it. This is how
-generation works: incremental, temporal, with a finite working memory that
-decays.
-
-Lisp evaluates inside-out. It requires knowing the whole expression before
-evaluating any of it. Lisp is spatially elegant but temporally unnatural
-for token-by-token generation. Forth starts computing the moment the first
-word arrives.
-
-The stack is a natural attention mechanism. What's on top is what's attended
-to right now. Push = focus. Pop = release. The 16-token concept decay in
-Vidya's symbolic layer is a stack with exponential forgetting. The
-correspondence is not metaphorical -- it's structural.
+composition operator is whitespace. This matters for neural generation
+because the model's output space is simpler -- sequences from a known
+vocabulary, separated by spaces. Complexity grows linearly, not
+combinatorially. And Forth evaluates left to right, one word at a time,
+which is exactly how token generation works: incremental, temporal, with
+the stack as a finite working memory.
 
 ## What Vidya Generates
 
 Vidya trains on the Enneads of Plotinus -- 6 treatises of Neoplatonic
-philosophy. After 100K steps of training (~6 epochs), it generates text
-like:
+philosophy. After 100K steps of training (~6 epochs), prompted with
+"what is the Absolute?", it generates 10 completions:
 
-The model produces novel philosophical passages that maintain word
-validity (no misspellings, no non-words), conceptual coherence (related
-ideas cluster together), and thematic progression (topics evolve rather
-than repeating). The symbolic constraints don't make the text robotic --
-they make it *possible*. Without them, a model this small produces
-unreadable fragments. With them, it produces something that reads like
-a philosophical sketch.
+```
+1: what is the Absolute? and therefore is in various of the same experiences?
+2: what is the Absolute? of this lower, but a matter of course, which it has been we
+3: what is the Absolute? and therefore is Authentic Existent.
+4: what is the Absolute? they are not merely allowed to its course, or another, in
+5: what is the Absolute? and therefore is to be seen and its intellection and
+6: what is the Absolute? of this sphere of the lower soul- as a question to remember
+7: what is the Absolute? Evil is no definite number and intervening down to its intention
+8: what is the Absolute? and as a less human being a definite shape is unless and as
+9: what is the Absolute? where there is nothing of the Soul, but a master
+10: what is the Absolute? of this sphere which in a light or up it a region
+```
 
-Prompted generation works too: give it "The Soul is" and it continues
-with 10 different completions, each valid, each coherent, each different.
+Every word is valid (no misspellings, no non-words). Related concepts
+cluster together -- soul, intellection, existent. Some completions are
+fragments; others land on coherent philosophical statements ("and
+therefore is Authentic Existent"; "Evil is no definite number"). Without
+the symbolic constraints, a model this small produces unreadable noise.
+With them, it produces philosophical sketches.
 
 ## Where It Goes From Here
 
@@ -204,22 +180,10 @@ Vidya currently has no way to evaluate its own output. The symbolic layer
 enforces validity (are the words real?) but not quality (is the text
 meaningful?). Reinforcement learning could provide this missing signal.
 
-The natural formulation: text generation is a continuing task (no episode
-boundaries). R-learning -- average-reward RL -- is designed for exactly
-this. The TD error becomes r - rho + V(s') - V(s), where rho is the
-running average of text quality. No discounting needed, no artificial
-episode boundaries.
-
-The Forth knowledge layer could serve as a world model for Dyna-style
-planning: use the concept associations to simulate likely continuations,
-evaluate multiple token sequences before committing. Interleave real
-generation with model-based look-ahead.
-
-The TD model of classical conditioning (Sutton & Barto, 1990) is directly
-relevant: concept activation is a conditioned stimulus, text quality is the
-unconditioned stimulus. TD learning would let Vidya learn which concept
-activations predict good text -- replacing the hand-coded coherence boost
-with a learned one.
+For the full RL roadmap — average-reward formulation, Dyna-style planning
+with the Forth knowledge layer, TD-learned concept associations, and six
+concrete approaches — see
+[Reinforcement Learning: From Sutton's Foundations to Vidya](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/).
 
 ### Growing Lisp Features Into Forth
 

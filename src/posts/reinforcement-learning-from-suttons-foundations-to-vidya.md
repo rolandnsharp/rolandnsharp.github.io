@@ -7,76 +7,13 @@ tags: post
 
 # Reinforcement Learning: From Sutton's Foundations to Vidya
 
-A research paper and reference collecting key ideas, code, and connections from
-[Rich Sutton's incompleteideas.net](http://incompleteideas.net/) and how they
-might apply to our neurosymbolic AI model, **Vidya**.
+[Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/) is
+a neurosymbolic language model: a small transformer constrained by a Forth
+interpreter. The neural model learns what token sequences are likely. The
+symbolic layer enforces what's valid. But neither side evaluates whether
+the output is *good*.
 
----
-
-## Table of Contents
-
-1. [What is Reinforcement Learning?](#what-is-reinforcement-learning)
-2. [The Bitter Lesson](#the-bitter-lesson)
-3. [Verification: The Key to AI](#verification-the-key-to-ai)
-4. [Core RL Algorithms in Lisp](#core-rl-algorithms-in-lisp)
-   - [Temporal-Difference Learning (TD)](#temporal-difference-learning)
-   - [Value Iteration & Dynamic Programming](#value-iteration--dynamic-programming)
-   - [Monte Carlo Methods](#monte-carlo-methods)
-   - [Q-Learning & Double Q-Learning](#q-learning--double-q-learning)
-   - [Multi-Armed Bandits](#multi-armed-bandits)
-   - [Policy Gradient / Gradient Bandits](#gradient-bandits)
-   - [R-Learning (Average Reward)](#r-learning)
-   - [Dyna Architecture (Planning + Learning)](#dyna-architecture)
-   - [TD Model of Classical Conditioning](#td-model-of-classical-conditioning)
-   - [Mountain Car with Tile Coding](#mountain-car-with-tile-coding)
-   - [Tic-Tac-Toe (Value-Based Self-Play)](#tic-tac-toe)
-5. [Lisp as an AI Substrate](#lisp-as-an-ai-substrate)
-6. [Forth vs Lisp: Why Forth Wins for Vidya](#forth-vs-lisp-why-forth-wins-for-vidya)
-7. [Applying RL to Vidya](#applying-rl-to-vidya)
-8. [Key References & Links](#key-references--links)
-
----
-
-## What is Reinforcement Learning?
-
-From the [RL FAQ](http://incompleteideas.net/RL-FAQ.html) (Rich Sutton, 2004):
-
-> Reinforcement learning (RL) is learning from interaction with an environment,
-> from the consequences of action, rather than from explicit teaching.
-
-The mathematical framework is the **Markov Decision Process (MDP)**:
-- An **agent** interacts with an **environment**
-- At each step it perceives a **state**, selects an **action**
-- It receives a **reward** and transitions to a new state
-- The goal: maximize **cumulative reward** over time
-
-RL is *not* just trial-and-error. Modern RL includes **planning** (using a
-model of the environment to simulate and evaluate actions before taking them),
-**temporal-difference learning** (bootstrapping value estimates from other
-estimates), and **function approximation** (generalizing across states).
-
-The key insight: RL addresses the kind of learning problems that people and
-animals face every day -- sequential decisions under uncertainty with long-term
-consequences.
-
-### The Two Pillars of RL (from Sutton & Barto)
-
-1. **Prediction**: Learning to estimate the value of states (how much future
-   reward to expect from here)
-2. **Control**: Learning to select actions that maximize value
-
-### Key Algorithms at a Glance
-
-| Algorithm | Type | Key Idea |
-|-----------|------|----------|
-| TD(0) | Prediction | Update value toward one-step bootstrap target |
-| TD(lambda) | Prediction | Blend TD and Monte Carlo via eligibility traces |
-| Q-Learning | Control | Off-policy, learns optimal Q directly |
-| SARSA | Control | On-policy, learns Q for current policy |
-| Monte Carlo | Both | Wait for episode end, update toward actual return |
-| Policy Gradient | Control | Directly optimize policy parameters |
-| Dyna | Both | Interleave real experience with model-based planning |
-| R-Learning | Control | Average-reward formulation for continuing tasks |
+Reinforcement learning is the missing piece.
 
 ---
 
@@ -103,9 +40,9 @@ The two methods that scale arbitrarily are **search** and **learning**.
 > have discovered. Building in our discoveries only makes it harder to see how
 > the discovering process can be done.
 
-### Implications for Vidya
+### The Tension with Vidya
 
-This challenges our symbolic layer directly. Vidya builds in word validity
+This challenges Vidya's symbolic layer directly. Vidya builds in word validity
 constraints, concept coherence, and topic depth penalties. The bitter lesson
 says this is the wrong long-term bet -- that we should instead find ways for
 the model to *learn* these constraints itself.
@@ -149,7 +86,157 @@ meaningful? coherent? interesting?). RL could provide this missing piece:
 
 ---
 
-## Core RL Algorithms in Lisp
+## How RL Enters Vidya
+
+Six concrete approaches, from simplest to most ambitious.
+
+### 1. Reward-Guided Generation
+
+Instead of sampling from constrained logits, use RL to learn which tokens
+produce good text:
+
+```
+State:   partial text generated so far
+Action:  next token to emit
+Reward:  quality signal (coherence, validity, novelty)
+```
+
+The reward could come from:
+- **Self-evaluation**: Does the generated text activate diverse concepts?
+- **Prediction accuracy**: Can the model predict what comes next in the corpus?
+- **Forth verification**: Does the generated text form valid Forth programs?
+
+### 2. Learned Constraints
+
+Each of Vidya's 5 constraints could be *learned* rather than hand-coded:
+
+| Current Constraint | RL Replacement |
+|---|---|
+| Repetition penalty (-1.5) | Learn penalty magnitude from reward signal |
+| Word boundary detection | Learn tokenization preferences |
+| Word validation (hard mask) | Learn soft validity preferences |
+| Concept coherence (+2.0 boost) | Learn association strengths via TD |
+| Topic depth penalty | Learn exploration-exploitation balance |
+
+The TD model of classical conditioning (see [Reference](#td-model-of-classical-conditioning)
+below) is directly applicable: concept activation is a *conditioned stimulus*,
+and text quality is the *unconditioned stimulus*. TD learning would let Vidya
+learn which concept activations predict good text.
+
+### 3. Dyna-Style Planning
+
+Vidya could use its Forth knowledge as a *world model*:
+
+```
+Real experience:  Generate token, observe reward
+Model experience: Use Forth associations to simulate likely continuations
+Planning:         Evaluate multiple token sequences before committing
+```
+
+This is exactly Dyna: interleave real generation with model-based look-ahead.
+
+### 4. Average-Reward Formulation
+
+Text generation is a *continuing task* -- there's no natural episode boundary.
+R-learning (see [Reference](#r-learning) below) is designed for exactly this:
+
+```
+rho = running estimate of average text quality
+TD error = r - rho + V(s') - V(s)
+```
+
+This avoids the need for discounting (which biases toward short-term quality)
+and naturally handles the fact that text generation doesn't have "episodes."
+
+### 5. Multi-Armed Bandit for Token Selection
+
+At each generation step, Vidya faces a multi-armed bandit problem:
+- ~580 token "arms" (the BPE vocabulary)
+- Reward = text quality after choosing that token
+- Exploration-exploitation tradeoff
+
+UCB or gradient bandit methods could replace or supplement the current
+softmax sampling:
+
+```
+score(token) = neural_logit(token) + c * sqrt(ln(t) / N(token))
+```
+
+### 6. Eligibility Traces for Credit Assignment
+
+When text quality is measured at the sentence level, which *token* deserves
+credit? Eligibility traces solve this:
+
+```
+e(token) *= gamma * lambda    ; decay all traces
+e(chosen_token) = 1           ; mark the chosen token
+theta += alpha * delta * e    ; update proportional to trace
+```
+
+This is exactly what TD(lambda) with replacing traces does.
+
+---
+
+## Proposed Architecture: Vidya-RL
+
+```
+Corpus --> BPE Training --> Tokenizer
+                               |
+                    +----------+----------+
+                    |                     |
+              Neural Training      Knowledge Extraction
+              (supervised)         (corpus statistics)
+                    |                     |
+                    v                     v
+              Transformer          Forth Dictionary
+              (6L, 128d)          (concepts, assoc.)
+                    |                     |
+                    +----------+----------+
+                               |
+                         Generation Loop:
+                    1. Forward pass -> logits
+                    2. Symbolic constraints -> constrained logits
+                    3. RL value adjustment -> final logits    <-- NEW
+                    4. Softmax, sample token
+                    5. Compute reward signal                  <-- NEW
+                    6. TD update to value estimates            <-- NEW
+                    7. Update Forth knowledge if needed        <-- NEW
+                               |
+                         Output text
+```
+
+---
+
+## Reference: What is Reinforcement Learning?
+
+From the [RL FAQ](http://incompleteideas.net/RL-FAQ.html) (Rich Sutton, 2004):
+
+> Reinforcement learning (RL) is learning from interaction with an environment,
+> from the consequences of action, rather than from explicit teaching.
+
+The mathematical framework is the **Markov Decision Process (MDP)**:
+- An **agent** interacts with an **environment**
+- At each step it perceives a **state**, selects an **action**
+- It receives a **reward** and transitions to a new state
+- The goal: maximize **cumulative reward** over time
+
+The two pillars: **prediction** (estimating value of states) and **control**
+(selecting actions that maximize value).
+
+| Algorithm | Type | Key Idea |
+|-----------|------|----------|
+| TD(0) | Prediction | Update value toward one-step bootstrap target |
+| TD(lambda) | Prediction | Blend TD and Monte Carlo via eligibility traces |
+| Q-Learning | Control | Off-policy, learns optimal Q directly |
+| SARSA | Control | On-policy, learns Q for current policy |
+| Monte Carlo | Both | Wait for episode end, update toward actual return |
+| Policy Gradient | Control | Directly optimize policy parameters |
+| Dyna | Both | Interleave real experience with model-based planning |
+| R-Learning | Control | Average-reward formulation for continuing tasks |
+
+---
+
+## Reference: Algorithms in Lisp
 
 Rich Sutton wrote the reference implementations for his RL textbook in Common
 Lisp. These are the actual code used to generate the figures in *Reinforcement
@@ -162,9 +249,6 @@ Source: [incompleteideas.net/book/code/code2nd.html](http://incompleteideas.net/
 ### Temporal-Difference Learning
 
 **TD Prediction on the Random Walk** (Chapter 6, Example 6.2)
-
-The simplest illustration of TD learning: a random walk on 5 states, where the
-agent learns to predict the probability of terminating on the right.
 
 ```lisp
 ;;; TD(lambda) learning on a discrete-state random walk
@@ -223,16 +307,11 @@ agent learns to predict the probability of terminating on the right.
                            (/ (+ i 1) (+ n 1))))))
 ```
 
-**Key insight**: TD learning updates predictions *before* the final outcome
-is known, bootstrapping from other predictions. This is more data-efficient
-than Monte Carlo methods, which must wait for the episode to end.
-
 ---
 
 ### Value Iteration & Dynamic Programming
 
-**Gridworld** (Chapter 3, Example 3.5) -- Computing state values via
-Bellman equations:
+**Gridworld** (Chapter 3, Example 3.5):
 
 ```lisp
 (defvar V)
@@ -271,7 +350,7 @@ Bellman equations:
     (+ r (* gamma (aref V y)))))
 ```
 
-**Gambler's Problem** (Chapter 4, Example 4.3) -- Pure value iteration:
+**Gambler's Problem** (Chapter 4, Example 4.3):
 
 ```lisp
 ;;; The gambler wagers on coin flips to reach $100.
@@ -308,8 +387,7 @@ Bellman equations:
         finally (return best-action)))
 ```
 
-**Jack's Car Rental** (Chapter 4, Figure 4.2) -- Policy iteration with
-Poisson dynamics:
+**Jack's Car Rental** (Chapter 4, Figure 4.2):
 
 ```lisp
 ;;; States: (n1, n2) = cars at each location (max 20)
@@ -386,7 +464,7 @@ Poisson dynamics:
                    (aref N dc pc ace))))))
 ```
 
-**Monte Carlo ES (Exploring Starts)** -- with policy improvement:
+**Monte Carlo ES (Exploring Starts)**:
 
 ```lisp
 (defun learn (episode outcome)
@@ -410,8 +488,7 @@ Poisson dynamics:
 
 ### Q-Learning & Double Q-Learning
 
-**Double Q-Learning** (Chapter 6, Example 6.7) -- Eliminates maximization
-bias by maintaining two independent Q-value estimates:
+**Double Q-Learning** (Chapter 6, Example 6.7):
 
 ```lisp
 ;;; The maximization bias problem:
@@ -455,7 +532,7 @@ bias by maintaining two independent Q-value estimates:
 
 ### Multi-Armed Bandits
 
-**10-Armed Testbed** (Chapter 2, Figure 2.1) -- The simplest RL problem:
+**10-Armed Testbed** (Chapter 2, Figure 2.1):
 
 ```lisp
 (defvar n 10)       ; number of arms
@@ -488,8 +565,7 @@ bias by maintaining two independent Q-value estimates:
     finally (return (arg-max-random-tiebreak Qtemp))))
 ```
 
-**Optimistic Initial Values** (Chapter 2, Figure 2.3) -- Encourage early
-exploration by initializing Q high:
+**Optimistic Initial Values** (Chapter 2, Figure 2.3):
 
 ```lisp
 (defvar alpha 0.1)  ; constant step-size (not sample average)
@@ -525,9 +601,7 @@ exploration by initializing Q high:
 
 ### Gradient Bandits
 
-**Gradient Bandit Algorithm** (Chapter 2, Figure 2.5) -- Learn action
-*preferences* H(a) rather than value estimates, using a softmax policy
-and stochastic gradient ascent:
+**Gradient Bandit Algorithm** (Chapter 2, Figure 2.5):
 
 ```lisp
 (defvar H)          ; preference for each action
@@ -544,9 +618,6 @@ and stochastic gradient ascent:
     ;; Increase preference for the taken action
     (incf (aref H A) alpha-delta)))
 ```
-
-This is the simplest form of **policy gradient** -- the same principle that
-scales to deep RL (REINFORCE, PPO, etc.).
 
 ---
 
@@ -584,17 +655,11 @@ RL for continuing (non-episodic) tasks:
                                   (- (max (aref Q s 0) (aref Q s 1)))))))))
 ```
 
-**Why this matters for Vidya**: Vidya generates text in a *continuing* fashion
-(no natural episode boundaries). Average-reward RL (R-learning) is designed
-exactly for this setting -- it doesn't require discounting or episode
-termination.
-
 ---
 
 ### Dyna Architecture
 
-**Dyna-AHC** -- The crucial insight of combining real experience with
-model-based planning:
+**Dyna-AHC** -- Combining real experience with model-based planning:
 
 ```lisp
 ;;; Dyna: For each real step, do N model-based planning steps
@@ -634,20 +699,9 @@ model-based planning:
     (setq current-state y)))
 ```
 
-**Why this matters for Vidya**: Dyna shows that an agent can learn from both
-real interaction AND from replaying/simulating past experiences. Vidya's Forth
-knowledge layer already stores structured information about the corpus. A Dyna-
-like architecture could let Vidya:
-- Learn token-level value estimates from real generation
-- Use the Forth knowledge to *simulate* likely continuations
-- Plan ahead before committing to tokens
-
 ---
 
 ### TD Model of Classical Conditioning
-
-This is particularly relevant -- it shows TD learning applied to
-*prediction of future stimuli*, not just reward maximization:
 
 ```lisp
 ;;; TD model of Pavlovian reinforcement
@@ -679,17 +733,11 @@ This is particularly relevant -- it shows TD learning applied to
         do (setq old-Vbar (Vbar V X))))
 ```
 
-**Connection to Vidya**: This model learns *temporal associations* between
-stimuli -- exactly what Vidya's concept coherence layer does with static
-co-occurrence statistics. A TD-based approach could learn these associations
-*online* from the generation process itself.
-
 ---
 
 ### Mountain Car with Tile Coding
 
-**n-step Sarsa on Mountain Car** (Chapter 10, Figures 10.2-4) -- RL with
-function approximation using tile coding:
+**n-step Sarsa on Mountain Car** (Chapter 10, Figures 10.2-4):
 
 ```lisp
 ;;; State: (position, velocity), 3 actions: left/none/right
@@ -739,7 +787,7 @@ function approximation using tile coding:
     until (= tau (- capT 1))))
 ```
 
-**Sarsa(lambda) on Mountain Car** -- with eligibility traces:
+**Sarsa(lambda) on Mountain Car**:
 
 ```lisp
 (defun episode ()
@@ -772,8 +820,7 @@ function approximation using tile coding:
 
 ### Tic-Tac-Toe
 
-**Value-based self-play** (Chapter 1) -- The introductory example showing
-the core RL loop:
+**Value-based self-play** (Chapter 1):
 
 ```lisp
 ;;; States mapped to a value table via index
@@ -819,289 +866,6 @@ the core RL loop:
 
 ---
 
-## Lisp as an AI Substrate
-
-Sutton chose Common Lisp for all his reference implementations. This is not
-accidental. Lisp has properties that make it uniquely suited to AI research:
-
-### Why Sutton Uses Lisp
-
-1. **Homoiconicity**: Code is data. Programs can manipulate other programs.
-   This enables meta-learning and self-modifying agents.
-
-2. **Interactive development**: REPL-driven exploration. Run an experiment,
-   inspect state, modify parameters, continue -- without restarting.
-
-3. **Symbolic + numeric**: First-class support for both symbolic manipulation
-   (lists, trees, pattern matching) and numerical computation (arrays, floats).
-
-4. **Macros**: Define new control structures that look like language primitives.
-   Sutton's `with-prob` macro is a perfect example.
-
-5. **Dynamic typing with optional declarations**: Rapid prototyping with the
-   option to add type declarations for performance.
-
-### Lisp Patterns in Sutton's Code
-
-Recurring patterns that reveal design principles:
-
-```lisp
-;; Pattern 1: Incremental mean update (appears everywhere)
-(incf (aref Q a) (/ (- r (aref Q a)) (aref n_a a)))
-
-;; Pattern 2: Epsilon-greedy with macro
-(with-prob epsilon (random n) (arg-max-random-tiebreak Q))
-
-;; Pattern 3: Tabular representation via arrays
-(defvar V (make-array states :initial-element 0.0))
-(defvar Q (make-array (list states actions) :initial-element 0.0))
-
-;; Pattern 4: Episode collection via loop
-(loop for state = start then next-state
-      collect state
-      until terminal-p
-      finally (return (list outcome states)))
-
-;; Pattern 5: Multi-run averaging
-(multi-mean (loop repeat num-runs collect (run num-episodes)))
-```
-
-### Connection to Vidya's Forth
-
-Vidya already uses a Forth interpreter as its symbolic substrate. Forth and
-Lisp share key properties:
-- **Stack-based evaluation** (Forth) vs **tree-based evaluation** (Lisp)
-- Both support **extensibility** through new word/function definitions
-- Both are **minimal** yet **complete**
-
-The question: should Vidya's knowledge layer speak Lisp instead of (or in
-addition to) Forth? Lisp's list processing and recursion could enable:
-- **Recursive concept hierarchies** (not just flat associations)
-- **Pattern matching** on generated text
-- **Rule-based reasoning** that complements neural predictions
-
-Or: should Vidya's Forth grow Lisp-like features (cons cells, recursion)?
-
----
-
-## Forth vs Lisp: Why Forth Wins for Vidya
-
-Sutton wrote all his RL reference implementations in Common Lisp, and Lisp has
-genuine strengths for AI research. But for Vidya's symbolic substrate, **Forth
-has deeper power than Lisp**. The decision: keep Forth, grow Lisp-like features
-into it, rather than switching.
-
-### Forth is Concatenative
-
-Any Forth program can be split at any point and both halves are valid programs.
-You compose by juxtaposition. Lisp doesn't have this -- you can't split an
-s-expression arbitrarily. This matters for Vidya because **token generation is
-concatenative**. Tokens arrive left-to-right, one at a time. Forth's evaluation
-order *is* the generation order. Lisp evaluates inside-out, which fights the
-temporal structure of text.
-
-### The Stack is a Natural Attention Mechanism
-
-What's on top of the stack is what's being attended to right now. Push = focus.
-Pop = release. This maps cleanly onto Vidya's concept activation window (the
-16-token decay). Lisp's nested lexical scoping doesn't have this temporal
-quality. The stack *is* a working memory with recency bias -- exactly the
-cognitive model that Vidya's symbolic layer implements.
-
-### Forth's Dictionary IS the Knowledge Graph
-
-Words defined in terms of other words isn't a data structure *representing*
-knowledge -- it's knowledge that *computes*. Vidya's Concept entries with
-associations are already halfway there. A Lisp association list is inert data
-that needs external code to interpret it. A Forth word *does something* when
-you invoke it. The dictionary is simultaneously a namespace, a knowledge base,
-and an executable program.
-
-### Verifiability
-
-Vidya already does stack-effect validation in O(n). This connects directly to
-Sutton's Verification Principle -- the AI can tell for itself whether a word
-definition is valid. Lisp's general recursion makes this undecidable. Forth's
-constraint: every word must consume and produce a known number of stack items.
-This is *exactly* the kind of structural constraint that survives the Bitter
-Lesson -- it's not domain knowledge, it's a meta-method.
-
-### Minimality is the Point
-
-Forth isn't less powerful than Lisp -- it's more *primitive*, in the
-mathematical sense. Closer to the computation itself. You can build up from
-Forth to whatever you need. Building down from Lisp to the stack machine is
-fighting gravity. Forth's entire semantics fit in a paragraph: there's a
-dictionary, a data stack, a return stack, and words consume input and execute.
-Everything else is defined in terms of these primitives.
-
-### What to Grow from Lisp
-
-The useful features of Lisp can be added to Forth without abandoning Forth's
-nature:
-
-| Lisp Feature | Forth Implementation |
-|---|---|
-| **Cons cells / pairs** | Push structured pairs onto the stack. Get lists and trees without leaving Forth. |
-| **Recursive definitions** | Use the return stack (which Forth already has). Add a base-case check idiom. |
-| **Pattern matching** | A `MATCH` word that destructures stack values. This is where Lisp's real power lives, and it fits naturally in Forth's vocabulary. |
-| **Quotations / lambdas** | Push a code block onto the stack as data, execute it later. Factor (a modern Forth descendant) does this beautifully. Gives you anonymous functions without s-expressions. |
-| **Map / filter / reduce** | Quotations + stack combinators. `' square EACH` instead of `(mapcar #'square list)`. |
-
-### What Lisp Has That We Deliberately Leave Out
-
-**Full homoiconicity** -- code as data in the most general sense. Quotations
-get you 90% of the way there. The remaining 10% (full metaprogramming, eval of
-arbitrary constructed code) is arguably *dangerous* for an AI that needs to be
-verifiable. Sutton's Verification Principle says the AI must be able to check
-its own knowledge. Unrestricted self-modification undermines this.
-
-### The Deeper Argument
-
-Forth's evaluation model matches the causal structure of time. Things happen in
-sequence. Effects follow causes. The stack accumulates context and releases it.
-This is how text works, how thought works, how reinforcement learning works --
-one step at a time, left to right, with a finite working memory that decays.
-
-Lisp's tree model is spatially elegant but temporally unnatural. It requires
-knowing the whole expression before evaluating any of it. Forth starts
-executing the moment the first word arrives. For an AI that generates tokens
-one at a time and must evaluate them incrementally, this is the right
-foundation.
-
----
-
-## Applying RL to Vidya
-
-### Current Architecture (No RL)
-
-Vidya is a neurosymbolic language model:
-- **Neural**: 6-layer GPT-2 style transformer (1.25M params, RoPE, KV-cache)
-- **Symbolic**: 5 constraints applied to logits before sampling
-- **Knowledge**: Forth dictionary of concepts extracted from corpus statistics
-
-The neural model learns via standard **supervised learning** (cross-entropy
-loss, Adam optimizer, cosine schedule). The symbolic layer uses **hand-crafted
-rules**. There is no reinforcement learning.
-
-### Where RL Could Enter
-
-#### 1. Reward-Guided Generation (RLHF-Lite)
-
-Instead of sampling from constrained logits, use RL to learn which tokens
-produce good text:
-
-```
-State:   partial text generated so far
-Action:  next token to emit
-Reward:  quality signal (coherence, validity, novelty)
-```
-
-The reward could come from:
-- **Self-evaluation**: Does the generated text activate diverse concepts?
-- **Prediction accuracy**: Can the model predict what comes next in the corpus?
-- **Forth verification**: Does the generated text form valid Forth programs?
-
-#### 2. Learned Constraints (Replace Symbolic Layer)
-
-Each of Vidya's 5 constraints could be *learned* rather than hand-coded:
-
-| Current Constraint | RL Replacement |
-|---|---|
-| Repetition penalty (-1.5) | Learn penalty magnitude from reward signal |
-| Word boundary detection | Learn tokenization preferences |
-| Word validation (hard mask) | Learn soft validity preferences |
-| Concept coherence (+2.0 boost) | Learn association strengths via TD |
-| Topic depth penalty | Learn exploration-exploitation balance |
-
-The TD model of classical conditioning (above) is directly applicable:
-concept activation is a *conditioned stimulus*, and text quality is the
-*unconditioned stimulus*. TD learning would let Vidya learn which concept
-activations predict good text.
-
-#### 3. Dyna-Style Planning
-
-Vidya could use its Forth knowledge as a *world model*:
-
-```
-Real experience:  Generate token, observe reward
-Model experience: Use Forth associations to simulate likely continuations
-Planning:         Evaluate multiple token sequences before committing
-```
-
-This is exactly Dyna: interleave real generation with model-based look-ahead.
-
-#### 4. Average-Reward Formulation
-
-Text generation is a *continuing task* -- there's no natural episode boundary.
-R-learning (shown above) is designed for exactly this:
-
-```
-rho = running estimate of average text quality
-TD error = r - rho + V(s') - V(s)
-```
-
-This avoids the need for discounting (which biases toward short-term quality)
-and naturally handles the fact that text generation doesn't have "episodes."
-
-#### 5. Multi-Armed Bandit for Token Selection
-
-At each generation step, Vidya faces a multi-armed bandit problem:
-- ~580 token "arms" (the BPE vocabulary)
-- Reward = text quality after choosing that token
-- Exploration-exploitation tradeoff
-
-UCB or gradient bandit methods could replace or supplement the current
-softmax sampling:
-
-```
-score(token) = neural_logit(token) + c * sqrt(ln(t) / N(token))
-```
-
-#### 6. Eligibility Traces for Credit Assignment
-
-When text quality is measured at the sentence level, which *token* deserves
-credit? Eligibility traces solve this:
-
-```
-e(token) *= gamma * lambda    ; decay all traces
-e(chosen_token) = 1           ; mark the chosen token
-theta += alpha * delta * e    ; update proportional to trace
-```
-
-This is exactly what TD(lambda) with replacing traces does (Mountain Car
-example above).
-
-### Proposed Architecture: Vidya-RL
-
-```
-Corpus --> BPE Training --> Tokenizer
-                               |
-                    +----------+----------+
-                    |                     |
-              Neural Training      Knowledge Extraction
-              (supervised)         (corpus statistics)
-                    |                     |
-                    v                     v
-              Transformer          Forth Dictionary
-              (6L, 128d)          (concepts, assoc.)
-                    |                     |
-                    +----------+----------+
-                               |
-                         Generation Loop:
-                    1. Forward pass -> logits
-                    2. Symbolic constraints -> constrained logits
-                    3. RL value adjustment -> final logits    <-- NEW
-                    4. Softmax, sample token
-                    5. Compute reward signal                  <-- NEW
-                    6. TD update to value estimates            <-- NEW
-                    7. Update Forth knowledge if needed        <-- NEW
-                               |
-                         Output text
-```
-
----
-
 ## Key References & Links
 
 ### The Textbook
@@ -1137,35 +901,6 @@ Corpus --> BPE Training --> Tokenizer
 - [Dyna-AHC (Lisp)](http://incompleteideas.net/simple-dyna-ahc.lisp) -- Planning + learning
 - [Acrobot (Lisp)](http://incompleteideas.net/book/code/acrobot.lisp) -- Control problem
 - [G Graphics for MCL](http://incompleteideas.net/G/g.html) -- Sutton's Lisp graphing package
-
-### Publications Highlights
-
-- [RL FAQ](http://incompleteideas.net/RL-FAQ.html)
-- [Publications page](http://incompleteideas.net/publications.html) with highlights:
-  - Welcome to the Era of Experience
-  - Loss of Plasticity and Continual Backprop (Nature)
-  - The STOMP progression (SwiftTD, Swift-Sarsa)
-  - The Big World Hypothesis
-  - Reward centering
-  - The common model of the intelligent agent
-  - Horde, nexting, and predictive knowledge
-  - Temporal-difference learning (original)
-  - TD model of Pavlovian conditioning
-  - Dyna and its extensions
-  - Options framework (temporal abstraction)
-  - Policy gradient methods
-  - PSRs (Predictive State Representations)
-
-### Classic Papers (hosted by Sutton)
-
-- [Minsky, 1960, Steps to AI](http://incompleteideas.net/papers/Minsky60steps.pdf)
-- [Samuel, 1959 (checkers)](http://incompleteideas.net/papers/samuel.pdf)
-- [Watkins thesis (Q-learning)](http://incompleteideas.net/papers/watkins-thesis.pdf)
-- [Tesauro, 1992 (TD-Gammon)](http://incompleteideas.net/papers/tesauro-92.pdf)
-- [Williams, 1992 (REINFORCE)](http://incompleteideas.net/papers/williams-92.pdf)
-- [Selfridge, 1958 (Pandemonium)](http://incompleteideas.net/papers/pandemonium.pdf)
-- [Good, 1965 (Ultraintelligent Machine)](http://incompleteideas.net/papers/Good65ultraintelligent.pdf)
-- [The Hedonistic Neuron (Klopf)](http://incompleteideas.net/papers/The_Hedonistic_Neuron.pdf)
 
 ### All Lisp Code Files (from the textbook)
 
@@ -1208,6 +943,35 @@ Corpus --> BPE Training --> Tokenizer
 | [TDmodel.lisp](http://incompleteideas.net/TDmodel.lisp) | TD model of classical conditioning |
 | [simple-dyna-ahc.lisp](http://incompleteideas.net/simple-dyna-ahc.lisp) | Dyna-AHC (planning + learning) |
 | [acrobot.lisp](http://incompleteideas.net/book/code/acrobot.lisp) | Acrobot control problem |
+
+### Publications Highlights
+
+- [RL FAQ](http://incompleteideas.net/RL-FAQ.html)
+- [Publications page](http://incompleteideas.net/publications.html) with highlights:
+  - Welcome to the Era of Experience
+  - Loss of Plasticity and Continual Backprop (Nature)
+  - The STOMP progression (SwiftTD, Swift-Sarsa)
+  - The Big World Hypothesis
+  - Reward centering
+  - The common model of the intelligent agent
+  - Horde, nexting, and predictive knowledge
+  - Temporal-difference learning (original)
+  - TD model of Pavlovian conditioning
+  - Dyna and its extensions
+  - Options framework (temporal abstraction)
+  - Policy gradient methods
+  - PSRs (Predictive State Representations)
+
+### Classic Papers (hosted by Sutton)
+
+- [Minsky, 1960, Steps to AI](http://incompleteideas.net/papers/Minsky60steps.pdf)
+- [Samuel, 1959 (checkers)](http://incompleteideas.net/papers/samuel.pdf)
+- [Watkins thesis (Q-learning)](http://incompleteideas.net/papers/watkins-thesis.pdf)
+- [Tesauro, 1992 (TD-Gammon)](http://incompleteideas.net/papers/tesauro-92.pdf)
+- [Williams, 1992 (REINFORCE)](http://incompleteideas.net/papers/williams-92.pdf)
+- [Selfridge, 1958 (Pandemonium)](http://incompleteideas.net/papers/pandemonium.pdf)
+- [Good, 1965 (Ultraintelligent Machine)](http://incompleteideas.net/papers/Good65ultraintelligent.pdf)
+- [The Hedonistic Neuron (Klopf)](http://incompleteideas.net/papers/The_Hedonistic_Neuron.pdf)
 
 ---
 
