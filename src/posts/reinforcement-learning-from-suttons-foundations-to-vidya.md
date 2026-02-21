@@ -3,6 +3,7 @@ title: "Reinforcement Learning: From Sutton's Foundations to Vidya"
 date: 2026-02-21
 layout: "base.njk"
 tags: post
+order: 4
 ---
 
 # Reinforcement Learning: From Sutton's Foundations to Vidya

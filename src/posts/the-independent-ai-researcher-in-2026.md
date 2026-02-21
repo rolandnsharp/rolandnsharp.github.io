@@ -3,6 +3,7 @@ title: "The Independent AI Researcher in 2026"
 date: 2026-02-21
 layout: "base.njk"
 tags: post
+order: 5
 ---
 
 # The Independent AI Researcher in 2026

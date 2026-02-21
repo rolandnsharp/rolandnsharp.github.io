@@ -3,6 +3,7 @@ title: "Forth9: The Lisp(Forth) Machine That Fits in Your Pocket"
 date: 2026-02-17
 layout: "base.njk"
 tags: post
+order: 3
 ---
 # Forth9: The Lisp Machine That Fits in Your Pocket
 

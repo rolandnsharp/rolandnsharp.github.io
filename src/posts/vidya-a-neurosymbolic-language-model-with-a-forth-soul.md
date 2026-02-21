@@ -3,6 +3,7 @@ title: "Vidya: A Neurosymbolic Language Model with a Forth Soul"
 date: 2026-02-21
 layout: "base.njk"
 tags: post
+order: 2
 ---
 
 # Vidya: A Neurosymbolic Language Model with a Forth Soul

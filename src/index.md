@@ -25,7 +25,8 @@ layout: "base.njk"
 ## Latest Posts
 
 <ul>
-{% for post in collections.post %}
+{% assign sorted = collections.post | sort: "data.order" %}
+{% for post in sorted %}
   <li>
     <a href="{{ post.url }}">
       {{ post.data.title }}
