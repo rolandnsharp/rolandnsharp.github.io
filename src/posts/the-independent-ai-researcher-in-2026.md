@@ -47,6 +47,35 @@ system. But understanding accumulates through repetition, through
 reading the code, through watching outputs change when architectures
 change. It catches up.
 
+Here's what comes out the other side — Vidya prompted with "what is the
+Absolute?", trained on the Enneads of Plotinus, 1.25M parameters,
+running on CPU:
+
+```
+$ ./microgpt_tuned --load --prompt "what is the Absolute?"
+num docs: 16478
+BPE: 79 chars + 500 merges = 580 vocab | 2.7 chars/token
+num params: 1253888
+
+ 1: what is the Absolute?and therefore is in various of the same experiences?
+ 2: what is the Absolute?of this lower, but a matter of course, which it has been we
+ 3: what is the Absolute?and therefore is Authentic Existent.
+ 4: what is the Absolute?they are not merely allowed to its course, or another, in
+ 5: what is the Absolute?and therefore is to be seen and its intellection and
+ 6: what is the Absolute?of this sphere of the lower soul- as a question to remember
+ 7: what is the Absolute?Evil is no definite number and intervening down to its intention
+ 8: what is the Absolute?and as a less human being a definite shape is unless and as
+ 9: what is the Absolute?where there is nothing of the Soul, but a master
+10: what is the Absolute?of this sphere which in a light or up it a region
+
+total time: 3.48s
+```
+
+Not coherent by GPT-4 standards. But every word is valid, the concepts
+are topically connected (Soul, Existent, intellection, Evil — all
+Plotinian), and the symbolic constraint system is keeping the model on
+topic with 1.25 million parameters. 3.48 seconds on a CPU. No GPU.
+
 ---
 
 ## The Landscape
