@@ -32,5 +32,6 @@ layout: "base.njk"
     </a>
     - <span>{{ post.date | readableDate }}</span>
   </li>
+  <br>
 {% endfor %}
 </ul>
