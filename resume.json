@@ -1,0 +1,193 @@
+{
+  "basics": {
+    "name": "Roland Sharp",
+    "email": "rolandnsharp@gmail.com",
+    "label": "Systems Programmer & Independent AI Researcher",
+    "picture": "",
+    "summary": "I build AI systems from first principles. My current project, Vidya, is a neurosymbolic language model written in OCaml — a GPT-2 transformer with BLAS-accelerated matrix ops, BPE tokenization, KV-cache inference, and a Forth interpreter that constrains generation at the logit level. It trains on a single CPU in 30 minutes. Before that, I spent 5+ years building distributed systems in Node.js and TypeScript across crypto exchanges, blockchain platforms, and enterprise SaaS. I'm the co-founder of JSON Resume, the open-source resume standard (4.2K GitHub stars).",
+    "location": {
+      "address": "",
+      "postalCode": "",
+      "city": "Melbourne",
+      "countryCode": "AU",
+      "region": "Victoria"
+    },
+    "website": "https://rolandnsharp.github.io",
+    "profiles": [
+      {
+        "url": "https://github.com/rolandnsharp",
+        "username": "rolandnsharp",
+        "network": "GitHub"
+      },
+      {
+        "url": "https://rolandnsharp.github.io",
+        "username": "rolandnsharp",
+        "network": "Blog"
+      }
+    ]
+  },
+  "work": [
+    {
+      "company": "Independent Research",
+      "website": "https://rolandnsharp.github.io/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/",
+      "position": "AI Researcher & Systems Programmer",
+      "startDate": "2022-01-01",
+      "summary": "Building Vidya, a neurosymbolic language model in OCaml with C FFI. Started from Karpathy's microGPT, rewrote the full transformer stack in OCaml: 6-layer GPT-2 with rotary position embeddings, weight tying, residual scaling, KV-cache, and BPE tokenization (~580 token vocab). Added a Forth-based symbolic constraint system that extracts concepts from the training corpus and biases generation toward topical coherence — the neural model ranks by likelihood, the symbolic system defines what's valid. Currently implementing TD learning (reinforcement learning) so concept association weights adapt during generation. The model trains 100K steps across 16K documents in 30 minutes on a laptop CPU with no GPU. I worked with Claude Code as a pair programming partner — I directed the architecture, studied its explanations of the math, read every line of generated code, and pushed the implementation forward through iterative conversation. Limited understanding of every detail, but deep enough to make real architectural decisions and debug production issues."
+    },
+    {
+      "company": "Sifchain",
+      "website": "https://sifchain.network",
+      "summary": "Built the TypeScript client SDK and public data API for a decentralized cryptocurrency exchange. Expanded SQL knowledge into complex aggregate queries, worked with Ethereum and Cosmos JavaScript APIs, deployed AWS Lambda functions.",
+      "position": "Node.js Developer & Data Engineer",
+      "startDate": "2021-04-25",
+      "endDate": "2021-11-23"
+    },
+    {
+      "company": "Blockbid",
+      "website": "https://blockbid.io",
+      "summary": "Maintained and built out the API gateway for an Australian cryptocurrency exchange. Built the initial market-starting arbitrage bot. TypeScript, GraphQL, TypeORM, Redis, JWT and TOTP multi-factor authentication.",
+      "position": "Senior Node.js Developer",
+      "startDate": "2018-04-12",
+      "endDate": "2019-03-01"
+    },
+    {
+      "company": "Everledger",
+      "summary": "Built a zero-knowledge query service for a consortium blockchain — the first company to use Hyperledger in production. Homomorphic encryption, private blockchain for immutable audit logs. 15+ Docker containers orchestrated with Docker Compose. Wrote all Golang chaincode. Deployed to IBM infrastructure.",
+      "position": "Systems Engineer",
+      "website": "https://everledger.io",
+      "startDate": "2017-09-08",
+      "endDate": "2018-04-03"
+    },
+    {
+      "company": "Adimeo",
+      "website": "https://adimeo.com/",
+      "position": "Node.js Developer",
+      "summary": "Built the server for laplateforme.com, France's largest building construction hardware retailer. Mentored PHP developers on modern JavaScript. Node.js, Express.js, Mocha.js, MySQL.",
+      "startDate": "2016-05-16",
+      "endDate": "2017-08-05"
+    },
+    {
+      "company": "Lighthouse",
+      "website": "https://lighthouse.io/",
+      "summary": "Built the main REST API for beacon location tracking on Android devices. Node.js, Express, MongoDB, Mongoose.",
+      "position": "Node.js Developer",
+      "startDate": "2014-12-02",
+      "endDate": "2016-02-01"
+    },
+    {
+      "company": "Payment Network International",
+      "website": "http://pni.com.au/",
+      "summary": "Geo-monitoring applications using Node.js. Built modules for meteorological and geological data processing. Maintained 500+ end-to-end and unit tests.",
+      "position": "Junior Node.js Developer",
+      "startDate": "2013-05-06",
+      "endDate": "2014-11-02"
+    },
+    {
+      "company": "JSON Resume",
+      "website": "http://jsonresume.org/",
+      "position": "Co-founder",
+      "summary": "Community-driven open-source initiative to create a JSON-based standard for resumes. Built the resume-cli tool (4.2K GitHub stars) and the registry server."
+    }
+  ],
+  "education": [
+    {
+      "courses": [
+        "Linear Algebra",
+        "Static and Dynamic Forces",
+        "Introduction to Electrical Engineering",
+        "Critical Reasoning and Formal Logic",
+        "Introduction to Neuroscience",
+        "Kant and European Philosophy",
+        "Philosophy of Art",
+        "Introduction to Philosophy",
+        "Introduction to Statistics",
+        "Writing for Engineers"
+      ],
+      "gpa": "",
+      "endDate": "2012-12-01",
+      "startDate": "2011-01-01",
+      "studyType": "Bachelor",
+      "area": "Science and Art",
+      "institution": "University of Queensland"
+    }
+  ],
+  "skills": [
+    {
+      "keywords": [
+        "OCaml",
+        "C FFI",
+        "TypeScript",
+        "Node.js",
+        "Golang"
+      ],
+      "level": "",
+      "name": "Languages"
+    },
+    {
+      "keywords": [
+        "Transformer architecture",
+        "BPE tokenization",
+        "Neurosymbolic systems",
+        "Reinforcement learning (TD learning)",
+        "Constrained decoding"
+      ],
+      "level": "",
+      "name": "AI / ML"
+    },
+    {
+      "keywords": [
+        "PostgreSQL",
+        "MongoDB",
+        "Redis",
+        "Docker",
+        "AWS Lambda",
+        "Linux"
+      ],
+      "level": "",
+      "name": "Infrastructure"
+    },
+    {
+      "keywords": [
+        "Forth",
+        "React",
+        "GraphQL",
+        "Express.js",
+        "REST APIs"
+      ],
+      "level": "",
+      "name": "Other"
+    }
+  ],
+  "languages": [
+    {
+      "fluency": "Native speaker",
+      "language": "English"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Vidya",
+      "description": "Neurosymbolic language model in OCaml. GPT-2 transformer with Forth-based symbolic constraint system, BPE tokenizer, BLAS-accelerated matrix ops, and TD-learned concept associations. Trains on CPU in 30 minutes.",
+      "url": "https://rolandnsharp.github.io/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/"
+    },
+    {
+      "name": "Aither",
+      "description": "Live-coding audio synthesis environment in JavaScript.",
+      "url": "https://rolandnsharp.github.io/posts/aither-live-coding-audio-synthesis-in-javascript/"
+    },
+    {
+      "name": "JSON Resume",
+      "description": "Open-source resume standard with 4.2K GitHub stars. Built the CLI tool and registry server.",
+      "url": "https://jsonresume.org"
+    }
+  ],
+  "meta": {
+    "theme": "even"
+  },
+  "references": [
+    {
+      "name": "Thomas Davis",
+      "reference": "I've known Roland for many years, and had the privilege of working closely with him at Blockbid, an Australian crypto currency exchange. Together we built out an API gateway which fronted a distributed system with Kubenetes on AWS. We used Open API v3 to define a schema for our public facing API, we built a custom schema validator which filtered out unexpected requests and responses improving security and consistency. We used JWT's to authenticate users on different microservices by passing them around with associated jobs in RabbitMQ. On top of this we managed to also support GraphQL and namely our own Apollo client frontend. He is excellent at Javascript/Typescript, writes readable, terse, documented and modular code."
+    }
+  ]
+}
