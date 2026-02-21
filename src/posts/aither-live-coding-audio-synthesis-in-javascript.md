@@ -23,25 +23,50 @@ No graph. No scheduler. No distinction between "control rate" and
 else — oscillators, filters, effects, composition — is functions
 calling functions.
 
-## How It Works
+## The Architecture
 
-The state object `s` carries:
+The state object `s` carries everything a signal needs:
 
 - `s.t` — elapsed time in seconds
 - `s.sr` — sample rate (48000)
+- `s.dt` — time delta per sample
 - `s.state` — 128-slot Float64Array for persistent memory
 - `s.name` — signal identifier
 
 Return a number for mono, `[left, right]` for stereo. The engine
 soft-clips the final mix through `Math.tanh`.
 
-Hot-swapping is the core interaction. Edit your code, send it to
-the engine (Ctrl+Enter from VSCode), and the signal crossfades to the
-new version. No click. No restart. The `s.state` array persists across
-swaps — a running oscillator keeps its phase, a delay buffer keeps
-its contents.
+### Zero-GC Hot Path
 
-## The DSP Toolkit
+The audio thread cannot tolerate garbage collection pauses. A 1ms GC
+pause is an audible click. Aither solves this with a sidecar
+architecture:
+
+- **Producer** (Bun/JavaScript): generates samples, writes to a ring
+  buffer backed by SharedArrayBuffer with lock-free atomics
+- **Consumer** (native C++): reads from the ring buffer on the audio
+  thread, outputs to JACK/PipeWire
+
+JavaScript's GC can pause the producer. The ring buffer absorbs the
+jitter. The consumer never calls back into JavaScript. Result: no
+clicks, no dropouts, no GC artifacts in the audio output.
+
+All per-signal state lives in pre-allocated Float64Arrays. No objects
+created, no arrays allocated, no strings concatenated in the hot path.
+The JIT compiles each signal chain into a tight numerical loop.
+
+### Hot-Swapping
+
+Edit your code, send it to the engine (Ctrl+Enter from VSCode), and
+the signal crossfades to the new version. No click. No restart. The
+`s.state` array persists across swaps — a running oscillator keeps its
+phase, a delay buffer keeps its contents.
+
+This is the core interaction model: write a function, hear it
+immediately, modify it, hear the change. The feedback loop is
+sub-second.
+
+## Functional Composition
 
 Oscillators are functions that return functions:
 
@@ -74,6 +99,13 @@ pipe(saw(110), signal => lowpass(signal, 800), signal => reverb(signal, 2.0, 0.4
 // Sum: three detuned sines
 mix(sin(220), sin(220.5), sin(330))
 ```
+
+Every helper — `lowpass()`, `delay()`, `tremolo()` — works on any
+signal regardless of how it was built. A filter doesn't care if it's
+processing a pure sine wave, a physics simulation, or a chaotic
+attractor. It's all `f(s) => sample`. The helpers manage their own
+state implicitly — no manual wiring, no bus routing, no explicit
+state allocation.
 
 ## What It Sounds Like
 
@@ -112,6 +144,10 @@ const carrier = sin(s => 340 + mod(s) * 100)
 play('fm', carrier)
 ```
 
+Cross-signal modulation is just one function calling another. No buses,
+no routing matrix, no global state. The modulator is a function, the
+carrier calls it. That's it.
+
 A logistic map oscillator — chaos theory as sound:
 
 ```javascript
@@ -135,18 +171,22 @@ just math at 48kHz.
 
 ## Why Not SuperCollider
 
-Traditional environments (SuperCollider, Max/MSP, PureData) use
-dataflow graphs. Nodes connect to nodes. Messages schedule events.
-Control rate and audio rate are separate worlds.
+SuperCollider separates UGens, DemandUGens, and Patterns into different
+APIs with different semantics. Control rate and audio rate are separate
+worlds. Cross-signal modulation requires explicit buses. State
+management is manual.
 
-Aither uses plain function composition. The JIT compiles the entire
-signal chain into a single tight loop. No message passing, no
-scheduling overhead, no garbage collection on the hot path.
+Aither has one interface: `f(s) => sample`. The same helpers work on
+everything. Cross-signal modulation is a function call. State is
+implicit. The JIT compiles the entire signal chain into a single tight
+loop — no message passing, no scheduling overhead, no garbage
+collection on the hot path.
 
-The tradeoff: no built-in GUI, no visual patching, no 30 years of
-UGen libraries. What you get instead is JavaScript — the language
-you already know, every npm package available, your editor, your
-debugger, your workflow. The learning curve is writing functions.
+Max/MSP and PureData give you visual patching. Aither gives you
+JavaScript — the language you already know, your editor, your debugger,
+your workflow. The tradeoff is no GUI and no 30 years of UGen
+libraries. What you get is the full npm ecosystem, sub-second feedback,
+and a synthesis model where composition is just how functions work.
 
 ---
 
