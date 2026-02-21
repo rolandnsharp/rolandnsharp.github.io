@@ -22,8 +22,6 @@ layout: "base.njk"
   </div>
 </div>
 
-## Latest Posts
-
 <ul>
 {% assign sorted = collections.post | sort: "data.order" %}
 {% for post in sorted %}
