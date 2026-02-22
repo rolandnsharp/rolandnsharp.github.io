@@ -2,8 +2,7 @@
 title: "The Neuromancer"
 date: 2026-02-21
 layout: "base.njk"
-tags: post
-order: 6
+draft: true
 ---
 
 # The Neuromancer
