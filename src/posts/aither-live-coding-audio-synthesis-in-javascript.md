@@ -8,6 +8,8 @@ order: 1
 
 # Aither: Live Coding Audio Synthesis in JavaScript
 
+**[Try Aither in your browser](https://rolandnsharp.github.io/aither)**
+
 Every sound in Aither is a function. A sine wave at 440 Hz:
 
 ```javascript
