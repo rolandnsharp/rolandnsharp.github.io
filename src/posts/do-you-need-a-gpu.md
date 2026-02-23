@@ -144,6 +144,49 @@ lives on the machine and learns from every conversation .
 
 ---
 
+## Give It a Book
+
+Interactive training teaches the model one sentence at a time . But what
+if we want to teach it a whole subject ? Give it a book .
+
+The mechanism is continued pre-training . Take a text file — a novel , a
+textbook , a collection of essays — tokenize it , slide a window across
+the tokens , and do one gradient step per window . A fifty thousand word
+book is roughly seventy thousand tokens . With a window of 256 tokens
+that is about 270 gradient steps . On a CPU , a few minutes . No GPU
+needed .
+
+The initial supervised training gives the model generic language ability .
+It learns grammar , turn-taking , how to form sentences . But that
+training data is not personal . It is a bootstrap . We might not mind
+overwriting some of it . The model does not need to remember every
+pattern from the original corpus . It needs to remember how to speak .
+The rest can be replaced with what we actually want it to know .
+
+This is a different kind of teaching than interactive RL . Interactive RL
+shapes behaviour — how the model responds , what style it uses , what it
+says when asked a question . Reading a book shapes knowledge — what the
+model knows about , what words and concepts it has seen , what patterns
+of thought it can draw on . The two complement each other . Read first ,
+then teach .
+
+The risk is the same as always : catastrophic forgetting . Two hundred
+and seventy gradient steps of book text will nudge the weights toward
+that book and away from everything else . A lower learning rate helps .
+Interleaving book chunks with examples from the original training data
+helps more . But at ten million parameters , capacity is tight . The
+model might learn the book and forget how to hold a conversation .
+
+At a billion parameters there should be room for both . The initial
+training gives it language . The books give it knowledge . The
+interactive RL gives it personality . Three layers of learning , all on
+the same CPU , all without a GPU after the first afternoon .
+
+We have not tested this yet either . But the code is straightforward —
+the same training loop we already have , pointed at a different file .
+
+---
+
 ## Why Nobody Does This
 
 The machine learning community thinks about training in batch . Millions
