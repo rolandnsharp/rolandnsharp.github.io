@@ -185,11 +185,19 @@ We expect measurable improvement in response quality after RL training.
 Longer responses. Better coherence. Cleaner endings. The model learning the
 human's preferences for what a good chatbot response looks like.
 
-We don't expect it to become smart. Ten million parameters is ten million
-parameters. It can't learn facts it hasn't seen. But it can learn to use
-what it has better -- to surface its best responses more often, to avoid its
-worst tendencies, to sound more like a conversation partner and less like a
-pattern matcher.
+We don't expect it to become smart from selection alone. Ten million parameters
+is ten million parameters. Picking the best of five redistributes what the model
+already knows -- surfacing its best responses more often, suppressing its worst
+tendencies.
+
+But when the human types their own response -- because none of the five were
+good enough -- that's different. That's new data. The model learns patterns it
+couldn't generate on its own. Over thousands of typed responses, the model
+acquires knowledge beyond its training set. The architecture supports this
+trivially: a typed response is just another training sequence. Same loss
+function, same gradient, same Adam step. The only difference is where the target
+came from -- not from the model's own generation, but from a human who knows
+better.
 
 The v4 model is still training. When it finishes, we teach it.
 
