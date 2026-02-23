@@ -116,8 +116,7 @@ We have not tested this at that scale yet . We will .
 
 ## The Plan
 
-There are two phases . The first tests whether interactive RL works at
-all . The second is where it leads if it does .
+There are three phases .
 
 **Phase 1 : Test interactive RL on a GPU-trained model .**
 
@@ -129,7 +128,29 @@ interaction . Does the model learn ? How fast ? How much does it forget ?
 
 This is the experiment . Everything else depends on the answer .
 
-**Phase 2 : Train from scratch , no GPU .**
+**Phase 2 : Expand the model .**
+
+Ten million parameters is a small bucket . Every new thing the model
+learns risks overwriting something old . But we do not have to start
+from scratch to get a bigger model . We can expand the one we have .
+
+The idea is width expansion . The model has an embedding dimension —
+say 128 . Double it to 256 and the model grows to roughly 40 million
+parameters . The existing weights are copied into the first 128 columns
+of every weight matrix . The remaining columns get small random values .
+The model behaves almost identically at first — the new dimensions
+contribute near-nothing — but now it has four times the capacity .
+
+This can be repeated . 10 million to 40 million to 160 million to 640
+million . Each expansion preserves what came before and adds room for
+what comes next . The GPU trained the seed . Everything after grows on
+the CPU .
+
+A few minutes of book training after each expansion should settle the
+noise from the new random parameters . Then we have a model that already
+speaks , with room to learn .
+
+**Phase 3 : Scale up , feed it books , talk to it .**
 
 If interactive RL works — if the model measurably improves from human
 feedback at human speed — then the GPU becomes optional . Not just for
@@ -144,10 +165,12 @@ is 64 GB of DDR4 for about seventy dollars .
 
 If we have an SSD with spare capacity , create a swap file . Free .
 
-**Step 3 : Initialise the model .**
+**Step 3 : Expand the model .**
 
-Random weights . No pre-trained checkpoint . No one else's training
-data . The model starts knowing nothing .
+Take the GPU-trained 10 million parameter checkpoint and grow it .
+Double the width , copy the existing weights , initialise the rest .
+Repeat until the model fills the available memory . A billion parameters
+on 64 GB of RAM . Five billion with SSD swap .
 
 **Step 4 : Give it books .**
 
