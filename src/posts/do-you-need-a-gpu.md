@@ -134,21 +134,34 @@ Ten million parameters is a small bucket . Every new thing the model
 learns risks overwriting something old . But we do not have to start
 from scratch to get a bigger model . We can expand the one we have .
 
-The idea is width expansion . The model has an embedding dimension —
-say 128 . Double it to 256 and the model grows to roughly 40 million
-parameters . The existing weights are copied into the first 128 columns
-of every weight matrix . The remaining columns get small random values .
-The model behaves almost identically at first — the new dimensions
-contribute near-nothing — but now it has four times the capacity .
+Expand in every dimension at once . The model has width , depth , heads ,
+and context length . Double all of them .
 
-This can be repeated . 10 million to 40 million to 160 million to 640
-million . Each expansion preserves what came before and adds room for
-what comes next . The GPU trained the seed . Everything after grows on
-the CPU .
+Width — double the embedding dimension from 128 to 256 . Every weight
+matrix gets wider . The existing weights are copied into the top-left
+corner . New columns get small random values . More width means more
+capacity per layer to store knowledge .
+
+Depth — add new transformer layers . Initialise them so their output is
+near-zero — they act as skip connections at first , doing nothing , then
+gradually learn to contribute . More depth means more levels of
+abstraction .
+
+Heads — double the number of attention heads . More heads means more
+parallel attention patterns . The model can track more relationships
+simultaneously .
+
+Context — extend how many tokens the model can see . Longer context
+means it can use more conversation history and read longer passages
+from books .
+
+All four grow together . Each expansion preserves what came before and
+adds room for what comes next . The GPU trained the seed . Everything
+after grows on the CPU .
 
 A few minutes of book training after each expansion should settle the
 noise from the new random parameters . Then we have a model that already
-speaks , with room to learn .
+speaks , with room to learn in every dimension .
 
 **Phase 3 : Scale up , feed it books , talk to it .**
 
@@ -168,9 +181,10 @@ If we have an SSD with spare capacity , create a swap file . Free .
 **Step 3 : Expand the model .**
 
 Take the GPU-trained 10 million parameter checkpoint and grow it .
-Double the width , copy the existing weights , initialise the rest .
-Repeat until the model fills the available memory . A billion parameters
-on 64 GB of RAM . Five billion with SSD swap .
+Double the width , depth , heads , and context . Copy the existing
+weights , initialise the rest . Repeat until the model fills the
+available memory . A billion parameters on 64 GB of RAM . Five billion
+with SSD swap .
 
 **Step 4 : Give it books .**
 
