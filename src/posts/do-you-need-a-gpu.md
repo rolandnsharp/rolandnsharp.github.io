@@ -8,19 +8,16 @@ order: 10
 
 # Do You Need a GPU?
 
-Everyone says you need a GPU to train a language model . For supervised
-fine-tuning , this is true . Three hundred thousand gradient steps over
-a million tokens , each building a full computation graph in memory —
-that needs parallel hardware . We plan to rent one for a few hours . That
-part makes sense .
+Everyone says you need a GPU to train a language model . We are not sure
+that is true . We think you might be able to train one from scratch —
+from randomly initialised weights — on a CPU . No GPU at all . Not even
+a rented one . Not even for an afternoon .
 
-But what about what comes after ? The part where the model learns to be
-good . Reinforcement learning from human feedback . We think that part
-might not need a GPU at all . We think it might need a chair , a
-keyboard , and patience .
-
-This is an experiment . We have not proven it yet . But the reasoning
-holds up , and we are going to try .
+The catch is time . A GPU trains a model in hours . Our approach would
+take months . Maybe years . But we are not building a product . We are
+building a personal AI — one that knows what we taught it , says what we
+shaped it to say , and has never seen a word we did not choose . That is
+a life's work . We do not mind if it takes like one .
 
 ---
 
@@ -110,80 +107,82 @@ We have not tested this at that scale yet . We will .
 
 ## The Plan
 
-Here is how we intend to train a large language model without owning a
-GPU :
+Here is how we intend to train a large language model without ever
+touching a GPU :
 
-**Step 1 : Supervised fine-tuning on a rented GPU .**
-
-Upload the training data . Upload the code . Rent an A100 for a few
-hours . Run the three hundred thousand gradient steps . Download the
-checkpoint . This should cost single-digit dollars .
-
-**Step 2 : Buy RAM .**
+**Step 1 : Buy RAM .**
 
 Check the motherboard manual . Buy the maximum it supports . For us that
 is 64 GB of DDR4 for about seventy dollars .
 
-**Step 3 : Set up swap .**
+**Step 2 : Set up swap .**
 
 If we have an SSD with spare capacity , create a swap file . Free .
 
-**Step 4 : Interactive reinforcement learning .**
+**Step 3 : Initialise the model .**
 
-Load the checkpoint . Start the training interface . Ask a question .
-Read five responses . Pick the best one or type a better answer . The
-model trains on the choice . One gradient step . Ask another question .
+Random weights . No pre-trained checkpoint . No one else's training
+data . The model starts knowing nothing .
 
-If this works , every interaction makes the model better . The
-conversation history accumulates in a context file so the model
-remembers across sessions . The trained weights save to a checkpoint
-file so progress persists .
+**Step 4 : Give it books .**
 
-No cloud subscription . No GPU rental . No ongoing cost . The model
-lives on the machine and learns from every conversation .
+Feed it text files . Novels , textbooks , essays , conversations —
+whatever we want it to know . The model reads them one window at a time ,
+a few hundred gradient steps per book , a few minutes each on a CPU .
+This is where it learns language and knowledge . We choose every word it
+has ever seen .
+
+**Step 5 : Talk to it .**
+
+Start the training interface . Ask a question . Read five responses .
+Pick the best one or type a better answer . The model trains on the
+choice . One gradient step . Ask another question . This is where it
+learns personality .
+
+The books give it something to know . The conversations shape how it
+uses that knowledge . Both happen on the same CPU . Both happen at human
+speed . The model lives on the machine and learns from every interaction .
+
+No cloud subscription . No GPU rental . No ongoing cost . No one else's
+biases . Every word it knows , we chose to teach it .
 
 ---
 
 ## Give It a Book
 
-Interactive training teaches the model one sentence at a time . But what
-if we want to teach it a whole subject ? Give it a book .
+This is how the model learns language and knowledge . Not from a massive
+pre-training run on a GPU cluster . From books . One at a time . Chosen
+by the person who owns the model .
 
-The mechanism is continued pre-training . Take a text file — a novel , a
-textbook , a collection of essays — tokenize it , slide a window across
-the tokens , and do one gradient step per window . A fifty thousand word
-book is roughly seventy thousand tokens . With a window of 256 tokens
-that is about 270 gradient steps . On a CPU , a few minutes . No GPU
-needed .
+The mechanism is simple . Take a text file — a novel , a textbook , a
+collection of essays — tokenize it , slide a window across the tokens ,
+and do one gradient step per window . A fifty thousand word book is
+roughly seventy thousand tokens . With a window of 256 tokens that is
+about 270 gradient steps . On a CPU , a few minutes per book .
 
-The initial supervised training gives the model generic language ability .
-It learns grammar , turn-taking , how to form sentences . But that
-training data is not personal . It is a bootstrap . We might not mind
-overwriting some of it . The model does not need to remember every
-pattern from the original corpus . It needs to remember how to speak .
-The rest can be replaced with what we actually want it to know .
+The first books should probably be conversations . The model needs to
+learn the structure of dialogue — questions and answers , turn-taking ,
+the rhythm of human speech . After that , anything . A book on
+philosophy . A collection of letters . A technical manual . Whatever you
+want the model to know about .
 
-This is a different kind of teaching than interactive RL . Interactive RL
-shapes behaviour — how the model responds , what style it uses , what it
-says when asked a question . Reading a book shapes knowledge — what the
-model knows about , what words and concepts it has seen , what patterns
-of thought it can draw on . The two complement each other . Read first ,
-then teach .
+This is a different kind of teaching than interactive RL . Reading shapes
+knowledge — what the model knows about , what words and concepts it has
+seen , what patterns of thought it can draw on . Conversation shapes
+behaviour — how it responds , what style it uses , what it says when
+asked a question . Read first , then teach .
 
-The risk is the same as always : catastrophic forgetting . Two hundred
-and seventy gradient steps of book text will nudge the weights toward
-that book and away from everything else . A lower learning rate helps .
-Interleaving book chunks with examples from the original training data
-helps more . But at ten million parameters , capacity is tight . The
-model might learn the book and forget how to hold a conversation .
+The risk is catastrophic forgetting . Every book nudges the weights
+toward its content and away from everything else . At ten million
+parameters , capacity is tight . The model might learn the latest book
+and forget the one before . This is the strongest argument for scaling
+up — a billion parameters should have room for many books .
 
-At a billion parameters there should be room for both . The initial
-training gives it language . The books give it knowledge . The
-interactive RL gives it personality . Three layers of learning , all on
-the same CPU , all without a GPU after the first afternoon .
-
-We have not tested this yet either . But the code is straightforward —
-the same training loop we already have , pointed at a different file .
+But even at ten million , we think something interesting could happen . A
+small model trained on a few dozen carefully chosen books and a few
+hundred conversations would know a narrow world deeply . It would not
+know everything . But what it knows , you taught it . And what it says ,
+you shaped .
 
 ---
 
@@ -211,10 +210,10 @@ and teach him , one conversation at a time . He will generate five
 responses to every question . We will pick the best or type a better
 one . He should learn .
 
-If we scale him up — rent a GPU for the initial training , bring the
-checkpoint home , max out the RAM — he could be a billion parameters or
-more . Still learning from conversation . Still running on an Intel i5
-with no graphics card . That is the experiment .
+If we scale him up — max out the RAM , set up swap — he could be a
+billion parameters or more . Still learning from books and conversation .
+Still running on an Intel i5 with no graphics card . No GPU ever . That
+is the experiment .
 
 ---
 
@@ -278,17 +277,20 @@ It knows everything about everything and nothing about you . It cannot
 learn . It cannot improve . It is a library — vast , static , useful ,
 but not yours .
 
-Or train your own model . Smaller , but it learns from every interaction .
-It adapts to your preferences , your domain , your corrections . It
-starts knowing less but it could get better every day . It is an
-apprentice .
+Or train your own model from scratch . Smaller , but it learns from
+every book you feed it and every conversation you have with it . It
+starts knowing nothing . It could get better every day for the rest of
+your life . It is an apprentice .
 
 We chose the apprentice . Sixty-four gigabytes of RAM and a swap file .
-A rented GPU for the afternoon . Interactive reinforcement learning for
-as long as we want to teach .
+No GPU . No rental . No cloud . Just books and a keyboard .
 
-The GPU is for the beginning . Everything after — if this works — is
-just a human and a keyboard .
+The conventional path is to rent a GPU for the initial training and do
+reinforcement learning after . We think you might not need the GPU at
+all . Start from random weights . Feed it books . Talk to it . It will
+be terrible at first . Give it a year . This is not a product . It is a
+life's work — to build an intelligence that is entirely yours , from the
+first gradient step to the last .
 
 ---
 
