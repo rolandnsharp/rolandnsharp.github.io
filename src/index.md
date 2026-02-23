@@ -1,34 +1,28 @@
 ---
-title: "Roland Sharp"
+title: "NUROMANCY"
 layout: "base.njk"
 ---
 
-<div class="neofetch-container">
-  <!-- <pre class="neofetch-ascii">
-    ██████╗ ██╗      ██████╗  ██████╗ 
-    ██╔══██╗██║     ██╔═══██╗██╔════╝
-    ██████╔╝██║     ██║   ██║█████╗  
-    ██╔══██╗██║     ██║   ██║██╔══╝  
-    ██║  ██║███████╗╚██████╔╝███████╗
-    ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚══════╝ 
-  </pre> -->
-  <div class="neofetch-info">
-    <!-- <p><span class="neofetch-title">Blog</span></p>
-    <p>--------------------</p> -->
-    <p><a href="https://github.com/rolandnsharp" target="_blank" rel="noopener noreferrer">github.com/rolandnsharp</a></p>
-    <p><a href="mailto:rolandnsharp@gmail.com">rolandnsharp@gmail.com</a></p>
-    <p><a href="https://x.com/rolandnsharp" target="_blank" rel="noopener noreferrer">x.com/rolandnsharp</a></p>
-  </div>
+<pre class="site-title-ascii">
+ ███╗   ██╗██╗   ██╗██████╗  ██████╗ ███╗   ███╗ █████╗ ███╗   ██╗ ██████╗██╗   ██╗
+ ████╗  ██║██║   ██║██╔══██╗██╔═══██╗████╗ ████║██╔══██╗████╗  ██║██╔════╝╚██╗ ██╔╝
+ ██╔██╗ ██║██║   ██║██████╔╝██║   ██║██╔████╔██║███████║██╔██╗ ██║██║      ╚████╔╝
+ ██║╚██╗██║██║   ██║██╔══██╗██║   ██║██║╚██╔╝██║██╔══██║██║╚██╗██║██║       ╚██╔╝
+ ██║ ╚████║╚██████╔╝██║  ██║╚██████╔╝██║ ╚═╝ ██║██║  ██║██║ ╚████║╚██████╗   ██║
+ ╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝   ╚═╝
+</pre>
+
+<div class="site-links">
+  <a href="https://github.com/rolandnsharp" target="_blank" rel="noopener noreferrer">github</a>
+  <a href="mailto:rolandnsharp@gmail.com">email</a>
+  <a href="https://x.com/rolandnsharp" target="_blank" rel="noopener noreferrer">x</a>
 </div>
 
-<ul>
+<ul class="post-list">
 {% assign sorted = collections.post | sort: "data.order" %}
 {% for post in sorted %}
   <li>
-    <a href="{{ post.url }}">
-      {{ post.data.title }}
-    </a>
+    <a href="{{ post.url }}">{{ post.data.title }}</a>
   </li>
-  <br>
 {% endfor %}
 </ul>

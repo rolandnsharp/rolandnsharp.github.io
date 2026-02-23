@@ -1,42 +1,74 @@
 :root {
-  --background-color-dark: #2c2c2c; /* Dark gray */
-  --text-color-dark: #e0e0e0; /* Light gray */
-  --background-color-light: #f0f0f0; /* Light gray */
-  --text-color-light: #333333; /* Darker gray */
+  --bg: #1a1a1a;
+  --fg: #c8c8c8;
+  --dim: #666;
+  --accent: #888;
+  --border: #333;
+  --bg-light: #f0f0f0;
+  --fg-light: #222;
+  --dim-light: #777;
+  --accent-light: #555;
+  --border-light: #ccc;
 }
 
 body {
   font-family: 'Ubuntu Mono', monospace;
   transition: background-color 0.3s, color 0.3s;
-  padding: 2rem 1rem; /* Add vertical padding to the body */
+  padding: 2rem 1rem;
+  line-height: 1.6;
+  font-size: 16px;
 }
 
 body.dark {
-  background-color: var(--background-color-dark);
-  color: var(--text-color-dark);
+  background-color: var(--bg);
+  color: var(--fg);
 }
 
 body.light {
-  background-color: var(--background-color-light);
-  color: var(--text-color-light);
+  background-color: var(--bg-light);
+  color: var(--fg-light);
 }
 
+/* Links */
 a {
   color: inherit;
   text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  transition: border-color 0.2s;
 }
 
+a:hover {
+  border-bottom-color: var(--fg);
+}
+
+body.light a:hover {
+  border-bottom-color: var(--fg-light);
+}
+
+/* Header */
 header {
-  max-width: 800px; /* Limit header width to match main content */
-  margin: 0 auto; /* Center the header horizontally */
+  max-width: 800px;
+  margin: 0 auto;
   padding: 1rem;
-  border-bottom: 1px solid;
+  border-bottom: 1px solid var(--border);
+}
+
+body.light header {
+  border-bottom-color: var(--border-light);
 }
 
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+nav a {
+  border-bottom: none;
+}
+
+nav a:hover {
+  border-bottom: 1px solid;
 }
 
 #theme-switcher {
@@ -50,38 +82,204 @@ nav {
 }
 
 body.light #theme-switcher {
-  filter: grayscale(1) brightness(0.3); /* Darken moon for light theme */
+  filter: grayscale(1) brightness(0.3);
 }
 
+/* Main content */
 main {
-  max-width: 800px; /* Limit content width for readability */
-  margin: 0 auto; /* Center the main content area */
+  max-width: 800px;
+  margin: 0 auto;
   padding: 1rem;
 }
 
-/* Neofetch Styles */
-.neofetch-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  margin-bottom: 2rem;
-}
-
-.neofetch-ascii {
+/* ASCII title */
+.site-title-ascii {
   font-family: 'Ubuntu Mono', monospace;
   white-space: pre;
-  color: var(--text-color-dark); /* Color for dark theme */
+  font-size: 10px;
+  line-height: 1.1;
+  margin: 2rem 0 1.5rem 0;
+  color: var(--fg);
+  overflow-x: auto;
 }
 
-body.light .neofetch-ascii {
-  color: var(--text-color-light); /* Color for light theme */
+body.light .site-title-ascii {
+  color: var(--fg-light);
 }
 
-.neofetch-info p {
-  margin: 0;
+/* Site links row */
+.site-links {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  color: var(--dim);
 }
 
-.neofetch-title {
-  font-weight: bold;
+body.light .site-links {
+  color: var(--dim-light);
 }
 
+.site-links a {
+  color: var(--dim);
+  border-bottom: 1px solid var(--border);
+}
+
+body.light .site-links a {
+  color: var(--dim-light);
+  border-bottom-color: var(--border-light);
+}
+
+.site-links a:hover {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+
+body.light .site-links a:hover {
+  color: var(--fg-light);
+  border-bottom-color: var(--fg-light);
+}
+
+/* Post list */
+.post-list {
+  list-style: none;
+  padding: 0;
+}
+
+.post-list li {
+  margin-bottom: 0.75rem;
+}
+
+.post-list a {
+  border-bottom: none;
+}
+
+.post-list a:hover {
+  border-bottom: 1px solid;
+}
+
+/* Post content */
+h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--fg);
+}
+
+body.light h2 {
+  color: var(--fg-light);
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Code blocks */
+pre {
+  overflow-x: auto;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+body.light pre {
+  border-color: var(--border-light);
+}
+
+code {
+  font-family: 'Ubuntu Mono', monospace;
+  font-size: 14px;
+}
+
+/* Inline code */
+p code, li code {
+  padding: 0.15rem 0.3rem;
+  border: 1px solid var(--border);
+}
+
+body.light p code, body.light li code {
+  border-color: var(--border-light);
+}
+
+/* Blockquotes */
+blockquote {
+  margin: 1rem 0;
+  padding: 0 1rem;
+  border-left: 2px solid var(--dim);
+  color: var(--accent);
+}
+
+body.light blockquote {
+  border-left-color: var(--dim-light);
+  color: var(--accent-light);
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 14px;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+}
+
+body.light th, body.light td {
+  border-color: var(--border-light);
+}
+
+th {
+  font-weight: 700;
+}
+
+/* Horizontal rules */
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+body.light hr {
+  border-top-color: var(--border-light);
+}
+
+/* Images */
+img {
+  max-width: 100%;
+}
+
+/* Strong / emphasis */
+strong {
+  font-weight: 700;
+}
+
+/* Lists in content */
+ul, ol {
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.3rem;
+}
+
+/* Responsive ASCII title */
+@media (max-width: 600px) {
+  .site-title-ascii {
+    font-size: 6px;
+  }
+}
