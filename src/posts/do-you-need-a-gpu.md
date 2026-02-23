@@ -175,6 +175,57 @@ with no graphics card . That is the experiment .
 
 ---
 
+## What We Expect
+
+We do not know how fast interactive RL will teach a small model . Nobody
+has tested this . But we have expectations , and we want to write them
+down before the experiment so we cannot fool ourselves after .
+
+**Selection should work relatively fast .** When the human picks one of
+five generated responses , the model already produced those tokens . The
+capability is in the weights . The gradient step reinforces an existing
+path , it does not create a new one . This is Expert Iteration , and it
+is well-studied . We expect a few dozen selections on similar prompts to
+noticeably shift the distribution . The model should start preferring the
+kind of responses the human keeps choosing .
+
+**Typing new responses will be slower .** Teaching the model something it
+has never said — a name , a fact , a style of speaking — means creating
+a new pattern in the weights . One gradient step is a tiny nudge . The
+loss might drop from 3.5 to 3.48 on that specific sequence . We expect
+it will take ten to fifty repetitions of the same kind of response
+before the model reliably produces it unprompted .
+
+**The context file will carry us while the weights catch up .** Even
+before the model learns something in its parameters , it sees the full
+conversation history on every prompt . If we taught it our name twenty
+turns ago , that turn is in the context file . The model can use
+in-context learning to stay consistent while the gradient steps slowly
+burn the pattern into the weights . The context is a crutch . The
+weights are the real learning .
+
+**What could go wrong :**
+
+Catastrophic forgetting . Every gradient step that teaches the model
+something new slightly overwrites something old . Ten million parameters
+is a small bucket . If we teach it a thousand new things , some old
+capabilities will degrade . We will watch for this .
+
+The steps might be too small to matter . At a learning rate of 1e-5 ,
+each step is safe but tiny . We might need to increase it to 1e-4 or
+even 1e-3 to see real change , at the risk of instability .
+
+The model might not have enough capacity . Ten million parameters can
+hold general conversation ability or specific taught knowledge , but
+maybe not both . This is the strongest argument for scaling up — not
+because bigger is better in the abstract , but because the model needs
+room to hold what we teach it without forgetting what it already knows .
+
+Fifty interactions will tell us more than any theory . We will sit down
+with Mr . Classic when his training finishes and find out .
+
+---
+
 ## The Apprentice and the Library
 
 There are two ways to have a capable language model on your machine .
