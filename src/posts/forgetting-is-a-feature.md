@@ -8,7 +8,7 @@ order: 9
 
 # Forgetting is a Feature
 
-My AI collaborator forgets everything between sessions . Every conversation
+Claude Code forgets everything between sessions . Every conversation
 starts from zero . No memory of the architecture we designed , the bugs we
 chased , the breakthroughs we had at two in the morning . It reads the
 codebase fresh each time , re-derives conclusions from first principles ,
