@@ -9,9 +9,18 @@ order: 10
 # Do You Need a GPU?
 
 Everyone says you need a GPU to train a language model . We are not sure
-that is true . We think you might be able to train one from scratch —
-from randomly initialised weights — on a CPU . No GPU at all . Not even
-a rented one . Not even for an afternoon .
+that is true .
+
+Right now we are training a 10 million parameter chatbot on a rented GPU .
+Three hundred thousand gradient steps over a million tokens . When that
+finishes , we will test something : can we teach it interactively , on a
+CPU , one conversation at a time ? Does it learn from human feedback at
+human speed ?
+
+If that works , the next question is obvious . Why use the GPU at all ?
+Why not start from random weights and teach it everything — from books ,
+from conversation — on a CPU ? No GPU . Not even a rented one . Not
+even for an afternoon .
 
 The catch is time . A GPU trains a model in hours . Our approach would
 take months . Maybe years . But we are not building a product . We are
@@ -107,8 +116,24 @@ We have not tested this at that scale yet . We will .
 
 ## The Plan
 
-Here is how we intend to train a large language model without ever
-touching a GPU :
+There are two phases . The first tests whether interactive RL works at
+all . The second is where it leads if it does .
+
+**Phase 1 : Test interactive RL on a GPU-trained model .**
+
+We are training Mr . Classic — a 10 million parameter transformer — on
+conversation data using a rented GPU . Three hundred thousand gradient
+steps . When that finishes , we sit with him and test : generate five
+responses , pick the best or type a better one , one gradient step per
+interaction . Does the model learn ? How fast ? How much does it forget ?
+
+This is the experiment . Everything else depends on the answer .
+
+**Phase 2 : Train from scratch , no GPU .**
+
+If interactive RL works — if the model measurably improves from human
+feedback at human speed — then the GPU becomes optional . Not just for
+RL , but for everything .
 
 **Step 1 : Buy RAM .**
 
@@ -205,15 +230,17 @@ loop typing responses on a keyboard .
 
 We are building that system . Our chatbot Mr . Classic is a 10 million
 parameter transformer trained from scratch in OCaml . No PyTorch . No
-GPU . No frameworks . When his training finishes , we will sit with him
-and teach him , one conversation at a time . He will generate five
+frameworks . Right now he is being trained on a rented GPU — the
+conventional way . When that finishes , we will sit with him and teach
+him on a CPU , one conversation at a time . He will generate five
 responses to every question . We will pick the best or type a better
 one . He should learn .
 
-If we scale him up — max out the RAM , set up swap — he could be a
-billion parameters or more . Still learning from books and conversation .
-Still running on an Intel i5 with no graphics card . No GPU ever . That
-is the experiment .
+If he does , we scale up . Max out the RAM , set up swap , start the
+next model from random weights . No GPU at all . Feed it books . Talk
+to it . A billion parameters or more , learning from books and
+conversation , running on an Intel i5 with no graphics card . That is
+where this leads .
 
 ---
 
@@ -282,15 +309,15 @@ every book you feed it and every conversation you have with it . It
 starts knowing nothing . It could get better every day for the rest of
 your life . It is an apprentice .
 
-We chose the apprentice . Sixty-four gigabytes of RAM and a swap file .
-No GPU . No rental . No cloud . Just books and a keyboard .
+We chose the apprentice . We are starting with the conventional path — a
+rented GPU for the initial training , then interactive RL on a CPU . But
+if the RL works , the next model starts from nothing . Sixty-four
+gigabytes of RAM and a swap file . No GPU . No rental . No cloud . Just
+books and a keyboard .
 
-The conventional path is to rent a GPU for the initial training and do
-reinforcement learning after . We think you might not need the GPU at
-all . Start from random weights . Feed it books . Talk to it . It will
-be terrible at first . Give it a year . This is not a product . It is a
-life's work — to build an intelligence that is entirely yours , from the
-first gradient step to the last .
+It will be terrible at first . Give it a year . This is not a product .
+It is a life's work — to build an intelligence that is entirely yours ,
+from the first gradient step to the last .
 
 ---
 
