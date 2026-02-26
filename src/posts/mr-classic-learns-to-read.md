@@ -258,13 +258,6 @@ persistence -- all of this is solid engineering. On a larger model, it should
 produce real improvement. On 10M parameters, it produces a model that knows its
 name and likes cigarettes.
 
-**Selection bias is powerful.** Mr . Classic's personality is partly the model
-and partly us. We selected "Mr . Classic" from noise. We leaned into the smoking.
-We wrote books that reinforced what we'd already chosen. The model didn't develop
-a personality -- we curated one from its best outputs and trained it to reproduce
-them. That's not emergence. It's directed selection. But it's also how you'd
-train a larger model. The method is right even if the scale is wrong.
-
 **Small models are specialists, not generalists.** 150 pairs on two topics
 worked. 161 pairs on twenty topics destroyed the model. At 10M, you get three
 facts. Pick them carefully.

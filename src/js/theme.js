@@ -11,7 +11,7 @@ if (savedTheme) {
   body.className = savedTheme;
   updateIcon(savedTheme);
 } else {
-  updateIcon('dark'); // Default to dark
+  updateIcon('light'); // Default to light
 }
 
 themeSwitcher.addEventListener('click', () => {

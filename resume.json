@@ -2,9 +2,9 @@
   "basics": {
     "name": "Roland Sharp",
     "email": "rolandnsharp@gmail.com",
-    "label": "Systems Programmer & Independent AI Researcher",
+    "label": "AI-Augmented Software Engineer",
     "picture": "",
-    "summary": "I build AI systems from first principles. My current project, Vidya, is a neurosymbolic language model written in OCaml — a GPT-2 transformer with BLAS-accelerated matrix ops, BPE tokenization, KV-cache inference, and a Forth interpreter that constrains generation at the logit level. It trains on a single CPU in 30 minutes. Before that, I spent 5+ years building distributed systems in Node.js and TypeScript across crypto exchanges, blockchain platforms, and enterprise SaaS. I'm the co-founder of JSON Resume, the open-source resume standard (4.2K GitHub stars).",
+    "summary": "I use AI coding assistants to build systems beyond what I could build alone. My current project, Vidya, is a neurosymbolic language model in OCaml — a 9.6M parameter transformer with a Forth interpreter constraining generation at the logit level, temporal difference learning for adaptive concept weights, and BLAS-accelerated matrix ops via C FFI. I directed the architecture and Claude Code wrote most of the implementation. The skill is knowing what to build, how to evaluate whether it's working, and how to steer an AI collaborator through a multi-week technical project. Before this, 5+ years building distributed systems in Node.js and TypeScript. Co-founder of JSON Resume (4.2K GitHub stars).",
     "location": {
       "address": "",
       "postalCode": "",
@@ -32,7 +32,7 @@
       "website": "https://rolandnsharp.github.io/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/",
       "position": "AI Researcher & Systems Programmer",
       "startDate": "2022-01-01",
-      "summary": "Building Vidya, a neurosymbolic language model in OCaml with C FFI. Started from Karpathy's microGPT, rewrote the full transformer stack in OCaml: 6-layer GPT-2 with rotary position embeddings, weight tying, residual scaling, KV-cache, and BPE tokenization (~580 token vocab). Added a Forth-based symbolic constraint system that extracts concepts from the training corpus and biases generation toward topical coherence — the neural model ranks by likelihood, the symbolic system defines what's valid. Currently implementing TD learning (reinforcement learning) so concept association weights adapt during generation. The model trains 100K steps across 16K documents in 30 minutes on a laptop CPU with no GPU. I worked with Claude Code as a pair programming partner — I directed the architecture, studied its explanations of the math, read every line of generated code, and pushed the implementation forward through iterative conversation. Limited understanding of every detail, but deep enough to make real architectural decisions and debug production issues."
+      "summary": "Directing the build of Vidya, a neurosymbolic language model in OCaml with C FFI, using Claude Code as primary implementation partner. The system: a 9.6M parameter GPT-2 transformer with rotary position embeddings, weight tying, KV-cache, BPE tokenization (606 vocab), a Forth interpreter for symbolic constraint at the logit level, and temporal difference learning for adaptive concept associations. My role: architecture decisions, evaluation, steering multi-week AI-assisted development across 10+ source files. Read every line. Ran every test. Decided what to build next. Identified and fixed performance bottlenecks (optimized O(n*m) co-occurrence scan to O(n) indexed lookup). Published technical blog documenting the process and results."
     },
     {
       "company": "Sifchain",
@@ -114,14 +114,14 @@
   "skills": [
     {
       "keywords": [
-        "OCaml",
-        "C FFI",
-        "TypeScript",
-        "Node.js",
-        "Golang"
+        "Claude Code",
+        "AI-directed architecture",
+        "Prompt engineering for code generation",
+        "Multi-session AI project management",
+        "Code review of AI-generated output"
       ],
       "level": "",
-      "name": "Languages"
+      "name": "AI-Assisted Development"
     },
     {
       "keywords": [
@@ -136,6 +136,17 @@
     },
     {
       "keywords": [
+        "OCaml",
+        "C FFI",
+        "TypeScript",
+        "Node.js",
+        "Golang"
+      ],
+      "level": "",
+      "name": "Languages"
+    },
+    {
+      "keywords": [
         "PostgreSQL",
         "MongoDB",
         "Redis",
@@ -145,17 +156,6 @@
       ],
       "level": "",
       "name": "Infrastructure"
-    },
-    {
-      "keywords": [
-        "Forth",
-        "React",
-        "GraphQL",
-        "Express.js",
-        "REST APIs"
-      ],
-      "level": "",
-      "name": "Other"
     }
   ],
   "languages": [
@@ -167,7 +167,7 @@
   "projects": [
     {
       "name": "Vidya",
-      "description": "Neurosymbolic language model in OCaml. GPT-2 transformer with Forth-based symbolic constraint system, BPE tokenizer, BLAS-accelerated matrix ops, and TD-learned concept associations. Trains on CPU in 30 minutes.",
+      "description": "9.6M parameter neurosymbolic language model in OCaml. GPT-2 transformer with Forth-based symbolic constraints, BPE tokenizer, BLAS-accelerated matrix ops, and TD-learned concept associations. Built with Claude Code as implementation partner.",
       "url": "https://rolandnsharp.github.io/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/"
     },
     {
