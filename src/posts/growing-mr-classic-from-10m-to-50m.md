@@ -3,7 +3,7 @@ title: "Growing Mr . Classic from 10M to 50M Parameters"
 date: 2026-02-27
 layout: "base.njk"
 tags: post
-draft: true
+draft: false
 ---
 
 # Growing Mr . Classic from 10M to 50M Parameters
