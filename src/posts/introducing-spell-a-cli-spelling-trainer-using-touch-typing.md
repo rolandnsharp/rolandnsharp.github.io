@@ -3,7 +3,6 @@ title: "Spell: A CLI Spelling Trainer"
 date: 2026-02-03
 layout: "base.njk"
 tags: post
-order: 6
 ---
 
 # Spell: A CLI Spelling Trainer

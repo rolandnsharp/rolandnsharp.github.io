@@ -3,7 +3,6 @@ title: "Aither: Live Coding Audio Synthesis in JavaScript"
 date: 2026-02-21
 layout: "base.njk"
 tags: post
-order: 1
 ---
 
 # Aither: Live Coding Audio Synthesis in JavaScript

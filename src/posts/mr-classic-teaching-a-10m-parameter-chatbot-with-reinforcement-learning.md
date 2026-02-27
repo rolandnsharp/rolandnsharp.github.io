@@ -3,7 +3,6 @@ title: "Mr . Classic: Teaching a 10M Parameter Chatbot with Reinforcement Learni
 date: 2026-02-23
 layout: "base.njk"
 tags: post
-order: 7
 ---
 
 # Mr . Classic

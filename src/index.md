@@ -19,10 +19,11 @@ layout: "base.njk"
 </div>
 
 <ul class="post-list">
-{% assign sorted = collections.post | sort: "data.order" %}
-{% for post in sorted %}
+{% assign sorted = collections.post | sort: "date" | reverse %}
+{% for post in sorted %}{% unless post.data.draft %}
   <li>
+    <span class="post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
     <a href="{{ post.url }}">{{ post.data.title }}</a>
   </li>
-{% endfor %}
+{% endunless %}{% endfor %}
 </ul>

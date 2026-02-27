@@ -3,7 +3,6 @@ title: "Mr . Classic Learns to Read"
 date: 2026-02-27
 layout: "base.njk"
 tags: post
-order: 8
 ---
 
 # Mr . Classic Learns to Read
