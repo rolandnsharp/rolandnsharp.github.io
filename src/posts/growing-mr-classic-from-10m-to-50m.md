@@ -13,21 +13,19 @@ at 10 million parameters could hold about three things in his head: his name, hi
 love of smoking, and basic greetings. Ask him anything else and the answers fell
 apart. We tried books, RL, experience replay. The model was full.
 
-So we made him bigger. Not by retraining from scratch — that takes days to weeks on CPU —
+So we made him bigger. Not by retraining from scratch — that takes weeks on CPU —
 but by widening his brain and keeping everything he already knew.
 
 ---
 
 ## The Problem with Starting Over
 
-Training Mr . Classic at 10M took over 20 hours on a CPU. At 49M parameters,
+Training Mr . Classic at 10M took over 60 hours on a CPU. At 49M parameters,
 each training step is about 7x slower — a full training run from scratch would
-take over a week. No GPU, no cloud, just a desktop machine grinding through
+take weeks to a month of grinding through
 matrix multiplies.
 
-We weren't going to wait a week. We needed a way to grow the model without
-losing what it had learned — like giving someone a bigger brain without erasing
-their memories.
+We needed a way to grow the model without losing what it had learned — like giving someone a bigger brain without erasing their memories.
 
 ---
 
