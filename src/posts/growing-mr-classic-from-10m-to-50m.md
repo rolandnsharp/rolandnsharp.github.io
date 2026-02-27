@@ -13,7 +13,7 @@ at 10 million parameters could hold about three things in his head: his name, hi
 love of smoking, and basic greetings. Ask him anything else and the answers fell
 apart. We tried books, RL, experience replay. The model was full.
 
-So we made him bigger. Not by retraining from scratch — that takes days on CPU —
+So we made him bigger. Not by retraining from scratch — that takes days to weeks on CPU —
 but by widening his brain and keeping everything he already knew.
 
 ---
