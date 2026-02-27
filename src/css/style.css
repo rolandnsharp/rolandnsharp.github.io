@@ -157,6 +157,14 @@ body.light .site-links a:hover {
   border-bottom: 1px solid;
 }
 
+.post-date {
+  color: var(--dim);
+}
+
+body.light .post-date {
+  color: var(--dim-light);
+}
+
 /* Post content */
 h1 {
   font-size: 1.4rem;
