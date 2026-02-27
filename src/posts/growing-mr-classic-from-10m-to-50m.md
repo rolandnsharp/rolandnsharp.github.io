@@ -195,3 +195,5 @@ toddler. You grow their capacity first, teach fundamentals, then introduce
 more complex material. Mr . Classic went from one-word answers to
 multi-sentence reasoning — not by reading more data, but by having a
 bigger brain to put it in.
+
+*Co-authored with [Claude](https://claude.ai/).*
