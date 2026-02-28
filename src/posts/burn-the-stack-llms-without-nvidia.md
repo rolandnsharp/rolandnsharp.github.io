@@ -72,19 +72,24 @@ fix on the first page of Google and nothing for the alternatives.
 This is what makes NVIDIA's position look unassailable. Not the silicon. The software
 ecosystem. An entire industry's muscle memory.
 
-**But software is exactly the thing that AI coding agents are good at translating.**
+**But the moat only works if you're already inside it.**
 
-Claude Code can read a CUDA kernel and rewrite it for different hardware. It can take
-PyTorch operations, decompose them into constituent matrix multiplies, and retarget them.
-It can read a hardware SDK it's never seen before and generate code for it. The entire
-value proposition of AI coding agents is that they collapse the cost of moving between
-software ecosystems.
+The CUDA ecosystem locks in projects that depend on it — PyTorch, TensorFlow, every
+framework built on cuBLAS and cuDNN. Porting those projects away from CUDA is a massive
+undertaking because they're entangled with proprietary libraries at every level.
 
-The CUDA moat is real. But it's a software moat in an era where software translation is
-becoming nearly free. Every month that AI coding tools improve, the moat gets a little
-shallower. The question isn't whether alternatives to CUDA will become viable — it's when.
-And for a small project like ours, where the surface area is one `dgemm` wrapper and a
-handful of kernels, the answer is: now.
+We never stepped inside the moat. Vidya doesn't use CUDA. It doesn't use PyTorch. It
+calls OpenBLAS for matrix multiplication through a single C FFI function. That's the
+entire hardware dependency. There's nothing to port away from CUDA because we never
+used CUDA.
+
+And the work of writing optimized kernels for alternative hardware? That's already being
+done. Tenstorrent ships TT-NN — an open-source operations library with matmul, softmax,
+layernorm, attention. The kernels exist. We just call them, the same way we call OpenBLAS
+today.
+
+The CUDA moat is real for the industry. It's irrelevant for us. When you build from
+scratch, you get to choose which ecosystem you walk into. We're choosing the open one.
 
 ---
 
