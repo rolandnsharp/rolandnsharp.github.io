@@ -118,39 +118,31 @@ core-to-core inside a chip works chip-to-chip across cards and rack-to-rack acro
 
 ---
 
-## Why Forth
+## The Simplest Port Possible
 
-Each Tensix core on the Blackhole contains dedicated tensor math units for matrix
-operations, a SIMD vector engine, and local SRAM. The 16 "Big RISC-V" cores are not toy
-processors — they're real compute cores that can run real code.
+Here's the part that surprised us. We'd been thinking about writing custom kernels — maybe
+in Forth, maybe in C. Then we looked at what Tenstorrent actually ships.
 
-These are exactly the kind of processors that Forth was designed for. Deterministic, simple,
-direct access to hardware. No branch predictors, no out-of-order execution, no speculative
-pipelines. They do exactly what you tell them, in the order you tell them. That's Forth's
-philosophy made silicon.
+TT-Metalium, their open-source SDK, includes **TT-NN** — a neural network operations
+library with pre-written, optimized kernels for matmul, softmax, layernorm, attention. The
+exact operations Vidya needs. Someone at Tenstorrent already wrote and optimized them.
 
-We already have [Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/) — a
-Forth system we built for RISC-V. The path from Forth9 to TensorForth (a Forth dialect where
-the stack holds tensors and the primitives are MATMUL, ATTENTION, LAYERNORM, SOFTMAX) is
-a straight line.
-
-Imagine composing a transformer layer as:
+Vidya's entire hardware interface today is one function: a C FFI call to OpenBLAS's `dgemm`
+for matrix multiplication. That's it. The port to Blackhole is swapping which library that
+one function calls:
 
 ```
-EMBED POSITION-ENCODE 12 TRANSFORMER-BLOCKS UNEMBED SOFTMAX
+Today:    OCaml → C FFI → OpenBLAS dgemm    → CPU
+Tomorrow: OCaml → C FFI → TT-NN matmul      → Blackhole
 ```
 
-Each word maps directly to hardware operations on the Tensix cores. No framework overhead.
-No driver calls. No kernel launches. No Python interpreter sitting in the middle wondering
-when to collect garbage.
+Same pattern. Same FFI bridge. Different library on the other end. The OCaml code — the
+model, the autograd engine, the training loop, the tokenizer — doesn't change. We don't
+need to write kernels. We don't need a new language. We call optimized operations that
+already exist, the same way we've been calling OpenBLAS.
 
-And crucially: **interactivity**. In Forth, you don't write code, compile, deploy, and pray.
-You type a word, it executes, you see the result. Immediately. Want to see what the
-attention weights look like in layer 7? Type a word. Want to change the temperature and
-regenerate? Type a word. You're inside the model, working with it live.
-
-This is the difference between treating a language model as a service you send requests to
-and treating it as a material you shape with your hands.
+This is the advantage of building from scratch with a clean architecture. When your entire
+hardware dependency is one function, switching hardware is one function change.
 
 ---
 
@@ -163,7 +155,7 @@ One used RTX 3060 12GB from eBay. Build the CUDA backend for Vidya, prove the GP
 pipeline works, train Mr. Classic properly. Learn what we need from GPU compute.
 
 **Phase 2: Blackhole ($1,399 USD / ~AU $2,200)**
-One Tenstorrent Blackhole p150a. Port Vidya's matrix ops from CUDA to TensorForth.
+One Tenstorrent Blackhole p150a. Swap Vidya's BLAS calls for TT-NN calls.
 32GB VRAM, open-source stack, interconnect ready for scaling.
 
 **Phase 3: Scale ($2,800-$5,600 USD)**
@@ -224,16 +216,16 @@ The Tenstorrent path:
 ```
 OCaml (model, autograd, training)  ← open source
   ↓
-C/Forth FFI bridge                 ← open source
+C FFI bridge                       ← open source
   ↓
-TensorForth kernels                ← open source
+TT-NN (matmul, softmax, etc.)     ← open source
   ↓
 TT-Metalium runtime               ← open source
   ↓
 Tenstorrent Blackhole              ← open hardware spec
 ```
 
-Open all the way down. The kernels are ours. The runtime is open. The hardware
+Open all the way down. The operations library is open. The runtime is open. The hardware
 documentation is public. If Tenstorrent disappeared tomorrow, the community could still
 build on the work.
 
@@ -266,7 +258,7 @@ afford. NVIDIA doesn't.
 There's an irony here worth noting. We're currently using Claude — an AI running on NVIDIA
 hardware — to help write the software that will let our AI models run without NVIDIA
 hardware. Claude Code reads the TT-Metalium SDK, understands the hardware abstraction, and
-helps generate Forth words that map to Tensix operations.
+helps write the FFI bridge to TT-NN operations.
 
 The CUDA ecosystem's last contribution to our project will be building the tool that makes
 itself unnecessary.
@@ -275,22 +267,23 @@ itself unnecessary.
 
 ## The Machine We Want to Build
 
-A Tenstorrent Blackhole card, powered up with a Forth REPL. No OS. No framework. No
-abstraction between the human and the math. You type words and tensors transform.
+A Tenstorrent Blackhole card running Vidya — the same OCaml framework we've been building
+from day one. The same autograd engine, the same transformer, the same training loop. Just
+pointing at different silicon through a different library call.
 
-This is what Chuck Moore was after when he designed Forth fifty years ago: a computer you
-can think with, not just think about. The AI revolution has been building computers that
-think for us. What we want is a computer that thinks *with* us — transparently,
-interactively, with nothing hidden.
+No proprietary layers. No black boxes. No vendor lock-in. Every line of code from the model
+definition down to the hardware operation library is open source, readable, modifiable.
 
-OCaml for the model. Forth for the metal. Open silicon underneath. That's the stack.
+The AI revolution has been building computers that think for us. What we want is a computer
+that thinks *with* us — transparently, on open hardware, with nothing hidden.
+
+OCaml for the model. TT-NN for the math. Open silicon underneath. That's the stack.
 
 Everything else is kindling.
 
 ---
 
 *See also: [Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
-[Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/),
 [Growing Mr. Classic](/posts/growing-mr-classic-from-10m-to-50m/),
 [Feeding Mr. Classic](/posts/feeding-mr-classic-2m-conversations-and-two-fixes/).*
 
