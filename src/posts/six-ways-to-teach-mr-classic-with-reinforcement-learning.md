@@ -9,10 +9,20 @@ tags: post
 
 We've been [teaching Mr. Classic with human-in-the-loop RL](/posts/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/) —
 generate five responses, pick the best one, update the weights. It works. The model
-gets better. But it doesn't scale. A human can rate maybe 50 responses an hour. The
-model has 49 million parameters and is training on
-[2.4 million conversations](/posts/feeding-mr-classic-2m-conversations-and-two-fixes/).
-The bottleneck is us.
+gets better. And it feels like something — you can feel the model learning from you,
+shifting toward your preferences, becoming more *yours* with every interaction.
+
+We don't want to replace that. The experience of teaching your own model is the
+whole point. When you pick response 3 and the next batch is noticeably better, that's
+not a bottleneck — that's the product. A model that learns from its owner, that
+carries the shape of a specific person's judgment, that gets better because *you*
+taught it. That's what we're building.
+
+But there are things the human can't teach efficiently. Mathematical correctness.
+Factual accuracy. Reasoning chains. Format compliance. And there are hours when the
+human isn't sitting at the keyboard but the model could still be learning. The six
+approaches below aren't replacements for human-in-the-loop RL — they're companions
+to it. The human teaches taste. The automated systems teach skill.
 
 This post is a research journal — notes on six approaches to RL that we want to
 apply to Vidya, from the simplest to the most ambitious. Some are proven at scale
@@ -37,8 +47,11 @@ This is [Sutton's gradient bandit](/posts/reinforcement-learning-from-suttons-fo
 applied to language generation. Actions that beat the baseline get reinforced. Actions
 below it get suppressed. The human is the reward function.
 
-The problem: the human is slow, expensive, and gets tired. Everything below is about
-replacing or augmenting that human signal.
+This stays. It's the core of Vidya's training experience and we have no intention of
+removing it. But the human is best at teaching *judgment* — style, tone, what makes a
+response feel right. The six approaches below handle what the human shouldn't have to
+teach: mechanical correctness, mathematical reasoning, format compliance. The human
+teaches taste. The machine teaches skill.
 
 ---
 
