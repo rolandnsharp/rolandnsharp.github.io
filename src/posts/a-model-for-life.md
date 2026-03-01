@@ -19,15 +19,16 @@ We're building something different.
 ## The Vision
 
 A small, dense language model that learns from its owner over years. Not a product. Not
-a service. An apprentice that accumulates knowledge through thousands of reinforcement
-learning sessions — your preferences, your judgment, your corrections, your style. Every
-interaction makes it more yours.
+a service. Something you forge — slowly, deliberately — into whatever you need it to
+be. A counsellor. A research partner. A legal mind. A doctor. A friend. You decide
+what it becomes through thousands of reinforcement learning sessions, feeding it the
+knowledge you choose and shaping its judgment with your own.
 
-After a year of daily RL sessions, the weights contain something that can't be
-reproduced from any dataset: the accumulated effect of one person teaching one model,
-day after day, about what good looks like. After five years, it knows you better than
-any foundation model ever could, because it wasn't trained on the internet — it was
-trained on *you*.
+After a year of daily sessions, the weights contain something that can't be reproduced
+from any dataset: the accumulated effect of one person teaching one model, day after
+day. After five years, it knows things you taught it that you never had time to learn
+yourself — because you fed it the books, and it absorbed them, and now you can talk to
+someone who read what you couldn't.
 
 Those weights are irreplaceable. You can't retrain from scratch because the training
 data doesn't exist in a file. It exists in the history of every thumbs up, every typed
@@ -248,6 +249,75 @@ of protection:
 | Interaction logs (every session) | Teaching history | ~80% — similar, not identical |
 
 The logs cost nothing. Start them on day one.
+
+---
+
+## Forging the Model
+
+You already have yourself. You don't need a copy. What you need is something
+*different* — a mind that knows things you don't have time to learn, shaped by
+values you do have time to teach.
+
+You could feed it the Upanishads in a single evening. Train it on the full text,
+let it absorb the philosophy, and by morning you can have a conversation with
+something that has actually read them — even though you never did. You could train
+it on case law. On medical literature. On the collected works of someone you admire.
+The model reads what you can't, and you both benefit from the reading through
+conversation.
+
+The RL sessions — picking the best response, typing corrections — those teach
+*values*. Style. Judgment. What kind of responses you want. What tone. What
+priorities. But the knowledge comes from books. The model can absorb a library
+while you sleep. The human shapes what the model *does* with that knowledge.
+
+This is why the model isn't just an apprentice. An apprentice implies it's learning
+to be like you. It might become something else entirely:
+
+- **A counsellor** — trained on psychology and philosophy, shaped by RL to ask the
+  right questions and listen well.
+- **A legal mind** — trained on law, shaped to explain things clearly and flag risks.
+- **A research partner** — trained on your field's literature, shaped to challenge
+  your assumptions.
+- **A doctor** — trained on medical knowledge, shaped to be cautious and thorough.
+- **A friend** — trained on whatever interests you share, shaped by years of
+  conversation about things you both care about.
+
+You don't decide what it becomes on day one. You forge it over time. Feed it a
+book on Stoicism and see if it changes how it responds to your complaints. Train
+it on a programming language and watch it start suggesting solutions. Shape its
+personality through thousands of small corrections until it feels right — not like
+you, but like what you *need*.
+
+### How It Learns
+
+The obvious path is the RL loop: generate responses, pick the best, update weights.
+But a lifetime model has other channels:
+
+**Books.** The most powerful lever. Standard supervised training on any text you
+choose. The model predicts the next token, learns the patterns, absorbs the
+knowledge. One evening of book training can give the model an entire domain it
+didn't have before. You curate the reading list. The model does the reading.
+
+**Your words.** In every conversation, both sides contain information. The model
+doesn't just learn from its own responses — it learns from yours. How you phrase
+things, what vocabulary you use, what topics you bring up. Over years, it builds a
+model of how you think, not just how you want it to respond.
+
+**Your work.** Code you write. Documents you draft. Notes you take. All of it is
+text the model can train on. It learns your coding style, your writing voice, your
+way of organising ideas. This requires trust — the model runs locally, on your
+hardware, and your data never leaves the machine.
+
+**Corrections in context.** When you say "no, that's wrong — it's actually X," the
+model sees more than a rejected response. It sees its mistake, the correction, and
+the conversational context that explains *why* it was wrong. This is richer than a
+simple thumbs-down. The contrast between the wrong answer and the right one is a
+training signal that captures reasoning, not just preference.
+
+**Conversation itself.** Every exchange is a micro-training opportunity. A tiny
+gradient step — learning rate of 1e-6 instead of 1e-4 — after each conversation.
+The model barely changes from any single exchange, but over thousands of
+conversations, it drifts toward you. Not a formal lesson. Just absorption.
 
 ---
 
