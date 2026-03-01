@@ -186,100 +186,114 @@ deliberate structure helps or hurts.
 
 ---
 
-## The Decision
+## Beyond "Pick the Best Response"
 
-Here is what each path looks like for Vidya over the next year:
+Both paths share a problem with the five-response selection method: it only works when
+responses are short. Pick the best one-liner from five options — easy. Pick the best
+paragraph from five paragraphs — tedious. Pick the best conversation from five
+conversations — impossible.
 
-**Path A (direct, GRPO-first):**
+A model for life cannot learn only through formal evaluation sessions. It needs to
+learn from conversation itself — from the human's words, from corrections, from the
+flow of interaction. Both paths support this, but differently.
 
-```
-Month 1:  GRPO on verifiable rewards (math, format). Works fast.
-Month 2:  Human-in-the-loop selection (pick best of 5). Works fast.
-Month 3:  Want to add credit assignment across turns. Awkward.
-Month 4:  Want to add a value function. Bolted on.
-Month 5:  Want continuous learning from conversation. Major rewrite.
-Month 6:  Realize we are building Path B anyway, but messily.
-```
+**Learning from your words.** The simplest channel. When the human types a message,
+that is training data. The model does a small gradient step to predict the human's
+words better. No scoring, no selection — just: "the human said this, learn from it."
+Works at any length. Works in both paths.
 
-**Path B (Sutton framework, TD(λ)-first):**
+**Learning from corrections.** When the human says "no, actually it is X," the model
+has two signals: its own response (bad) and the correction (good). One negative
+gradient step on what it said, one positive step on what the human said. No need to
+pick from five. Works in both paths.
 
-```
-Month 1:  Build the framework. Define state, action, policy, value, traces.
-          Test with a toy problem (bandit, gridworld). No model training yet.
-Month 2:  Connect to the neural network. TD(λ) with traces on real conversations.
-Month 3:  Add GRPO as a second learning rule. Plugs in cleanly.
-Month 4:  Add a value function. Plugs in cleanly.
-Month 5:  Add curiosity-driven exploration. Plugs in cleanly.
-Month 6:  Everything composes. Each new method is a module, not a rewrite.
-```
+**Learning from continued conversation.** If the human keeps talking, the model was
+probably fine. If the human corrects, it was wrong. If the human leaves, it was boring.
+These are weak signals but they are free and continuous. Works in both paths — but
+differently.
 
-Path A is faster for the first month and slower for every month after. Path B is
-slower for the first month and faster for every month after. For a project measured in
-years, not months, the upfront cost of Path B is noise.
+This is where the paths diverge:
+
+| Signal | Path A | Path B (with traces) |
+|---|---|---|
+| Correction at token 50 | Updates the whole response equally | Tokens 45-50 get most blame, token 10 gets almost none |
+| Human keeps talking | Rewards the whole response equally | Recent tokens get most credit |
+| "That last part was wrong" | Cannot isolate "last part" | Traces know which parameters fired recently |
+
+Path A treats every token in a response as equally responsible. Path B knows *when*
+things happened — the traces carry a fading memory of which parameters contributed to
+which tokens.
+
+The question is whether that precision matters. If the model says something wrong and
+the human corrects it, nudging the whole response with a small negative step might be
+good enough. The model drifts away from that kind of response. It does not need to
+know that token 47 was the specific problem.
+
+But if the model keeps making the same mistake in the middle of otherwise good
+responses — if the beginning is always fine and the ending always goes wrong — then
+whole-response updates cannot fix it. Only temporal credit assignment can isolate the
+pattern.
 
 ---
 
-## Our Choice
+## The Decision
 
-We are building Path B.
+The goal is not to give Sutton's ideas a place to live. The goal is the most capable
+personal AI that grows and learns with its owner over a lifetime.
 
-Not because it is theoretically elegant — though it is. Because Vidya is a
-[model for life](/posts/a-model-for-life/). It will learn from
-[many channels](/posts/a-model-for-life/) — human selection, automated
-rewards, book training, online conversation learning, corrections in context. Each
-of these is a different reward signal, a different environment, a different learning
-rule. They all need to compose.
+Start simple. The three learning channels that do not require any framework:
 
-Path A works for one algorithm applied to one reward signal. Path B works for many
-algorithms applied to many reward signals, accumulated over years. Vidya is not a
-model that gets trained once. It is a model that keeps learning, from everything,
-forever.
+1. **Learn from the human's words** — supervised, tiny learning rate, every conversation
+2. **Learn from corrections** — contrastive, wrong response down, correction up
+3. **Pick from N responses** — when responses are short enough to compare
 
-Sutton's framework was designed for exactly this: an agent that learns continuously
-from a stream of experience, with multiple sources of reward, over an indefinite
-lifetime. We did not need to invent something new. We needed to implement something
-old.
+These work on Path A. No traces, no value functions, no abstractions. Start teaching
+the model immediately.
 
-The ant has been running Path B for 100 million years. It works.
+If after months of teaching, the model shows a pattern — good beginnings, bad endings,
+or vice versa — that whole-response updates cannot fix, add eligibility traces. That
+is one array and a few lines of update logic. Not a framework. Just a tool for a
+specific problem.
+
+If the model needs to plan ahead — choosing responses that lead to better conversations
+rather than just good individual turns — add a value function. That is a linear layer
+on the hidden state. Not a framework. Just a tool for a specific problem.
+
+Build what solves the problem in front of you. The framework emerges from the problems,
+not the other way around. The ant did not design its architecture. It evolved toward
+whatever worked. We should do the same — start simple, add complexity when the simple
+approach fails, and let the system grow from experience rather than from theory.
 
 ---
 
 ## The Implementation
 
-The Sutton framework for Vidya, in concrete terms:
+What we build on day one:
 
 ```
-agent.js:
-  state     = tokenize(conversation)
-  policy    = transformer forward pass → token probabilities
-  value     = linear layer on last hidden state → scalar
-  traces    = Float64Array(n_params), decays by γλ per token
-  baseline  = running average of recent rewards
+learn.js:
+  learnFromHuman(model, humanTokens)
+    // tiny supervised step on the human's words
+    // lr = 1e-6, accumulates over thousands of conversations
 
-environment.js:
-  step(token) → appends to conversation, optionally returns reward
-  reward sources:
-    - human feedback (explicit: "good" / "bad" / typed correction)
-    - verification (automated: did the math check out?)
-    - conversation signal (implicit: did the human keep talking?)
+  learnFromCorrection(model, badResponse, correction)
+    // negative step on badResponse
+    // positive step on correction
+    // lr = 1e-5, stronger signal
 
-learner.js:
-  td_lambda:  traces + TD error → parameter updates
-  grpo:       batch completions + group comparison → parameter updates
-  bandit:     selection from N candidates → parameter updates
-  (all implement the same interface: observe reward, update policy)
+  learnFromSelection(model, candidates, selectedIndex)
+    // positive step on selected, negative on rejected
+    // the original bandit method, for short responses
+
+  // future, if needed:
+  learnWithTraces(model, traces, reward)
+    // TD(λ) update proportional to eligibility traces
+    // add when whole-response updates are not precise enough
 ```
 
-Three files. Each replaceable. Each testable independently. The neural network knows
-nothing about RL — it just maps tokens to probabilities. The RL system knows nothing
-about transformers — it just updates parameters through traces and gradients. The
-environment knows nothing about either — it just provides states and rewards.
-
-We test the learner on a multi-armed bandit. We test the environment with a dummy
-policy. We test the policy with known inputs. When all three work independently, we
-connect them. If something breaks, we know which component to blame.
-
-This is how Sutton builds RL systems. This is how we will build ours.
+One file. No framework. Each function is independent — use whichever channels make
+sense for the current interaction. Add new channels when you need them. The neural
+network stays clean. The learning stays simple.
 
 ---
 
