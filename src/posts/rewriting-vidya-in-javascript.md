@@ -116,10 +116,12 @@ because the types are not there to document the interface. `computeGradient`,
 `clipNorm`, `cosineLR` — the names carry the meaning. If we need type hints for
 editor support, JSDoc gives us that without a type system:
 
+{% raw %}
 ```js
 /** @param {{ data: Float64Array, grad: Float64Array }} tensor */
 function backward(tensor) { ... }
 ```
+{% endraw %}
 
 VS Code reads JSDoc and provides full autocomplete. No TypeScript required.
 
