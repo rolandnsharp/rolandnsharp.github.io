@@ -19,7 +19,7 @@ We're building something different.
 ## The Vision
 
 A small, dense language model that learns from its owner over years. Not a product. Not
-a service. A companion that accumulates knowledge through thousands of reinforcement
+a service. An apprentice that accumulates knowledge through thousands of reinforcement
 learning sessions — your preferences, your judgment, your corrections, your style. Every
 interaction makes it more yours.
 
