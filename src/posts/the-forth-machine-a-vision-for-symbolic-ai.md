@@ -305,6 +305,100 @@ Each year produces something real, not just progress toward a distant goal.
 
 ---
 
+## Where the Weights Live
+
+A billion parameters is about 4 GB in float32. That is just a block of numbers. You
+do not want a billion dictionary entries.
+
+The split is natural: **the dictionary holds the structure, the weight arrays hold the
+data.** The dictionary is small — thousands of words defining the architecture, the
+symbolic graph, the execution semantics. The weights are big flat arrays sitting in
+RAM, streamed to the Blackhole over PCIe when needed.
+
+Forth already has this concept. `CREATE` and `ALLOT` make words that point to data
+regions:
+
+```
+CREATE LAYER-1   1024 1024 * FLOATS ALLOT
+CREATE LAYER-2   1024 4096 * FLOATS ALLOT
+CREATE ATTN-Q    1024 1024 * FLOATS ALLOT
+```
+
+Each layer is a Forth word, but the word is just a pointer to a massive data region.
+Execute `LAYER-1` and it pushes the address of its weight block onto the stack. Then
+`MATMUL` takes that address and dispatches the computation to the Blackhole.
+
+The memory hierarchy maps naturally:
+
+| Level | Role | Brain analog |
+|---|---|---|
+| NVMe | Full model weights on disk. Persistent. | Long-term memory |
+| AMD RAM (64-128 GB) | Active weights, working dictionary | Short-term memory |
+| PCIe transfer | Streaming weight tiles to Blackhole | White matter tracts |
+| Tensix SRAM | Current tile during computation | Register file |
+
+The structure — which weights connect to which, how attention routes, what activations
+apply, how layers compose — lives in the dictionary. And that is the part that can be
+dynamic, self-modifying, and symbolically meaningful:
+
+```
+: TRANSFORMER-BLOCK ( addr -- addr' )
+    DUP ATTN-Q @ ATTN-K @ ATTN-V @ ATTENTION
+    RESIDUAL+
+    FFN-UP @ GELU FFN-DOWN @ LINEAR
+    RESIDUAL+ ;
+
+: INFER ( tokens -- output )
+    EMBED
+    30 0 DO TRANSFORMER-BLOCK LOOP
+    UNEMBED SOFTMAX ;
+```
+
+The weights are `@` fetched from named data regions. The structure is in the word
+definitions. Redefine `TRANSFORMER-BLOCK` to try a different architecture without
+touching the weights. Swap weight blocks without changing the structure.
+
+The symbolic concepts — DOG, JUSTICE, CAUSALITY — do not each store billions of
+parameters. They store small embeddings (maybe 1024 floats each) plus symbolic
+relationships (links to other words). When the system needs deep inference, it drops
+into the tensor layer and runs the big model. When it is doing symbolic reasoning, it
+stays in the dictionary.
+
+The billion parameters do not need to be clever. They just need to be addressable.
+Forth is good at that.
+
+---
+
+## The Brain Mapping
+
+The Forth machine is not a computer that simulates a brain. It is a computer
+*organised* like a brain, where each subsystem has the right computational character
+for its role.
+
+| Forth component | Brain region | Function |
+|---|---|---|
+| Dictionary | Cerebral cortex | Symbolic thought, language, planning, conscious reasoning. Named concepts linked to each other, organised into vocabularies, searchable, composable. |
+| Weight arrays on Blackhole | Cerebellum | Fast, learned, parallel pattern completion. 80% of the brain's neurons but no conscious thought. You do not think about how to catch a ball — the cerebellum just does it. |
+| Data stack | Working memory | What you are currently holding in mind. Humans hold 7 plus or minus 2 items. The stack has no biological limit but serves the same function. |
+| Return stack | Prefrontal cortex | Goal management. Nested subroutines are nested subgoals. Deep nesting is deep planning. Stack overflow is cognitive overload. |
+| NVMe storage | Hippocampus | Consolidates experiences into long-term storage. Loading a dictionary image from disk is memory recall — reconstructing a past state of knowledge. |
+| RAM | Short-term memory | Currently active knowledge. The working dictionary, loaded weights, recent data. Things you have been thinking about. |
+| PCIe bus | White matter tracts | Connections between brain regions. The bottleneck is often communication between regions, not computation within them. |
+| NoC mesh | Cerebellar granule layer | Massively parallel. Each Tensix core is a microzone processing its local tile, coordinating with neighbours. |
+| Outer interpreter | Thalamic gateway | All input passes through it, gets parsed, recognised, and routed to the appropriate word for processing. |
+| `INTERPRET` mode | System 1 (Kahneman) | Immediate, reactive, fast. See word, execute word. Stimulus-response. |
+| `COMPILE` mode | System 2 (Kahneman) | Deliberate, constructive, slow. See word, integrate into a larger plan. |
+| `CREATE...DOES>` | Neuroplasticity | Creates words that create other words. New types of connections. Meta-learning. |
+| `FORGET` | Synaptic pruning | The brain prunes unused connections during sleep. `FORGET` truncates the dictionary. |
+
+The mapping is not forced. Each Forth concept was designed for computing, not
+neuroscience. That it maps this precisely onto brain architecture suggests something
+deeper — that the minimal computing system and the minimal cognitive system share a
+structure because they solve the same problem: process information, remember what
+matters, forget what does not, and grow.
+
+---
+
 ## Why This Matters
 
 The current AI paradigm is: take a giant neural network, train it on the internet,
