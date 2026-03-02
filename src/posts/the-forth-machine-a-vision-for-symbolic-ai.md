@@ -542,6 +542,275 @@ matters, forget what does not, and grow.
 
 ---
 
+## Does It Have a Neural Network?
+
+The Forth machine has a dictionary, embeddings, and tensor operations. But does it
+have a neural network in the traditional sense — layers of weights, a forward pass,
+backpropagation?
+
+The answer is yes, but the weights emerge from the architecture rather than being the
+whole system. Three options, in order of complexity:
+
+**Option 1: Pure symbolic.** No learned weights at all. When you define
+`: PUPPY YOUNG DOG ;` the system computes PUPPY's embedding as a combination of
+YOUNG and DOG's vectors. Associations strengthen through co-occurrence. The
+intelligence is entirely in the dictionary structure and the vector space geometry.
+
+This is clean and very Forth. No training loop, no gradients. But without learned
+projections, the system can only do what you explicitly program it to do with vectors.
+It cannot discover non-obvious patterns.
+
+**Option 2: Learned projections.** A few small weight matrices that learn to project
+between embedding spaces:
+
+```
+CREATE SIMILARITY-PROJ  64 64 * 2* ALLOT   \ 8KB
+CREATE ANALOGY-PROJ     64 64 * 2* ALLOT   \ 8KB
+CREATE PREDICT-NEXT     64 64 * 2* ALLOT   \ 8KB
+```
+
+Three matrices, 24KB total. These learn over time through simple online updates — not
+backpropagation through a deep network, more like single-layer perceptron learning.
+When the system predicts the next word wrong, it nudges `PREDICT-NEXT` slightly.
+Hebbian learning. What fires together wires together.
+
+This gives learned structure without the machinery of a real neural network. The
+matrices capture patterns the symbolic system cannot represent explicitly.
+
+**Option 3: A genuine tiny cerebellum.** A real network mapping from embedding space
+through a hidden representation and back:
+
+```
+: CEREBELLUM ( embedding -- embedding' )
+    LAYER-1 @ MATMUL RELU
+    LAYER-2 @ MATMUL RELU
+    LAYER-3 @ MATMUL ;
+```
+
+| Layer | Dimensions | Size |
+|---|---|---|
+| Layer 1 | 64 → 256 | 32 KB |
+| Layer 2 | 256 → 256 | 128 KB |
+| Layer 3 | 256 → 64 | 32 KB |
+| **Total** | | **192 KB** |
+
+Small but architecturally complete. You could even add a tiny attention head — four
+projection matrices of 4 KB each, 16 KB total. One head, one layer, tiny dimensions,
+but structurally identical to what later runs on the Blackhole with thousands of
+dimensions and dozens of heads.
+
+The learning:
+
+```
+: LEARN ( input target -- )
+    OVER CEREBELLUM        \ forward pass
+    OVER SWAP V-           \ compute error
+    BACKPROP               \ update weights
+    2DROP ;
+```
+
+Not batch SGD over a dataset. Online learning from interaction. Every conversation,
+every new word defined, every correction generates a training signal. The system
+learns continuously from experience, one example at a time.
+
+This is biologically plausible. Brains do not do batch training. They learn from a
+continuous stream of experience with immediate weight updates. The Forth AI does the
+same.
+
+The right path is Option 2 transitioning to Option 3. Start with the learned
+projections — simple to implement, simple to train online. Then when you understand
+the dynamics, add the tiny cerebellum. The relationship between dictionary and
+weights stays the same at every scale. On the Blackhole eventually, those 192 KB of
+weights become billions. But the architecture is identical.
+
+---
+
+## Three Timescales of Learning
+
+An obvious objection: if the system learns one example at a time, how does it develop
+the deep structure that batch training provides?
+
+The answer is that batch training is not missing. It is built in — from millions of
+years of evolution.
+
+Evolution IS batch training. Millions of generations of organisms, each one a
+training example, fitness as the loss function, natural selection as the optimizer.
+The architecture of the brain itself — the number of cortical layers, the structure
+of the cerebellum, the neurotransmitter systems, the basic wiring plan — all of that
+was learned through massive batch training over evolutionary timescales.
+
+There are actually three timescales of learning, and the Forth machine has all three:
+
+**Evolutionary (batch training over deep time).** This is what produced the
+architecture itself. In the Forth machine this maps to the designer. When you decide
+the dictionary should have 64-dimensional embeddings, or that there should be three
+layers in the cerebellum, or that the DREAM cycle should use Hebbian updates — those
+are architectural decisions encoding accumulated design wisdom into the initial
+structure. You are the evolutionary process.
+
+Practically: take a text corpus, run it on your laptop, train the small weight
+matrices through proper batch SGD, then flash the trained weights onto the hardware.
+That is evolution. You are giving the system a brain that already has structure before
+it is born.
+
+**Developmental (structured growth).** A baby brain is not randomly initialised. It
+goes through critical periods, structured growth phases. The Forth machine should have
+something similar — an initial boot phase where basic concepts are loaded from flash,
+foundational associations are established, core projection matrices are initialised
+with reasonable structure rather than random noise. The system prompt equivalent. The
+prior knowledge baked in before the system starts interacting.
+
+**Experiential (online learning from interaction).** The continuous one-example-at-a-
+time learning. The day-to-day interaction. It fine-tunes, adapts, personalises. But it
+starts from a good prior rather than random initialisation.
+
+The three timescales map onto the Forth system:
+
+| Timescale | Forth equivalent | Brain analog |
+|---|---|---|
+| Evolutionary | Boot kernel in flash, immutable at runtime, changed only by reflashing | Genome, basic brain architecture |
+| Developmental | `COLD` start sequence that builds up from kernel to working system | Critical periods, structured growth |
+| Experiential | Runtime interpreter loop, continuously modifying the dictionary | Day-to-day learning from experience |
+
+The lifecycle:
+
+```
+LAPTOP (evolution):
+  Design architecture (natural selection)
+  Batch train small weight matrices on corpus
+  Optimise embedding initialisation
+  Test and iterate on the design
+  Flash the "genome" to the hardware
+
+BOOT (development):
+  Load base dictionary from flash
+  Initialise association graph
+  Load pre-trained weights into RAM
+  Run structured initialisation sequence
+  Critical period: establish core concepts
+
+RUNTIME (experience):
+  Online learning from interaction
+  Dictionary growth
+  Association strengthening / pruning
+  Small weight updates from experience
+
+SLEEP (consolidation):
+  DREAM cycle
+  Replay and consolidate
+  Prune weak associations
+  Snapshot to flash
+```
+
+Every cycle of this teaches you something about both Forth implementation and machine
+learning fundamentals that you carry forward to the next build. The evolutionary layer
+(your design iterations) and the experiential layer (the system's online learning)
+co-evolve.
+
+---
+
+## Sleep and the LoRA Hippocampus
+
+During the day, the system interacts and accumulates a low-rank adaptation on top of
+the base weights. Small, cheap to store, cheap to compute. The base neural network
+stays frozen during waking hours. All learning goes into the delta.
+
+```
+BASE WEIGHTS (in stable memory, frozen during day):
+  64×256  = 16 KB
+  256×256 = 128 KB
+  256×64  = 32 KB
+
+LORA DELTA (in fast memory, accumulating):
+  rank 4: 64×4 + 4×256 = 1.5 KB per layer
+  total ≈ 5 KB
+```
+
+5 KB of low-rank adaptation capturing everything learned that day. Every interaction
+nudges it slightly. Cheap forward pass because you are just adding a small correction
+to the base output.
+
+Then night comes. DREAM runs:
+
+```
+: DREAM ( -- )
+    \ merge today's LoRA into base weights
+    LORA-DELTA @ BASE-WEIGHTS @
+    CONSOLIDATION-RATE @ SCALE
+    V+!
+
+    \ replay key experiences from the day
+    TODAY-LOG @ REPLAY-AND-REINFORCE
+
+    \ test integrity
+    SANITY-CHECK
+    IF
+        BASE-WEIGHTS @ FLASH-SNAPSHOT   \ commit to long-term
+        LORA-DELTA @ ZERO-FILL          \ clear for tomorrow
+        ASSOCIATIONS DECAY              \ prune weak links
+    ELSE
+        FLASH-SNAPSHOT @ BASE-WEIGHTS @ RESTORE  \ rollback
+    THEN ;
+```
+
+This is literally how neuroscience thinks sleep works. During the day the hippocampus
+captures experiences quickly in a fast, plastic temporary store. During sleep the
+hippocampus replays those experiences and gradually transfers the knowledge into the
+cortex's slower, more stable long-term weights. The hippocampus is the LoRA. The
+cortex is the base model. Sleep consolidation is the merge.
+
+The memory hierarchy makes this physical:
+
+| Memory | Role | Brain analog |
+|---|---|---|
+| LoRA delta in fast RAM | Today's learning, volatile | Hippocampus |
+| Base weights in stable RAM | Accumulated knowledge | Cortex |
+| Flash snapshots | Survives power loss | Deep long-term memory |
+
+This solves the catastrophic forgetting problem naturally. The base weights change
+slowly through nightly merges, not sudden overwrites. The LoRA captures new
+information without destroying old knowledge. If a day's learning was bad, the sanity
+check catches it and rolls back. The system is conservative about what it integrates
+permanently.
+
+The daily rhythm:
+
+```
+MORNING:  Boot. Load base weights from flash.
+          Clear LoRA. Fresh day.
+
+DAY:      Interact. Learn into LoRA.
+          Base weights frozen.
+          Fast inference = base + LoRA forward pass.
+
+EVENING:  Interaction slows.
+          System reviews day's log.
+          Flags important experiences for replay.
+
+NIGHT:    DREAM runs.
+          Replay experiences.
+          Merge LoRA into base at slow learning rate.
+          Sanity check.
+          Snapshot to flash.
+          Prune associations.
+          Clear LoRA.
+
+MORNING:  Wake. Slightly different system than yesterday.
+          A little more knowledgeable.
+```
+
+Just like humans, it does not remember specific experiences after sleep consolidation.
+It remembers what it *learned* from them. The episodic memory (today's log) gets
+transformed into semantic memory (weight updates) and then the episodes can be
+discarded.
+
+The consolidation rate is a tunable personality parameter. High rate means the system
+changes quickly but risks instability. Low rate means it is conservative and stable
+but slow to learn. Finding the right rate is part of the evolutionary layer — part of
+the designer's job.
+
+---
+
 ## Why This Matters
 
 The current AI paradigm is: take a giant neural network, train it on the internet,
