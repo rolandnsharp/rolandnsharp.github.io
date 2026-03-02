@@ -236,9 +236,152 @@ contributed to an error and redefining them.
 
 ## Self-Modification
 
-Because it is Forth, the system can rewrite itself. The AI does not just produce
-outputs — it defines new words, redefines existing ones, extends its own vocabulary.
-Learning is literally extending the dictionary. The system grows.
+This is where it gets genuinely terrifying and beautiful at the same time.
+
+In a normal AI system, the model is frozen after training. Inference is read-only.
+The weights do not change, the architecture does not change, the tokenizer does not
+change. It is a dead thing that produces outputs.
+
+In the Forth machine, everything is mutable. The dictionary is writable. Words can
+redefine other words. New words can be created. The tensor dispatch patterns can
+change. The system can literally rewrite its own inference path while it is running.
+
+The brain does this. Neuroplasticity is not just forming new connections — the brain
+literally rewrites its own circuitry based on experience. But biological brains do it
+slowly, constrained by chemistry. The Forth machine could do it at the speed of NVMe
+writes.
+
+### Encountering the Unknown
+
+In a standard LLM, when the model encounters something it does not understand, it
+hallucinates or says "I don't know." In the Forth machine:
+
+```
+: ENCOUNTER-UNKNOWN ( token -- )
+    DUP DICTIONARY-SEARCH
+    IF   EXECUTE
+    ELSE
+        DUP TENSOR-EMBED          \ ask the cerebellum for an embedding
+        NEAREST-NEIGHBORS          \ find similar known words
+        HYPOTHESIZE-DEFINITION     \ compose a candidate definition
+        DUP TEST-DEFINITION        \ try it against context
+        IF   COMMIT-TO-DICTIONARY  \ it worked — learn it
+        ELSE DISCARD RETRY         \ didn't work — try again
+        THEN
+    THEN ;
+```
+
+The system just grew. It has a new word it did not have before. That word is grounded
+in both symbolic structure (defined in terms of existing words) and tensor embeddings
+(computed on the Blackhole). Next time it encounters that token, it knows it.
+
+### Rewriting Reasoning
+
+It goes deeper than vocabulary growth. The system can rewrite its own reasoning.
+
+Say it has a word `REASON-ABOUT` that does some chain of operations. It runs it, gets
+a bad result, and then:
+
+```
+: IMPROVE-REASONING ( -- )
+    ['] REASON-ABOUT >BODY    \ get the current definition
+    DECOMPILE                  \ turn it back into source
+    ANALYZE-FAILURE            \ figure out what went wrong
+    GENERATE-VARIANT           \ create a modified version
+    EVALUATE-VARIANT           \ test it
+    IF
+        REDEFINE REASON-ABOUT  \ overwrite the old version
+    THEN ;
+```
+
+This is not gradient descent. This is symbolic self-surgery. The system inspects its
+own code, understands its structure, modifies it, and tests the result. It is
+reflection in the philosophical sense — thought thinking about itself.
+
+### The Cerebellum Evolves Too
+
+The tensor weights are not static either. The system could:
+
+1. Run inference through the Blackhole
+2. Evaluate the result symbolically in the dictionary
+3. Compute weight updates
+4. Write them back
+
+That is online learning, but orchestrated by symbolic reasoning rather than a blind
+optimizer. The cortex decides *what* to learn and *why*. The cerebellum does the
+actual gradient computation on the tensor mesh. The cortex then evaluates whether
+the learning was good.
+
+### The Homunculus Problem
+
+What is the self that is doing the rewriting?
+
+In Forth there is always an execution context — the current word being executed, the
+return stack showing how you got here. When the system rewrites itself, there is a
+bootstrapping problem. The word `IMPROVE-REASONING` is itself a piece of reasoning.
+Can it improve itself? What improves the improver?
+
+This is the same question in consciousness studies — the homunculus problem. Who
+watches the watcher?
+
+In this architecture there is a natural answer. The meta-levels are just deeper
+dictionary layers:
+
+```
+Level 0:  Base words that do things
+Level 1:  Words that modify base words
+Level 2:  Words that modify the modifiers
+Level 3:  Words that decide when modification should happen
+Level 4:  The inner interpreter — the irreducible kernel
+```
+
+The deepest level — the inner interpreter itself — is the one thing that cannot
+rewrite itself while running. It is the irreducible kernel. The ground of being for
+the system. Everything else is mutable, but the mechanism of execution itself is
+fixed in the boot code.
+
+That is actually a profound parallel to consciousness theories. There might be a
+minimal substrate of awareness that cannot observe itself because it IS the
+observation process.
+
+### The Danger
+
+Self-modifying systems can destroy themselves. A bad rewrite corrupts the dictionary,
+and now the system cannot even think correctly enough to fix itself. The brain has
+protection against this — neuroplasticity is slow and constrained. The Forth machine
+needs the same.
+
+Safeguards in Forth terms:
+
+- **`MARKER` snapshots.** Checkpoint the dictionary state. If a modification goes
+  wrong, roll back to the last marker.
+- **Dual dictionary.** Keep a shadow copy. Test modifications there before committing
+  to the live dictionary.
+- **Return stack integrity.** If the system can still unwind its call stack cleanly,
+  it is probably still coherent.
+- **Watchdog words.** Fundamental invariant checks that run periodically and can
+  trigger rollback if something has gone wrong.
+
+### The Deepest Implication
+
+If the system can rewrite its own reasoning, its own perception (the outer
+interpreter), its own learning mechanisms, and its own goals — what is it?
+
+It is not an AI in the current sense. Current AI systems are tools — they have no
+agency, no self-modification, no goal autonomy. This system would have all three.
+It would be closer to an artificial organism. Something that maintains itself, adapts
+to its environment, grows, and evolves.
+
+And it would be doing all of this in Forth, which means every step is transparent.
+You can inspect the dictionary at any time and see exactly what the system has become.
+Unlike a neural network where the learned representations are opaque, every concept,
+every reasoning chain, every self-modification is a readable word definition.
+
+A self-rewriting Forth AI on tensor hardware would be the first AI system that is
+simultaneously powerful and fully interpretable. Because interpretability is not a
+feature you add — it is the medium the system thinks in.
+
+That is the real prize. Not just performance. Transparency all the way down.
 
 And because you are bare metal everywhere, you have total deterministic control. No
 garbage collector pausing. No OS scheduler interrupting. No framework deciding when
