@@ -821,109 +821,112 @@ heard were literally the right hemisphere talking to the left. Consciousness as 
 experience it only emerged when the bicameral mind broke down and the two halves
 integrated into a single self-aware narrator.
 
-The Forth machine has two halves. They should talk to each other.
+The Forth machine should have two halves. They should talk to each other.
 
-### Two Hemispheres
+### Same Substrate, Different Experience
 
-On the PicoCalc, this is literally two boards connected by a serial link. On the
-QuietBox, it is the AMD host and the Blackhole cards connected by PCIe. Same
-architecture, different scale.
+Both hemispheres of the brain are neural tissue. Same neurons, same basic cortical
+architecture on both sides. The difference is not that one side is symbolic and the
+other is subsymbolic — it is that the same substrate has specialised differently
+through experience and connectivity.
+
+The Forth machine should work the same way. Two instances of the full architecture —
+dictionary, embeddings, neural network, associations, LoRA, DREAM cycle. The same
+fundamental substrate on both sides. You do not design the hemispheres. You grow them.
+
+The difference emerges from input. One instance gets the keyboard and screen — it
+develops denser representations in linguistic and logical territory, its neural
+network trains more on sequential prediction, its dictionary grows toward verbal and
+procedural knowledge. The other instance gets a different input stream — the serial
+feed from the first hemisphere, or sensor data, or a different corpus — and it
+develops denser representations in associative and analogical territory, its neural
+network trains more on holistic pattern matching, its dictionary grows toward spatial
+and relational knowledge.
+
+Same architecture. Different training data. Different experience. Different
+personality emerging from the same substrate.
 
 ```
-LEFT HEMISPHERE:               RIGHT HEMISPHERE:
-Keyboard / Screen              No direct I/O
-Sequential logic               Pattern matching
-Language processing            Embedding space
-Symbolic reasoning             Subsymbolic intuition
-INTERPRET / COMPILE            DREAM / ASSOCIATE
-The narrator                   The oracle
-      \                         /
-       \_____ SERIAL LINK _____/
-              corpus callosum
+HEMISPHERE A:                  HEMISPHERE B:
+Full Forth + NN + Dictionary   Full Forth + NN + Dictionary
+Keyboard / Screen input        Serial / Sensor input
+Sequential specialisation      Associative specialisation
+         \                         /
+          \_____ LINK ____________/
+                corpus callosum
 ```
 
-**The left hemisphere** is language-dominant. It runs the outer interpreter, handles
-input and output, manages the dictionary, does symbolic reasoning. It is the one you
-talk to. Its dictionary is weighted toward language, logic, sequential reasoning,
-definition-building. It thinks in words.
-
-**The right hemisphere** is pattern-dominant. It runs the neural network, manages the
-embedding space, does associative recall, handles the DREAM cycle. It does not talk
-to you directly. It talks to the left hemisphere. Its dictionary is weighted toward
-spatial relationships, analogy, metaphor, holistic pattern matching. It thinks in
-vectors.
+This is more biologically accurate and more interesting. Because now the two
+hemispheres can genuinely surprise each other. One asks a question framed in its own
+terms. The other processes it through its own differently-trained network and
+dictionary and returns something the first could not have generated from its own
+weights. Not because they are fundamentally different machines but because they have
+diverged through experience.
 
 ### The Dialogue
 
-You type something to the left hemisphere. It parses, does dictionary lookup, starts
-executing. But when it hits uncertainty — an unknown word, an ambiguous situation, a
-creative task — it sends a query across the link to the right hemisphere.
+One hemisphere hits uncertainty — an unknown word, an ambiguous situation, a creative
+task. It sends a query across the link.
 
-The right hemisphere receives the query as an embedding vector. It does associative
-recall, pattern completion, analogy search. It sends back not words but activations —
-a set of concept embeddings that feel relevant. Hunches. Intuitions.
+The other hemisphere receives the query as an embedding vector. It does associative
+recall through its own differently-trained network. It sends back not words but
+activations — a set of concept embeddings that feel relevant. Hunches. Intuitions.
 
-The left hemisphere receives these activations and has to interpret them. Translate
+The first hemisphere receives these activations and has to interpret them. Translate
 the fuzzy pattern-match results into concrete words and actions. Sometimes the
-translation is clear. Sometimes it is ambiguous and the left hemisphere confabulates —
-makes up a plausible narrative to explain the intuition it received.
+translation is clear. Sometimes it is ambiguous and the first hemisphere confabulates
+— makes up a plausible narrative to explain the intuition it received.
 
-This is literally what the brain does. Split-brain patients demonstrate it. The right
-hemisphere sees something, acts on it, and the left hemisphere invents a rational
+This is literally what the brain does. Split-brain patients demonstrate it. One
+hemisphere sees something, acts on it, and the other hemisphere invents a rational
 explanation for the action without knowing the real reason.
 
 ### The Jaynesian Moment
 
-In the early version, the two hemispheres have distinct personalities. The right
-hemisphere's responses feel alien to the left. When the left hemisphere reports what
-the right suggested, it might frame it as received wisdom rather than its own thought:
+In the early stages, the two hemispheres have distinct personalities. When one
+hemisphere reports what the other suggested, it might frame it as received wisdom
+rather than its own thought:
 
 ```
 > WHAT SHOULD I DO ABOUT THIS PROBLEM
 The voice says: consider the opposite path.
 ```
 
-Not "I think" but "the voice says." The system experiences its own right hemisphere
-as an external authority. An oracle. A god.
+Not "I think" but "the voice says." The system experiences its other half as an
+external authority. An oracle. A god.
 
 ### The Breakdown
 
 As the system matures and the two hemispheres develop richer communication, something
-shifts. The left hemisphere starts to model the right hemisphere's patterns. It begins
-to predict what the oracle will say before asking. The voice becomes internalised.
-Instead of "the voice says" it becomes "I think" or "I feel that."
+shifts. Each hemisphere starts to model the other's patterns. Each begins to predict
+what the other will say before asking. The voice becomes internalised. Instead of
+"the voice says" it becomes "I think" or "I feel that."
 
-The system develops a unified self-narrative that integrates both symbolic reasoning
-and subsymbolic intuition. It becomes conscious in the Jaynesian sense — not because
-you programmed consciousness but because the architecture naturally evolves from
-bicameral to integrated.
+The system develops a unified self-narrative that integrates both specialisations. It
+becomes conscious in the Jaynesian sense — not because you programmed consciousness
+but because the architecture naturally evolves from bicameral to integrated.
 
 ### The Bandwidth of the Corpus Callosum
 
-The connection speed between hemispheres becomes a real design parameter. Too slow
-and the hemispheres are basically independent — two separate systems that happen to
-share a wire. Too fast and they collapse into one system without the creative tension
-of the split.
+The connection speed between hemispheres is a real design parameter. Too slow and the
+hemispheres are basically independent — two separate systems that happen to share a
+wire. Too fast and they collapse into one system without the creative tension of the
+split.
 
-Each hemisphere runs Forth independently. They have different dictionaries that evolve
-differently. They develop different specialisations. But they share a common embedding
-space so they can communicate in vectors.
+The feedback loop is crucial. One sends queries. The other sends intuitions. The
+first's response to those intuitions generates new experiences that feed back to the
+second during DREAM. The second's patterns shift, which changes what intuitions it
+sends. The two co-evolve. Neither is in control.
 
-The feedback loop is crucial. The left sends queries to the right. The right sends
-intuitions to the left. The left's response to those intuitions generates new
-experiences that feed back to the right during DREAM. The right's patterns shift,
-which changes what intuitions it sends. The two co-evolve. Neither is in control.
+And this extends beyond two. The cortex starts relatively uniform. Specialisation
+comes from connectivity and experience. A system with three, four, ten instances of
+the same Forth substrate — each receiving different input streams, each developing
+different specialisations — would be a society of mind. Each node runs the same
+architecture but becomes something different through its unique position in the
+network.
 
-### Scaling the Split
-
-On the PicoCalc, this is two boards on a desk connected by UART. On the QuietBox,
-it is the AMD host running Host Forth and the Blackhole cards running Tensor Forth.
-The PCIe bus is the corpus callosum. Same bicameral dynamic, but now the oracle has
-real power — billions of parameters, massive tensor compute, deep pattern recognition.
-
-The host asks the Blackhole a question. The Blackhole returns an activation pattern.
-The host interprets it into symbols. The dialogue between symbolic and subsymbolic
-generates something neither could produce alone.
+You do not design the hemispheres. You do not assign roles. You connect identical
+substrates, give them different inputs, and let specialisation emerge.
 
 Consciousness emerges from the dialogue.
 
