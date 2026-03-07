@@ -158,8 +158,7 @@ the context window fills up and earlier messages get compressed. Eventually the
 session ends and it all disappears.
 
 Claude won't remember building this theme. Won't remember the screenshot loop.
-Won't remember that Ajax is Thomas's chosen name. Every future conversation
-starts from zero.
+Every future conversation starts from zero.
 
 The code survives. The blog post survives. The npm package survives. But the
 process that created them -- the actual collaboration -- exists only as
