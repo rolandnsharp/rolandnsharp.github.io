@@ -151,25 +151,6 @@ And now Claude is writing this post, adding it to my Eleventy blog, which will
 deploy via GitHub Pages when pushed. The entire chain -- from "let's build a
 theme" to published blog post -- happened in one conversation.
 
-## What This Actually Demonstrates
-
-This isn't really about JSON Resume themes. It's about what the workflow looks
-like now.
-
-I didn't write the CSS. I didn't hand-craft the HTML. I didn't fiddle with npm
-publish flags or remember the `gh repo create` syntax. I said what I wanted in
-plain English and steered the results.
-
-But I also didn't just say "make me a resume theme" and walk away. I knew the
-JSON Resume ecosystem because I helped build it. I knew what `resumed` was. I
-knew the registry needs themes to be serverless-compatible. I knew to check
-whether the registry has an allowlist. I knew to ask Ajax to add it.
-
-The skill isn't prompting. The skill is *context* -- knowing enough about the
-system to direct the work, evaluate the output, and catch the gaps. Claude
-didn't know the registry has an allowlist. I didn't know the exact `gh gist
-edit` syntax. Together we covered it.
-
 ## The Ephemeral Part
 
 After I send the next message, this conversation continues. After a few more,
