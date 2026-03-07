@@ -10,17 +10,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body class="light">
-  <header>
-    <nav>
-      <a href="/">Home</a>
-      <a href="https://rolandnsharp.github.io/aither" target="_blank" rel="noopener">Aither</a>
-      <a href="https://registry.jsonresume.org/rolandnsharp" target="_blank" rel="noopener">Resume</a>
-      <span id="theme-switcher" style="cursor: pointer;">🌙</span>
-    </nav>
-  </header>
-  <main>
-    {{ content | safe }}
-  </main>
+  <div class="page">
+    <header>
+      <nav>
+        <a href="/">home</a>
+        <a href="https://rolandnsharp.github.io/aither" target="_blank" rel="noopener">aither</a>
+        <a href="https://registry.jsonresume.org/rolandnsharp" target="_blank" rel="noopener">resume</a>
+        <span id="theme-switcher" style="cursor: pointer;">🌙</span>
+      </nav>
+    </header>
+    <main>
+      {{ content | safe }}
+    </main>
+    <footer>
+      Roland Sharp · Hinterland, Australia
+    </footer>
+  </div>
   <script src="/js/theme.js"></script>
 </body>
 </html>
