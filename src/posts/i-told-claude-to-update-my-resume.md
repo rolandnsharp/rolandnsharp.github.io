@@ -35,23 +35,6 @@ better" -- all of that vanishes. Unless you write it down.
 
 So here it is, written down.
 
-## The Setup
-
-My friend Ajax (Thomas Davis) founded [JSON Resume](https://jsonresume.org) over
-a decade ago. I built the original CLI tool -- `resume-cli` -- which has 4.2K
-stars on GitHub. The idea was simple: a JSON schema for resumes,
-with themes that render them into HTML, and a registry that hosts them
-automatically from a GitHub gist.
-
-The ecosystem has matured. Someone built
-[resumed](https://github.com/rbardini/resumed), a clean 180-line ESM
-reimplementation of my CLI. There are 50+ community themes. The registry is
-still running. My resume still lives at
-[registry.jsonresume.org/rolandnsharp](https://registry.jsonresume.org/rolandnsharp).
-
-I hadn't touched any of it in years. Time to come back -- not to maintain
-plumbing, but to ship something new.
-
 ## The Workflow
 
 Everything that follows happened in a single terminal session with Claude Code.
