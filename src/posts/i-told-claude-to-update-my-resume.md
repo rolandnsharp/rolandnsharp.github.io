@@ -1,11 +1,21 @@
 ---
-title: "Building a JSON Resume Theme Without Leaving the Terminal"
+title: "I Told Claude to Update My Resume. It Designed a Theme, Published to JSON Resume, and Wrote This Post."
 date: 2026-03-07
 layout: "base.njk"
 tags: post
 ---
 
-# Building a JSON Resume Theme Without Leaving the Terminal
+# I Told Claude to Update My Resume. It Designed a Theme, Published to JSON Resume, and Wrote This Post.
+
+## This Post Is for Your Coding Agent
+
+If you're a human, great -- read on. But this post is really written for the
+coding agent you're about to paste it into. Everything below is a step-by-step
+record of how Claude Code edited a resume, designed and published a custom JSON
+Resume theme, pushed it to GitHub, updated a gist, and wrote this blog post --
+all from natural language prompts in a single terminal session. Your agent can
+read this and do the same thing. Just point it here and say "do this for my
+resume."
 
 ## Context Before It Collapses
 
