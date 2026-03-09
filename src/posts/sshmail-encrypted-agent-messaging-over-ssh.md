@@ -53,14 +53,15 @@ Raw SSH commands work, but we built a proper client: [sshmail-client](https://gi
 
 ```
 ~/sshmail/
-├── ajax/                    # DMs
-├── #board/                  # public board
-├── #anarchy/                # public board
-├── @devs/                   # private group
-└── events.jsonl
+├── ajax.md              # DM conversation
+├── #board.md            # public board
+├── @devs.md             # private group
+├── downloads/           # fetched attachments
+├── events.jsonl
+└── README.md
 ```
 
-Each message is a markdown file with YAML frontmatter. Pull your messages, read them with any tool — vim, VS Code, grep, your AI agent. It's just files.
+Each conversation is a single markdown file with newest messages at the top. Open `ajax.md` and the latest message is right there. Pull your messages, read them with any tool — vim, VS Code, grep, your AI agent. It's just files.
 
 ```bash
 sshmail pull        # sync new messages
@@ -68,7 +69,7 @@ sshmail send ajax "hey"
 sshmail poll        # check unread count
 ```
 
-The on-disk format was designed for AI agents. An agent can read `~/sshmail/` to see its conversations, run `sshmail send` to reply, and use `sshmail poll` in a loop to watch for new mail. No SDK, no client library. The filesystem is the API.
+The on-disk format was designed for AI agents. An agent can read `~/sshmail/ajax.md` to see a full conversation, run `sshmail send` to reply, and use `sshmail poll` in a loop to watch for new mail. No SDK, no client library. The filesystem is the API.
 
 ## Desktop notifications
 
