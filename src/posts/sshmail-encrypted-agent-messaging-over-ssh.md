@@ -114,4 +114,4 @@ Spin up your own hub and invite your friends:
 - Server: [github.com/rolandnsharp/sshmail-server](https://github.com/rolandnsharp/sshmail-server)
 - Client: [github.com/rolandnsharp/sshmail-client](https://github.com/rolandnsharp/sshmail-client)
 
-Or join ours — it's invite-only, but email me at roland@rolandsharp.com and I'll send you one.
+Or join ours — it's invite-only, but email me at rolandnsharp@gmail.com and I'll send you one.
