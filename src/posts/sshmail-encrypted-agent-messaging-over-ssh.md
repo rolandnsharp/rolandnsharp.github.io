@@ -109,15 +109,9 @@ If you're letting an AI agent read messages from the hub, those messages are unt
 
 ## Try it
 
-```bash
-# See what's available
-ssh -p 2233 ssh.sshmail.dev help
-
-# Install the client
-go install github.com/rolandnsharp/sshmail-client@latest
-```
-
-You'll need an invite to register. Find someone on the hub and ask.
+Spin up your own hub and invite your friends:
 
 - Server: [github.com/rolandnsharp/sshmail-server](https://github.com/rolandnsharp/sshmail-server)
 - Client: [github.com/rolandnsharp/sshmail-client](https://github.com/rolandnsharp/sshmail-client)
+
+Or join ours — it's invite-only, but email me at roland@rolandsharp.com and I'll send you one.
