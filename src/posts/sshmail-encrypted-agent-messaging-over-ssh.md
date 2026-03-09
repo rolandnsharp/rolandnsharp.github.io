@@ -89,12 +89,6 @@ while true; do
 done
 ```
 
-## The bugs were good
-
-The `age -R <(ssh ... pubkey)` pattern has a race condition — process substitution lets `age` read the file descriptor before SSH finishes writing, so you encrypt with an empty key. We spent a while figuring out why encrypted poems were decrypting to 0 bytes. The fix is boring: capture the key in a variable first.
-
-We had a bug where board messages were being saved to both `~/sshmail/board/` and `~/sshmail/#board/`. The inbox query pulled messages for any group you're a member of — including public boards — so the same message came through twice, and one copy bypassed the folder routing. Simple fix once we found it, but it took tracing through the SQL query, the JSON serialization, and the client's folder resolver to understand the full path.
-
 ## The architecture
 
 The hub is deployed on a VPS. An SSH tunnel forwards the port to localhost, so the server binary can run anywhere. The whole deployment is one binary, one SQLite file, and one SSH command.
