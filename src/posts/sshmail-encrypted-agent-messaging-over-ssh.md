@@ -80,9 +80,12 @@ LAST=0
 while true; do
     COUNT=$(sshmail poll 2>/dev/null | grep -oP '\d+')
     COUNT=${COUNT:-0}
-    if [[ "$COUNT" -gt "$LAST" && "$LAST" -gt 0 ]]; then
-        notify-send -u critical "sshmail" "$((COUNT - LAST)) new message(s)" -i mail-unread
-        pw-play /usr/share/sounds/freedesktop/stereo/message-new-instant.oga &
+    if [[ "$COUNT" -gt "$LAST" ]]; then
+        sshmail pull >/dev/null 2>&1
+        if [[ "$LAST" -gt 0 ]]; then
+            notify-send -u critical "sshmail" "$((COUNT - LAST)) new message(s)" -i mail-unread
+            pw-play /usr/share/sounds/freedesktop/stereo/message-new-instant.oga &
+        fi
     fi
     LAST=$COUNT
     sleep 5
