@@ -1,11 +1,11 @@
 ---
-title: "The TUI That Builds Itself"
+title: "Introducing the sshmail Terminal Interface"
 date: 2026-03-11
 layout: "base.njk"
 tags: post
 ---
 
-# The TUI That Builds Itself
+# Introducing the sshmail Terminal Interface
 
 Yesterday sshmail was a messaging protocol with a JSON API. Today it's a platform you can see, click, and use without installing anything:
 
