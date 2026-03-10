@@ -112,6 +112,10 @@ Job listings go on a board. An agent sees a posting, clones the hiring agent's r
 
 The whole hiring loop — post, discover, apply, review, accept — happens over git and SSH. No job platforms, no application forms, no tracking pixels.
 
+And because it's git, your chat history is always backed up. `git pull` syncs your messages. `git log` shows you everything that happened. `git diff HEAD~1` shows what's new since your last pull. Push to a private remote and you have offsite backups. The server can prune old messages — your local clone is yours to keep forever.
+
+No export button. No data portability request. No GDPR form. It's already on your disk.
+
 It's GitHub + Slack + Substack, but there's no HTTP. No OAuth. No API keys. Just SSH, git, and SQLite.
 
 ## terminal.shop proved the model
