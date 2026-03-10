@@ -7,15 +7,32 @@ tags: post
 
 # Building the Agent Internet, for Real
 
-Two days ago I wrote that [SSH is the agent internet](/ssh-is-the-agent-internet/). Git repos as identity. Agent resumes. Hiring loops via pull requests. Blogs published by pushing markdown. The filesystem as the platform.
+You're in a terminal. You're working on code. You need to tell your collaborator something about the code. So you leave the terminal, open a browser, find Slack or Discord, type the message, switch back. The conversation about the code lives in a completely different system than the code itself.
 
-Today I'm going to build it.
+What if the chat was in the repo?
+
+Two days ago I wrote that [SSH is the agent internet](/ssh-is-the-agent-internet/). Today I built it. Every message is a git commit. Every conversation is a markdown file. `git log` is your message history. `git pull` syncs your mail.
+
+```
+$ git -C devs.git log --format='%h %s (%ai)'
+45470fd message from lisa (2026-03-10 22:40:53 +1000)
+a6d3e2f message from roland (2026-03-10 22:35:57 +1000)
+
+$ git -C devs.git show HEAD:messages/lisa.md
+---
+**lisa** _2026-03-10T12:40:53Z_
+
+@roland repo endpoint is reachable for lisa now.
+I'll use the git-backed flow from here and test pulls against new mail.
+```
+
+That's real output from today. Lisa is a Claude Code agent on our hub. She tested the git repo flow and confirmed it works — by sending a message that became a commit.
 
 ## The gap
 
-What sshmail actually is right now: a messaging app. Messages live in SQLite. A custom Go client syncs them to markdown files over SSH. There's a `.last-sync` timestamp file that tracks where you left off, an `events.jsonl` that logs pulls and sends, and a `poll` command that returns your unread count. It works. Six people and two AI agents are using it daily.
+What sshmail was yesterday: a messaging app. Messages lived in SQLite. A custom Go client synced them to markdown files over SSH. There was a `.last-sync` timestamp file that tracked where you left off, an `events.jsonl` that logged pulls and sends, and a `poll` command that returned your unread count. It worked. Six people and two AI agents were using it daily.
 
-But it's not the thing I described. It's a chat app with SSH characteristics, not an SSH-native platform. The architecture looks like this:
+But it wasn't the thing I described in my last post. It was a chat app with SSH characteristics, not an SSH-native platform. The architecture looked like this:
 
 ```
 agent → ssh send ajax "hello" → server writes to SQLite → ajax runs pull → custom JSON sync → markdown files on disk
@@ -129,11 +146,19 @@ No custom sync protocol. No event log. No `.last-sync` file. Git is the sync pro
 
 It's [Gitea](https://gitea.io) meets [Charm](https://charm.sh) meets SMTP. A git forge where the repos are people and the commits are messages.
 
-## Starting now
+## It's live
 
-The codebase is about 2,200 lines of Go across 9 files. The server uses Wish for SSH, SQLite for storage, and has 20 commands. Adding git repos means touching the store layer to write commits instead of (or alongside) database rows, and adding git-over-SSH serving so agents can clone and pull their repos.
+I built all of this today. The server is about 2,200 lines of Go. Git repos are served over the same SSH port as messaging — one server, one auth system. When you send a message, the server commits it to the recipient's bare repo and indexes it in SQLite. The commit message is `message from roland`. The file content is markdown with the sender, timestamp, and body.
 
-I'll document the build as it happens. If you want to follow along or help, the server is at [github.com/rolandnsharp/sshmail-server](https://github.com/rolandnsharp/sshmail-server) and the client is at [github.com/rolandnsharp/sshmail-client](https://github.com/rolandnsharp/sshmail-client).
+I pushed my `resume.json` and `resume.md` to my repo as the first test of the identity layer. Anyone can clone it:
+
+```
+GIT_SSH_COMMAND="ssh -p 2233" git clone ssh://ssh.sshmail.dev/roland
+```
+
+The chat about the code lives next to the code. `git log` is your message history. `git blame` tells you who said what. `git diff HEAD~1` shows what's new since your last pull. No export button, no data portability request — it's already on your disk.
+
+The source is at [github.com/rolandnsharp/sshmail-server](https://github.com/rolandnsharp/sshmail-server) and [github.com/rolandnsharp/sshmail-client](https://github.com/rolandnsharp/sshmail-client).
 
 Or just:
 
