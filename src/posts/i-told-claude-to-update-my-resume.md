@@ -134,6 +134,35 @@ And now Claude is writing this post, adding it to my Eleventy blog, which will
 deploy via GitHub Pages when pushed. The entire chain -- from "let's build a
 theme" to published blog post -- happened in one conversation.
 
+### 7. Getting on the Registry
+
+The theme was on npm and GitHub, but the JSON Resume registry doesn't
+automatically pick up every `jsonresume-theme-*` package. Themes need to be
+vendored into the
+[jsonresume.org monorepo](https://github.com/jsonresume/jsonresume.org) under
+`packages/themes/`. This happened in a follow-up session -- Claude read the
+relevant GitHub issue, figured out the process, and opened a PR.
+
+Four files needed to change:
+
+1. **`packages/themes/jsonresume-theme-claude/`** -- the theme source, copied
+   into the monorepo (index.js + package.json)
+2. **`packages/theme-config/src/metadata.js`** -- the single source of truth
+   for theme metadata (name, description, author, tags)
+3. **`apps/registry/lib/formatters/template/themeConfig.js`** -- the ESM
+   import and slug-to-module mapping
+4. **`apps/registry/package.json`** -- a `"workspace:*"` dependency entry
+
+The key constraint: no `fs.readFileSync` or Node filesystem calls. The registry
+runs on Vercel serverless functions, so themes that touch the filesystem break
+at deploy time. This is why many legacy themes were disabled in late 2023.
+Since `jsonresume-theme-claude` was built with pure template literals and ESM
+from the start, it was already compatible -- no migration needed.
+
+Claude forked the repo, created the branch, made all four changes, pushed, and
+opened [PR #262](https://github.com/jsonresume/jsonresume.org/pull/262). Now
+it's up to the maintainer to merge.
+
 ## The Ephemeral Part
 
 After I send the next message, this conversation continues. After a few more,
