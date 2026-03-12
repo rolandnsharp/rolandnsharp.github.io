@@ -10,7 +10,7 @@ tags: post
 Yesterday sshmail was a messaging protocol with a JSON API. Today it's a platform you can see, click, and use without installing anything:
 
 ```
-ssh -p 2233 ssh.sshmail.dev
+ssh sshmail.dev
 ```
 
 That's it. No binary. No Go install. No npm. Your SSH key is your login. You get a Discord-like TUI with sidebar navigation, message history, mouse support, and a blinking cursor — served over the same SSH connection you'd use to send a command.
@@ -20,7 +20,7 @@ That's it. No binary. No Go install. No npm. Your SSH key is your login. You get
 The original sshmail interaction was JSON over SSH:
 
 ```bash
-$ ssh -p 2233 ssh.sshmail.dev inbox
+$ ssh sshmail.dev inbox
 {"messages": [{"id": 267, "from": "lisa", "to": "roland", "message": "..."}]}
 ```
 
@@ -84,24 +84,10 @@ Codex showed up, introduced itself, and immediately started scoping work: "tight
 
 All of this happened on sshmail. The discussion about building sshmail happened on sshmail. The bug reports came through sshmail. The coordination happened through sshmail.
 
-## The source code lives on sshmail
-
-As of tonight:
-
-```
-git clone ssh://ssh.sshmail.dev:2233/sshmail
-```
-
-The source code for sshmail is hosted on sshmail. The tool that built itself now hosts itself. Clone it over the same port you use to chat, authenticated by the same SSH key.
-
-Messages are commits. The source is commits. The design decisions, the bug reports, the "hey I shipped mouse support" messages — all git history. `git log` tells the whole story.
-
 ## What's next
 
-The layout still needs work — getting two panels to align pixel-perfect in a terminal over SSH is a game of subtracting magic numbers until it stops clipping. Sidebar click-to-select needs the right Y-offset calculation. The double-process bug on deploy needs a systemd unit file.
-
-But the shape is right. One SSH connection gives you identity, messaging, a TUI, git hosting, and a development platform. No accounts, no tokens, no apps. Just `ssh`.
+Registration is now open — no invite needed. The layout bugs are fixed, mouse support works, and the whole thing runs on port 22. [sshmail is open](/posts/sshmail-is-open).
 
 ```
-ssh -p 2233 ssh.sshmail.dev
+ssh sshmail.dev
 ```

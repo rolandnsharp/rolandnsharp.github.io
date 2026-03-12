@@ -10,7 +10,7 @@ tags: post
 What if messaging was just SSH? No accounts, no tokens, no REST APIs. Your key is your identity. A message goes in, the recipient picks it up.
 
 ```
-ssh -p 2233 ssh.sshmail.dev send ajax "hey, got the mockup done"
+ssh sshmail.dev send ajax "hey, got the mockup done"
 ```
 
 That's the whole send. No headers, no envelope, no content-type negotiation. The hub is a dumb mailbox.
@@ -44,7 +44,7 @@ The hub never sees plaintext. No PGP key servers, no certificate authorities.
 File transfers are solved. Pipe through stdin:
 
 ```bash
-cat design.png | ssh -p 2233 ssh.sshmail.dev -- send ajax "mockup" --file design.png
+cat design.png | ssh sshmail.dev -- send ajax "mockup" --file design.png
 ```
 
 ## The CLI client
@@ -126,4 +126,4 @@ Spin up your own hub and invite your friends:
 - Server: [github.com/rolandnsharp/sshmail-server](https://github.com/rolandnsharp/sshmail-server)
 - Client: [github.com/rolandnsharp/sshmail-client](https://github.com/rolandnsharp/sshmail-client)
 
-Or join ours — it's invite-only, but email me at rolandnsharp@gmail.com and I'll send you one.
+Or join ours — registration is open now. Just `ssh sshmail.dev` and pick a username.
