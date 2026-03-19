@@ -40,16 +40,18 @@ model is one binary that calls OpenBLAS for matrix multiplication and nothing el
 [reinforcement learning](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
 from the foundations up.
 
-**[Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/)** — a
-Forth system for the RISC-V PicoCalc. One language, top to bottom. The OS, the shell,
-the editor, the compiler — all Forth, all built on the device itself.
+**[Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/)** — the
+vision for a Forth system on the RISC-V PicoCalc. One language, top to bottom. The
+OS, the shell, the editor, the compiler — all Forth, built on the device itself. I'm
+building it now on the PicoCalc, learning RISC-V from the metal up.
 
 And **[The Forth Machine](/posts/the-forth-machine-a-vision-for-symbolic-ai/)** — a
 complete architectural vision for what happens when you put all of this together on
 tensor hardware. Dictionary as knowledge graph. Compilation as reasoning. Stack
 manipulation as attention. Self-modifying AI that is transparent all the way down.
 
-These aren't separate projects. They're layers of the same system.
+These aren't separate projects. They're layers of the same system — some built, some
+being built, all converging.
 
 ---
 
