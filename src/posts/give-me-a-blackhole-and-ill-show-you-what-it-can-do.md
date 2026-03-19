@@ -213,18 +213,58 @@ On Blackhole, you can. That's the selling point. I'm the demo.
 
 ---
 
+## The Development Machine
+
+Here's something people miss about the QuietBox TT. It's not just an accelerator card
+in a box. It's a full Linux workstation with Blackhole cards inside. A desk machine.
+A computer you sit at.
+
+That matters because of how I work.
+
+I build with [Claude Code](https://claude.ai/claude-code) — an AI coding assistant
+that runs in the terminal on a Linux machine. It reads my codebase, understands the
+architecture, helps me write the FFI bridges and the assembly and the tensor
+operations. It's how Vidya was built. It's how every post on this blog was written.
+It's how this post was written.
+
+The workflow: I sit at the QuietBox TT. Claude Code runs on the host. I'm writing
+Forth kernels for the Tensix cores, and Claude is helping me navigate the TT-Metalium
+SDK, debug RISC-V assembly, design the tensor dispatch protocol, work through the
+math of attention mechanisms. When we write a new tensor word, we test it immediately
+— the Blackhole is right there, in the same machine, not a cloud instance I'm SSHing
+into.
+
+This is what the next era of programming looks like. Not a human typing alone into a
+terminal. Not an AI generating code unsupervised. A human and an AI building something
+together on real hardware, iterating in real time, each contributing what they're best
+at. I bring the vision, the architecture, the bare-metal instinct. Claude brings the
+breadth — every data sheet, every algorithm, every edge case in floating point
+arithmetic.
+
+The PicoCalc is where I build alone. The QuietBox TT is where I build with AI. Both
+matter. The first teaches me what the machine is. The second lets me build what the
+machine can become.
+
+A task this ambitious — a new language, a new AI architecture, bare-metal tensor
+programming — is exactly the kind of thing that becomes possible when a skilled human
+and a capable AI work together on the right hardware. None of the three alone is
+sufficient. All three together is something new.
+
+---
+
 ## The Path
 
 I'm not asking for a research grant or a partnership or a job. I'm asking for a
 QuietBox TT at my desk.
 
 I have the skills. The architecture is designed. The prerequisite software exists. The
-blog has the audience. The work is happening regardless — I'm building Forth on RISC-V
-right now on a $60 calculator. A Blackhole just makes it real at scale.
+blog has the audience. The AI collaborator is ready. The work is happening regardless
+— I'm building Forth on RISC-V right now on a $60 calculator. A Blackhole just makes
+it real at scale.
 
 The PicoCalc proves I can build from nothing. Vidya proves I can build AI from
 scratch. The Forth Machine proves I know where this is going. The blog proves I'll
-document every step.
+document every step. Claude Code proves I don't have to do it alone.
 
 Give me a Blackhole and I'll show you what it can do.
 
