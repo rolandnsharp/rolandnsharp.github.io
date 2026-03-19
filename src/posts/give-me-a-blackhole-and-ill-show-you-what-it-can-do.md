@@ -14,11 +14,13 @@ from scratch. No SDK, no operating system, no internet. Just me and the metal.
 This is not a hobby. This is training.
 
 The machine I actually want to build needs a
-[Tenstorrent Blackhole](/posts/burn-the-stack-llms-without-nvidia/). Specifically, a
-QuietBox TT — the desktop workstation with Blackhole cards sitting right there on
-your desk, silent, waiting to be programmed. And I don't mean programmed through
-PyTorch. I mean programmed the way Jim Keller's team designed it to be — bare metal,
-open stack, direct access to the Tensix mesh.
+[Tenstorrent Blackhole](/posts/burn-the-stack-llms-without-nvidia/) card — a p150a,
+slotted into a Linux workstation I build myself. My own machine, my own monitor, my
+own keyboard, Blackhole silicon over PCIe. Start with one card. Learn it deeply. Then
+scale to four when the architecture proves out — 128GB of pooled VRAM for under
+$6,000. And I don't mean programmed through PyTorch. I mean programmed the way Jim
+Keller's team designed it to be — bare metal, open stack, direct access to the Tensix
+mesh.
 
 I've spent the last several months building the tools and the understanding to do
 exactly that. Here's what I have, what I'm building, and what I'll do with a
@@ -51,10 +53,10 @@ These aren't separate projects. They're layers of the same system.
 
 ---
 
-## What the QuietBox TT Actually Is
+## What a Blackhole Card Actually Is
 
-Most people look at the QuietBox TT and see a workstation for running LLM inference.
-A box that does what an NVIDIA DGX does, but cheaper and quieter.
+Most people look at the Blackhole p150a and see an alternative GPU. A card that does
+what an RTX does, but open-source and interconnect-ready.
 
 That's the least interesting thing about it.
 
@@ -215,9 +217,9 @@ On Blackhole, you can. That's the selling point. I'm the demo.
 
 ## The Development Machine
 
-Here's something people miss about the QuietBox TT. It's not just an accelerator card
-in a box. It's a full Linux workstation with Blackhole cards inside. A desk machine.
-A computer you sit at.
+The Blackhole card goes into a Linux workstation I build myself. Not a headless server
+I SSH into — a machine at my desk with a monitor, a keyboard, and a PCIe slot with
+a Blackhole in it. I need to sit at this machine and develop on it directly.
 
 That matters because of how I work.
 
@@ -227,12 +229,12 @@ architecture, helps me write the FFI bridges and the assembly and the tensor
 operations. It's how Vidya was built. It's how every post on this blog was written.
 It's how this post was written.
 
-The workflow: I sit at the QuietBox TT. Claude Code runs on the host. I'm writing
-Forth kernels for the Tensix cores, and Claude is helping me navigate the TT-Metalium
-SDK, debug RISC-V assembly, design the tensor dispatch protocol, work through the
-math of attention mechanisms. When we write a new tensor word, we test it immediately
-— the Blackhole is right there, in the same machine, not a cloud instance I'm SSHing
-into.
+The workflow: I sit at my workstation. Claude Code runs in the terminal. The Blackhole
+is in the PCIe slot. I'm writing Forth kernels for the Tensix cores, and Claude is
+helping me navigate the TT-Metalium SDK, debug RISC-V assembly, design the tensor
+dispatch protocol, work through the math of attention mechanisms. When we write a new
+tensor word, we test it immediately — the card is right there, in the same machine,
+not a cloud instance three SSH hops away.
 
 This is what the next era of programming looks like. Not a human typing alone into a
 terminal. Not an AI generating code unsupervised. A human and an AI building something
@@ -241,7 +243,7 @@ at. I bring the vision, the architecture, the bare-metal instinct. Claude brings
 breadth — every data sheet, every algorithm, every edge case in floating point
 arithmetic.
 
-The PicoCalc is where I build alone. The QuietBox TT is where I build with AI. Both
+The PicoCalc is where I build alone. The workstation is where I build with AI. Both
 matter. The first teaches me what the machine is. The second lets me build what the
 machine can become.
 
@@ -255,12 +257,12 @@ sufficient. All three together is something new.
 ## The Path
 
 I'm not asking for a research grant or a partnership or a job. I'm asking for a
-QuietBox TT at my desk.
+Blackhole p150a card.
 
 I have the skills. The architecture is designed. The prerequisite software exists. The
 blog has the audience. The AI collaborator is ready. The work is happening regardless
-— I'm building Forth on RISC-V right now on a $60 calculator. A Blackhole just makes
-it real at scale.
+— I'm building Forth on RISC-V right now on a $60 calculator. One Blackhole card
+makes it real. Four make it scale.
 
 The PicoCalc proves I can build from nothing. Vidya proves I can build AI from
 scratch. The Forth Machine proves I know where this is going. The blog proves I'll
