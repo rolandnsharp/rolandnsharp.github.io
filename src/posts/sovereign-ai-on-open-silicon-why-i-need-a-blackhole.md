@@ -1,11 +1,11 @@
 ---
-title: "Give Me a Blackhole and I'll Show You What It Can Do"
+title: "Sovereign AI on Open Silicon: Why I Need a Blackhole"
 date: 2026-03-19
 layout: "base.njk"
 tags: post
 ---
 
-# Give Me a Blackhole and I'll Show You What It Can Do
+# Sovereign AI on Open Silicon: Why I Need a Blackhole
 
 I'm writing this with Claude Code — an AI coding agent running in my terminal. I tell
 it what I'm thinking, it helps me build it, and we ship together. That's how Vidya was
