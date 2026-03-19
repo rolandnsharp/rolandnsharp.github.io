@@ -7,11 +7,15 @@ tags: post
 
 # Give Me a Blackhole and I'll Show You What It Can Do
 
-I'm writing this from a PicoCalc — a pocket calculator with a RISC-V chip, a tiny
+I'm writing this with Claude Code — an AI coding agent running in my terminal. I tell
+it what I'm thinking, it helps me build it, and we ship together. That's how Vidya was
+built. That's how this post was written. That's how the Blackhole will be programmed.
+
+On my desk there's also a PicoCalc — a pocket calculator with a RISC-V chip, a tiny
 keyboard, and a screen the size of a playing card. I'm building a Forth system on it
 from scratch. No SDK, no operating system, no internet. Just me and the metal.
 
-This is not a hobby. This is training.
+The PicoCalc is training. The real work needs real silicon.
 
 The machine I actually want to build needs a
 [Tenstorrent Blackhole](/posts/burn-the-stack-llms-without-nvidia/) card — a p150a,
