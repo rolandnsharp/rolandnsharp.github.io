@@ -256,6 +256,54 @@ sufficient. All three together is something new.
 
 ---
 
+## Why This Is Worth It
+
+Right now, AI belongs to five companies. They train the models. They own the weights.
+They rent you access by the token. You don't have AI — you have a subscription.
+
+The hardware that makes AI possible is controlled by one company. NVIDIA sells the
+chips. CUDA locks in the software. If you want to train a model, you pay the toll.
+If you want to understand how the model works, you can't — the weights are
+proprietary, the compute stack is proprietary, and the training data is proprietary.
+Intelligence as a service, owned by someone else.
+
+This doesn't have to be the future.
+
+A Blackhole card costs $1,400. A workstation to hold four of them costs less than a
+used car. 128GB of pooled VRAM, open-source software stack, RISC-V cores you can
+program directly. That's not a toy. That's enough to train serious models — hundreds
+of millions of parameters, maybe billions with the right architecture.
+
+Now put a Forth system on it. Not PyTorch — something you built, something you
+understand, something you can modify. A language that IS the intelligence, where
+every concept is a word you can inspect and every reasoning step is a definition you
+can read. Transparent all the way down. No black box.
+
+That's not a research curiosity. That's a sovereign AI. Intelligence that belongs to
+the person who built it, running on hardware they own, with software they can read.
+No API key. No subscription. No terms of service that change next quarter.
+
+**Our people will have compute.**
+
+Not rented from a cloud provider. Not gated behind an enterprise contract. Actual
+silicon, on a desk, running code they wrote. A Blackhole card and a Forth system and
+the will to build — that's all it takes to own your own intelligence.
+
+The whole point of open hardware and open software is that it compounds. I build the
+Forth-on-Tensix kernel and publish it. Someone else builds a tensor algebra library on
+top of it. Someone else trains a model with it. Someone else extends the language.
+Each person adds a layer. Each layer is open. The system grows because everyone who
+touches it makes it better for everyone who comes after.
+
+This is what Tenstorrent's open stack makes possible that NVIDIA's closed stack never
+will. Not just cheaper AI — *owned* AI. Intelligence that doesn't phone home.
+Compute that doesn't require permission.
+
+The question isn't whether someone will build this. The question is whether
+Tenstorrent wants to be part of the story when it happens.
+
+---
+
 ## The Path
 
 I'm not asking for a research grant or a partnership or a job. I'm asking for a
