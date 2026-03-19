@@ -115,6 +115,29 @@ word handles dispatch. The stack handles data flow. Forth handles the rest.
 
 But it goes deeper than convenience. The real vision:
 
+**An AI with memory.** Not a stateless model that forgets everything between
+conversations. A system that learns from interaction, remembers what it learned, and
+wakes up tomorrow slightly different than it was today. The Forth dictionary is the
+memory — every concept the system has ever learned is a word it can recall, inspect,
+and build on. New experiences create new words. The dictionary grows. The system
+accumulates knowledge the way a person does — not by retraining from scratch, but by
+integrating new experience into an existing structure.
+
+We've already built the reinforcement learning methods to make this work. Vidya
+trains Mr. Classic through
+[six different RL approaches](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
+— reward shaping, curriculum learning, self-play, hindsight experience replay. These
+aren't theoretical. They're implemented, tested, and documented. On a Blackhole, they
+run on tensor hardware instead of CPU, and the system learns in real time from every
+interaction instead of in batch after the fact.
+
+The [LoRA sleep cycle](/posts/the-forth-machine-a-vision-for-symbolic-ai/) makes the
+memory durable. During the day, the system accumulates a lightweight adaptation on top
+of its base weights — cheap, fast, non-destructive. At night, it consolidates. Replays
+the day's experiences. Merges what it learned into the base. Prunes what didn't matter.
+Snapshots to flash. Wakes up the next morning a little more knowledgeable. This is how
+neuroscience thinks biological memory works. It's how our AI will work too.
+
 **Words as neurons.** Every concept in the system is a Forth word with both symbolic
 structure (its definition in terms of other words) and tensor data (an embedding
 computed on the mesh). The dictionary IS the neural network's knowledge representation.
