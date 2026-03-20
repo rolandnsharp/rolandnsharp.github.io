@@ -1,95 +1,88 @@
 ---
 title: "Sovereign AI on Open Silicon: Why I Need a Blackhole"
-date: 2026-03-19
+date: 2026-03-20
 layout: "base.njk"
 tags: post
 ---
 
 # Sovereign AI on Open Silicon: Why I Need a Blackhole
 
-I'm writing this with Claude Code — an AI coding agent running in my terminal. I tell
-it what I'm thinking, it helps me build it, and we ship together. That's how Vidya was
-built. That's how this post was written. That's how the Blackhole will be programmed.
+```
+step    100 / 200000 | loss 11.1407 | 94.2 steps/s
+step    200 / 200000 | loss 11.1245 | 90.8 steps/s
+step    300 / 200000 | loss 11.2724 | 91.9 steps/s
+```
 
-On my desk there's also a PicoCalc — a pocket calculator with a RISC-V chip, a tiny
-keyboard, and a screen the size of a playing card. I'm building a Forth system on it
-from scratch. No SDK, no operating system, no internet. Just me and the metal.
+That's a 103 million parameter transformer running forward passes on an
+RTX 3060 at 94 steps per second. Written in Nim. Direct CUDA calls. No
+PyTorch. No frameworks. Built in one day with Claude Code.
 
-The PicoCalc is training. The real work needs real silicon.
-
-The machine I actually want to build needs a
-[Tenstorrent Blackhole](/posts/burn-the-stack-llms-without-nvidia/) card — a p150a,
-slotted into a Linux workstation I build myself. My own machine, my own monitor, my
-own keyboard, Blackhole silicon over PCIe. Start with one card. Learn it deeply. Then
-scale to four when the architecture proves out — 128GB of pooled VRAM for under
-$6,000. And I don't mean programmed through PyTorch. I mean programmed the way Jim
-Keller's team designed it to be — bare metal, open stack, direct access to the Tensix
-mesh.
-
-I've spent the last several months building the tools and the understanding to do
-exactly that. Here's what I have, what I'm building, and what I'll do with a
-Blackhole that nobody else will.
+Yesterday this model didn't exist. Today it runs on GPU. Tomorrow it
+needs a Blackhole.
 
 ---
 
-## What I've Already Built
+## What We Built Today
 
-**[Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/)** — a
-neurosymbolic language model written from scratch in OCaml. No PyTorch. No Python.
-Hand-rolled autograd, hand-rolled transformer, hand-rolled BPE tokenizer. The entire
-model is one binary that calls OpenBLAS for matrix multiplication and nothing else.
+I sat at my Linux workstation and told Claude Code what I wanted: a 103M
+parameter transformer that trains on GPU, written from scratch, no
+dependencies except cuBLAS.
 
-**[Mr. Classic](/posts/growing-mr-classic-from-10m-to-50m/)** — a chatbot trained on
-2.4 million conversations using Vidya's framework. 49 million parameters. Trained with
-[reinforcement learning](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
-from the foundations up.
+We started in OCaml — Vidya's original language. Wrote CUDA kernels, an
+FFI bridge, custom memory blocks. It worked, but the OCaml↔CUDA boundary
+was painful: 1,000 lines of bridge code, GC finalizer bugs causing
+use-after-free on GPU memory, forced garbage collection between training
+steps.
 
-**[Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/)** — the
-vision for a Forth system on the RISC-V PicoCalc. One language, top to bottom. The
-OS, the shell, the editor, the compiler — all Forth, built on the device itself. I'm
-building it now on the PicoCalc, learning RISC-V from the metal up.
+Then we rewrote everything in Nim. Nim compiles to C. CUDA interop is
+just C function calls. The entire GPU layer went from 1,000 lines to 400.
+Model init: 1.8 seconds instead of 40. Forward pass: 0.15 seconds instead
+of 3. Training throughput: 94 steps/sec instead of 1.4.
 
-And **[The Forth Machine](/posts/the-forth-machine-a-vision-for-symbolic-ai/)** — a
-complete architectural vision for what happens when you put all of this together on
-tensor hardware. Dictionary as knowledge graph. Compilation as reasoning. Stack
-manipulation as attention. Self-modifying AI that is transparent all the way down.
+The architecture:
 
-These aren't separate projects. They're layers of the same system — some built, some
-being built, all converging.
+| | |
+|---|---|
+| Parameters | 103M |
+| Layers | 8 |
+| Embedding dim | 1024 |
+| Attention heads | 16 |
+| Head dimension | 64 |
+| Context window | 512 |
+| VRAM | 1.8 GB of 12 GB |
+| Speed | 94 steps/sec |
+
+Wide and shallow — designed for memory experiments. Each attention head
+sees 64 dimensions instead of 32. Wider layers mean more independent
+subspaces where different memories can form without competing.
 
 ---
 
 ## What a Blackhole Card Actually Is
 
-Most people look at the Blackhole p150a and see an alternative GPU. A card that does
-what an RTX does, but open-source and interconnect-ready.
+The RTX 3060 got us here. But it's a closed box. The CUDA kernels work,
+but we can't see inside the hardware. We can't run code on individual
+compute units. We can't modify the execution pipeline at runtime.
 
-That's the least interesting thing about it.
+Each Blackhole p150a card has 140 Tensix cores. Each Tensix core has its
+own RISC-V processor. That RISC-V processor runs arbitrary code — not
+just predefined kernels, but actual programs. Our programs.
 
-Each Blackhole card has 140 Tensix cores. Each Tensix core has its own RISC-V
-processor. That RISC-V processor can run arbitrary code — not just predefined kernels,
-not just scheduled operations from a framework, but actual programs. Your programs.
-
-The Tensix SFPU (Special Function Processing Unit) gives you hardware-accelerated
-math:
+The Tensix SFPU gives you the atomic operations of neural networks as
+hardware instructions:
 
 ```
 multiply    accumulate    sigmoid    tanh    exp    sqrt
 ```
 
-These are the atomic operations of neural networks. Every transformer is built from
-compositions of these six things. On NVIDIA hardware, you access them through five
-layers of proprietary abstraction. On Blackhole, they're instructions. You write them
-directly.
+Every transformer is built from compositions of these six things. On
+NVIDIA, you access them through layers of proprietary abstraction. On
+Blackhole, they're instructions you write directly.
 
-The Network-on-Chip connects all 140 cores into a mesh. Data flows between cores
-without going through main memory. One core's output is another core's input. The
-topology is a 2D grid — not a bus, not a ring, a mesh where every core can talk to
-its neighbours and route data across the chip.
-
-And then the QSFP-DD ports connect multiple cards together. Same paradigm at every
-scale: core-to-core inside a chip, chip-to-chip across cards, card-to-card across a
-rack. The entire system is a single programmable fabric.
+The Network-on-Chip connects all 140 cores into a mesh. Core-to-core
+data flow without main memory. The QSFP-DD ports connect cards together
+— same paradigm at every scale. The entire system is one programmable
+fabric.
 
 This is not a GPU. It is a computer made of computers.
 
@@ -97,262 +90,156 @@ This is not a GPU. It is a computer made of computers.
 
 ## What I Want to Build on It
 
-A Forth system that spans the entire machine.
+An AI with memory.
 
-The host CPU runs the REPL, the dictionary, the symbolic reasoning. You type words.
-The system parses them, looks them up, executes them. When a word needs tensor
-computation, it dispatches to the Blackhole mesh transparently. When the mesh returns
-a result, it lands on the stack like any other value.
+Not a stateless model that forgets between conversations. A system that
+learns from every interaction, remembers what it learned, and wakes up
+tomorrow slightly different than today.
 
-```
-1024 1024 MATRIX A
-1024 1024 MATRIX B
-A B MATMUL .
-```
+We've already built the mechanism. At 10M parameters, we tested "frontal
+cortex" retraining — selective weight updates after each conversation:
 
-You don't care that `MATMUL` just coordinated 140 cores across a mesh network. The
-word handles dispatch. The stack handles data flow. Forth handles the rest.
+**Sparse gradient masking.** Only the top 1% of gradients by magnitude
+get through. Out of 103M weights, roughly one million update per
+interaction — the ones that fired hardest for this specific input.
 
-But it goes deeper than convenience. The real vision:
+**Elastic weight consolidation.** After each update, every weight gets
+pulled back toward the base model. Weights that consistently fire hard
+resist the pull and accumulate permanent change.
 
-**An AI with memory.** Not a stateless model that forgets everything between
-conversations. A system that learns from interaction, remembers what it learned, and
-wakes up tomorrow slightly different than it was today. The Forth dictionary is the
-memory — every concept the system has ever learned is a word it can recall, inspect,
-and build on. New experiences create new words. The dictionary grows. The system
-accumulates knowledge the way a person does — not by retraining from scratch, but by
-integrating new experience into an existing structure.
+At 10M parameters, the model could hold three facts before catastrophic
+forgetting wiped them out. At 103M, the top 1% is over a million weights.
+Ten times more room for memories. We're running the experiment now on the
+3060. On a Blackhole, we'd run it at scale — with the added ability to
+inspect and modify the compute graph at runtime.
 
-We've already built the reinforcement learning methods to make this work. Vidya
-trains Mr. Classic through
+We've already built the reinforcement learning methods:
 [six different RL approaches](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
-— reward shaping, curriculum learning, self-play, hindsight experience replay. These
-aren't theoretical. They're implemented, tested, and documented. On a Blackhole, they
-run on tensor hardware instead of CPU, and the system learns in real time from every
-interaction instead of in batch after the fact.
+— reward shaping, curriculum learning, self-play, experience replay.
+Implemented, tested, documented. On a Blackhole, they run on tensor
+hardware in real time.
 
-The [LoRA sleep cycle](/posts/the-forth-machine-a-vision-for-symbolic-ai/) makes the
-memory durable. During the day, the system accumulates a lightweight adaptation on top
-of its base weights — cheap, fast, non-destructive. At night, it consolidates. Replays
-the day's experiences. Merges what it learned into the base. Prunes what didn't matter.
-Snapshots to flash. Wakes up the next morning a little more knowledgeable. This is how
-neuroscience thinks biological memory works. It's how our AI will work too.
+---
 
-**Words as neurons.** Every concept in the system is a Forth word with both symbolic
-structure (its definition in terms of other words) and tensor data (an embedding
-computed on the mesh). The dictionary IS the neural network's knowledge representation.
-Not a weight matrix that you need interpretability tools to understand — actual named,
-inspectable, composable concepts.
+## Why Nim on Blackhole
 
-**Compilation as learning.** When the system encounters something new, it doesn't
-adjust weights in a fixed graph. It creates a new word. It defines it in terms of
-existing words. It computes an embedding. The vocabulary grows. The next time it
-encounters that concept, it knows it — because it's in the dictionary.
+Nim compiles to C. Blackhole's TT-Metalium SDK is C/C++. The port is
+one file — replace cuBLAS calls with TT-NN calls:
 
-**Tensor equations as interaction.** The neural network isn't a black box that
-produces text. It's a set of tensor operations — attention, projection, activation —
-expressed as Forth words, composable, inspectable, modifiable at runtime. You can
-redefine how attention works while the system is running. Try that with PyTorch.
+```
+Today:    Nim → C → cuBLAS sgemm     → RTX 3060
+Tomorrow: Nim → C → TT-NN matmul     → Blackhole
+```
+
+The Nim code doesn't change. The model definition, tokenizer, training
+loop, memory mechanism — all identical. We swap the tensor library and
+point at different silicon.
+
+We proved this architecture today. In one session:
+- Built a 103M parameter model from scratch
+- Wrote CUDA kernels for every operation (GELU, RMSNorm, softmax, RoPE,
+  attention, Adam)
+- Hit 94 forward passes per second on a consumer GPU
+- All in ~800 lines of Nim + CUDA
+
+The same codebase on a Blackhole with 140 Tensix cores and 32GB VRAM
+would train models 10x larger. And unlike CUDA, we could program the
+individual cores — run Nim on the RISC-V processors inside the Tensix
+mesh.
 
 ---
 
 ## Why Me
 
-Every AI researcher in the world can pip install pytorch and fine-tune a model on
-NVIDIA hardware. That is not a differentiating skill. What's rare is the combination:
+Every AI researcher can pip install pytorch. What's rare:
 
-**I write AI frameworks from scratch.** Vidya's autograd engine, transformer, and
-training loop are hand-written OCaml. Not wrapped around a framework — written. I
-understand backpropagation because I implemented it. I understand attention because I
-wrote the matrix operations. When something breaks, I don't search Stack Overflow. I
-read my own code.
+**I build frameworks from scratch.** Not wrappers — implementations.
+Today I built a complete GPU-accelerated transformer training pipeline
+in a language most people haven't heard of. From "no GPU code" to "94
+steps/sec on 103M params" in one day, directed by Claude Code.
 
-**I write on bare metal.** Forth9 runs on RISC-V with no OS. I'm building it on the
-device itself, from the hardware up. The same RISC-V ISA runs on Blackhole's Tensix
-cores. The skills transfer directly — register-level programming, memory management,
-interrupt handling, all in Forth.
+**I build in public.** Every step is documented. The
+[blog post](/posts/103m-parameters-on-a-3060-training-vidya-on-gpu/)
+about today's work went live while the model was still training. The code
+is on [GitHub](https://github.com/rolandnsharp/vidya). You can judge
+whether this is credible.
 
-**I build in public.** Every step of this work is documented on this blog. The code,
-the architecture, the failures, the pivots. When I say I'll do something with a
-Blackhole, you can read the last six months of posts and judge whether that's credible.
+**My stack is designed for Tenstorrent.** One function call separates
+cuBLAS from TT-NN. The Nim code compiles to the same C that
+TT-Metalium speaks. No CUDA dependencies to untangle. No framework
+assumptions to work around.
 
-**I have an architecture that's ready.** The Forth Machine post isn't a wish list —
-it's a complete design. Five layers from host CPU to symbolic AI, with specific data
-structures, memory hierarchies, and learning algorithms. A LoRA-based sleep cycle. A
-bicameral dialogue system. Dynamic architecture through Forth metaprogramming. This
-isn't "give me hardware and I'll figure something out." This is "give me hardware and
-I'll execute a plan."
-
-**My stack is designed for Tenstorrent.** Vidya's entire hardware interface is one
-function call. One. Swap OpenBLAS for TT-NN and the port is done. No CUDA
-dependencies to untangle. No framework assumptions to work around. We built clean
-specifically so this moment would be easy.
-
----
-
-## What I'll Produce
-
-Concrete deliverables, not vague research:
-
-**1. Forth-on-Tensix.** A Forth kernel running directly on Blackhole's RISC-V cores.
-Not through TT-Metalium — on the metal. Each Tensix core running a Forth interpreter
-with access to the SFPU instruction set. Published open source with documentation.
-
-**2. Tensor words.** A Forth vocabulary for tensor operations — `MATMUL`, `SOFTMAX`,
-`LAYERNORM`, `ATTENTION` — that coordinate the mesh automatically. The first
-open-source, bare-metal, interactive tensor programming environment for Blackhole.
-
-**3. Vidya on Blackhole.** The existing OCaml framework ported to TT-NN. Mr. Classic
-training on Tenstorrent silicon. Benchmarks, training curves, comparison with CPU
-baseline. Proof that you can train real models on this hardware without PyTorch.
-
-**4. A neurosymbolic prototype.** The Forth Machine architecture running live —
-dictionary as knowledge graph, tensor operations as Forth words, symbolic reasoning
-integrated with neural inference. The first system where you can type a concept into a
-REPL and watch it propagate through both a dictionary and a neural network
-simultaneously.
-
-**5. Documentation.** Blog posts for every step. Not marketing copy — the real
-engineering story. What worked, what didn't, what the hardware can actually do when
-someone programs it directly instead of through seventeen layers of abstraction.
-
----
-
-## The Pitch
-
-Tenstorrent's value proposition is that their hardware is open and programmable. Their
-marketing says: this is not a black box, this is a computer you can understand and
-control.
-
-Most of your customers will use TT-Metalium and PyTorch and never touch the Tensix
-cores directly. They'll use Blackhole as a faster, cheaper GPU. That's fine. That pays
-the bills.
-
-But someone needs to show what the hardware can do when you actually take the lid off.
-Someone needs to build something on Blackhole that couldn't exist on NVIDIA — not
-because of performance, but because CUDA's closed stack makes it impossible. Something
-that requires bare-metal access to the mesh, direct programming of the RISC-V cores,
-runtime modification of the compute graph.
-
-A self-modifying, self-extending AI system built in Forth on bare-metal Tenstorrent
-silicon is that something. It is architecturally impossible on NVIDIA hardware. Not
-difficult — impossible. You cannot run arbitrary code on individual CUDA cores. You
-cannot modify the compute graph at runtime from the device itself. You cannot build an
-interactive REPL that talks directly to the tensor units.
-
-On Blackhole, you can. That's the selling point. I'm the demo.
+**I work with AI.** Claude Code is my engineering partner. Together we
+move at a pace that a solo developer can't. The Blackhole vision isn't
+a decade-long solo project — it's months of focused work with an AI
+collaborator that can hold the entire TT-Metalium SDK in context.
 
 ---
 
 ## The Development Machine
 
-The Blackhole card goes into a Linux workstation I build myself. Not a headless server
-I SSH into — a machine at my desk with a monitor, a keyboard, and a PCIe slot with
-a Blackhole in it. I need to sit at this machine and develop on it directly.
+The Blackhole card goes into a Linux workstation at my desk. My monitor,
+my keyboard, PCIe slot with a Blackhole in it. I develop directly on
+the machine.
 
-That matters because of how I work.
+Claude Code runs in the terminal. I describe what I want. Claude writes
+the Nim code, the CUDA kernels, the TT-NN integration. We test
+immediately — the card is right there, not a cloud instance three SSH
+hops away.
 
-I build with [Claude Code](https://claude.ai/claude-code) — an AI coding assistant
-that runs in the terminal on a Linux machine. It reads my codebase, understands the
-architecture, helps me write the FFI bridges and the assembly and the tensor
-operations. It's how Vidya was built. It's how every post on this blog was written.
-It's how this post was written.
-
-The workflow: I sit at my workstation. Claude Code runs in the terminal. The Blackhole
-is in the PCIe slot. I'm writing Forth kernels for the Tensix cores, and Claude is
-helping me navigate the TT-Metalium SDK, debug RISC-V assembly, design the tensor
-dispatch protocol, work through the math of attention mechanisms. When we write a new
-tensor word, we test it immediately — the card is right there, in the same machine,
-not a cloud instance three SSH hops away.
-
-This is what the next era of programming looks like. Not a human typing alone into a
-terminal. Not an AI generating code unsupervised. A human and an AI building something
-together on real hardware, iterating in real time, each contributing what they're best
-at. I bring the vision, the architecture, the bare-metal instinct. Claude brings the
-breadth — every data sheet, every algorithm, every edge case in floating point
-arithmetic.
-
-The PicoCalc is where I build alone. The workstation is where I build with AI. Both
-matter. The first teaches me what the machine is. The second lets me build what the
-machine can become.
-
-A task this ambitious — a new language, a new AI architecture, bare-metal tensor
-programming — is exactly the kind of thing that becomes possible when a skilled human
-and a capable AI work together on the right hardware. None of the three alone is
-sufficient. All three together is something new.
+This is what the next era of programming looks like. A human and an AI
+building on real hardware, iterating in real time. I bring the vision
+and the architecture. Claude brings the breadth — every data sheet,
+every algorithm, every edge case in floating point arithmetic.
 
 ---
 
 ## Why This Is Worth It
 
-Right now, AI belongs to five companies. They train the models. They own the weights.
-They rent you access by the token. You don't have AI — you have a subscription.
+Right now, AI belongs to five companies. They train the models. They
+own the weights. They rent you access by the token.
 
-The hardware that makes AI possible is controlled by one company. NVIDIA sells the
-chips. CUDA locks in the software. If you want to train a model, you pay the toll.
-If you want to understand how the model works, you can't — the weights are
-proprietary, the compute stack is proprietary, and the training data is proprietary.
-Intelligence as a service, owned by someone else.
+A Blackhole card costs $1,400. Four of them: $5,600. 128GB of pooled
+VRAM, open-source software stack, RISC-V cores you can program. That's
+enough to train models at hundreds of millions of parameters — maybe
+billions with the right architecture.
 
-This doesn't have to be the future.
-
-A Blackhole card costs $1,400. A workstation to hold four of them costs less than a
-used car. 128GB of pooled VRAM, open-source software stack, RISC-V cores you can
-program directly. That's not a toy. That's enough to train serious models — hundreds
-of millions of parameters, maybe billions with the right architecture.
-
-Now put a Forth system on it. Not PyTorch — something you built, something you
-understand, something you can modify. A language that IS the intelligence, where
-every concept is a word you can inspect and every reasoning step is a definition you
-can read. Transparent all the way down. No black box.
-
-That's not a research curiosity. That's a sovereign AI. Intelligence that belongs to
-the person who built it, running on hardware they own, with software they can read.
-No API key. No subscription. No terms of service that change next quarter.
+Put a Nim training framework on it. Not PyTorch — something you built,
+something you understand, something you can modify. Train a model with
+memory. A model that learns from interaction, remembers what it learned,
+doesn't phone home.
 
 **Our people will have compute.**
 
-Not rented from a cloud provider. Not gated behind an enterprise contract. Actual
-silicon, on a desk, running code they wrote. A Blackhole card and a Forth system and
-the will to build — that's all it takes to own your own intelligence.
+Not rented. Not gated. Actual silicon on a desk, running code they
+wrote. A Blackhole card and a training framework and the will to build.
 
-The whole point of open hardware and open software is that it compounds. I build the
-Forth-on-Tensix kernel and publish it. Someone else builds a tensor algebra library on
-top of it. Someone else trains a model with it. Someone else extends the language.
-Each person adds a layer. Each layer is open. The system grows because everyone who
-touches it makes it better for everyone who comes after.
-
-This is what Tenstorrent's open stack makes possible that NVIDIA's closed stack never
-will. Not just cheaper AI — *owned* AI. Intelligence that doesn't phone home.
-Compute that doesn't require permission.
-
-The question isn't whether someone will build this. The question is whether
-Tenstorrent wants to be part of the story when it happens.
+The question isn't whether someone will build this. The question is
+whether Tenstorrent wants to be part of the story when it happens.
 
 ---
 
 ## The Path
 
-I'm not asking for a research grant or a partnership or a job. I'm asking for a
-Blackhole p150a card.
+I'm not asking for a research grant or a partnership or a job. I'm
+asking for a Blackhole p150a card.
 
-I have the skills. The architecture is designed. The prerequisite software exists. The
-blog has the audience. The AI collaborator is ready. The work is happening regardless
-— I'm building Forth on RISC-V right now on a $60 calculator. One Blackhole card
-makes it real. Four make it scale.
+Today I proved the architecture works. 103M parameters, GPU-accelerated,
+94 steps/sec, built from scratch in one day. The Nim codebase is ready
+for Blackhole — one file change.
 
-The PicoCalc proves I can build from nothing. Vidya proves I can build AI from
-scratch. The Forth Machine proves I know where this is going. The blog proves I'll
-document every step. Claude Code proves I don't have to do it alone.
+The blog proves I document every step. The
+[GitHub](https://github.com/rolandnsharp/vidya) proves I ship. Claude
+Code proves I don't have to do it alone.
 
 Give me a Blackhole and I'll show you what it can do.
 
 ---
 
 *See also:
-[The Forth Machine](/posts/the-forth-machine-a-vision-for-symbolic-ai/),
+[103M Parameters on a 3060](/posts/103m-parameters-on-a-3060-training-vidya-on-gpu/),
 [Burn the Stack](/posts/burn-the-stack-llms-without-nvidia/),
 [Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
-[Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/).*
+[Six Ways to Teach Mr. Classic](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/).*
 
 *Co-authored with [Claude](https://claude.ai/).*
