@@ -7,16 +7,13 @@ tags: post
 
 # NimLLM: A Local Language Model You Own
 
-```
-step    650 / 25000 | loss 10.44 | lr 0.000033 | 1.1 opt/s
-```
+What if you could train a language model on your own computer, talk to
+it, and have it remember the conversation tomorrow? Not by downloading
+someone else's 70 billion parameter model — by training your own small
+one from scratch, on your data, and letting it learn from every
+interaction.
 
-That's a 103 million parameter language model training on my RTX 3060.
-Not downloading someone else's weights. Training. From scratch. On my
-data. In a language nobody expects.
-
-The entire thing is one Nim binary. No Python. No PyTorch. No pip
-install. Nim compiles to C. C calls CUDA. The model learns.
+That's what NimLLM is. One binary. Train, chat, remember.
 
 ---
 
