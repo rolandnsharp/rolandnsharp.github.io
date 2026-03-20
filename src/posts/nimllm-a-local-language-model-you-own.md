@@ -137,6 +137,35 @@ PyTorch is 3 million lines. We do what we need in 1,000.
 
 ---
 
+## Why Nim
+
+We tried OCaml first. It worked but the FFI boundary between OCaml
+and CUDA was painful — 1,000 lines of bridge code, GC finalizer bugs
+crashing the GPU, forced garbage collection between training steps.
+
+Nim compiles to C. CUDA interop is just C function calls. No bridge
+file. No custom memory blocks. No GC fighting your GPU allocations.
+When you write `gpu_adamw(param.data, grad.data, ...)` in Nim, that's
+literally a C function call in the generated code.
+
+We also considered:
+
+- **C**: maximum control but no closures, no generics. Autograd in C
+  is miserable.
+- **Rust**: the borrow checker and GPU pointers don't mix. Every
+  device pointer is unsafe. Every autograd closure needs lifetime
+  annotations.
+- **Python + PyTorch**: fast to prototype but 3 million lines of
+  framework between you and the GPU. Can't compile to a single binary.
+
+Nim gives you C's performance with Python's productivity. Closures
+for autograd. Generics for type safety. Metaprogramming for code
+generation. Compiles in 4 seconds. Produces a single binary. The
+only downside is the small community — which means if you build
+something real in Nim, people notice.
+
+---
+
 ## How It Got Built
 
 I sat at my Linux workstation and told Claude Code what I wanted.
