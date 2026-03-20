@@ -8,15 +8,18 @@ tags: post
 # 103M Parameters on a 3060: Training Vidya on GPU
 
 ```
-nvidia-smi
-| NVIDIA GeForce RTX 3060        |   3480MiB / 12288MiB |   28%  |
-| _build/default/bin/main.exe                           1756MiB  |
+initialising model on GPU...
+  102,994,944 params in 1.82s
+running forward pass...
+  loss = 10.8820 in 0.15s
 ```
 
-That's Vidya — our neurosymbolic language model — training a 103 million
-parameter transformer on a single consumer GPU. The entire stack is ours: OCaml
-orchestration, CUDA kernels, hand-rolled autograd, no PyTorch, no frameworks.
-Built in one session with Claude Code.
+That's Vidya — our neurosymbolic language model — running a 103 million
+parameter forward pass on a single consumer GPU in 150 milliseconds. The
+entire stack is ours: Nim, direct CUDA calls, cuBLAS, hand-rolled kernels.
+No PyTorch. No frameworks. Built in one session with Claude Code.
+
+We started the day in OCaml. We ended it in Nim. Here's why.
 
 ---
 
@@ -70,34 +73,47 @@ The whole thing fits in 1.8 GB of a 12 GB card. Room to spare.
 
 ---
 
-## The GPU Port
+## From OCaml to Nim in One Day
 
-Until today, Vidya trained on CPU. Single-threaded OpenBLAS. At 49M parameters,
-one epoch over 37,000 conversations took days. At 103M it would take weeks.
-The memory experiments we need to run — hundreds of RL interactions testing
-whether the model can accumulate persistent knowledge — were impossible.
+The morning started in OCaml. Vidya's original implementation — hand-rolled
+autograd, BPE tokenizer, transformer, training loop — all OCaml calling
+OpenBLAS for matrix multiplication on CPU. We ported it to CUDA: wrote GPU
+kernels, an OCaml FFI bridge, custom memory blocks with GC finalizers. It
+worked. 103M parameters training on the RTX 3060.
 
-So we ported the entire engine to CUDA. In one session. Here's what that means:
+But it was painful. OCaml's FFI requires C linkage wrappers. GPU tensors
+needed custom blocks with finalizer hacks. The GC would free device memory
+mid-computation — we had to force full GC sweeps between training steps to
+prevent use-after-free crashes. The build system fought us at every turn:
+nvcc compilation rules, duplicate symbol linking, header path mismatches.
 
-**OCaml stays as the orchestrator.** It builds the computation graph, manages the
-training loop, handles tokenization and I/O. The autograd backward pass is a
-topological sort in OCaml that dispatches to GPU kernels via closures.
+The OCaml GPU port was 1,000+ lines across three files: `gpu_stubs.cu`,
+`gpu_bridge.c`, `gpu.ml`, plus dune build hacks. It worked, but it was
+fragile.
 
-**CUDA does the math.** Every tensor operation — matrix multiply, GELU activation,
-softmax, RMSNorm, dropout, embedding lookup, Adam optimizer — runs on GPU.
-The data lives in VRAM as float32 and never moves to CPU during training except
-for a single scalar loss value for logging.
+Then we rewrote it in Nim.
 
-**The FFI bridge is thin.** OCaml custom blocks wrap `cudaMalloc`'d device
-pointers. The GC finalizer calls `cudaFree`. Three files connect the two
-worlds: `gpu.ml` (OCaml externals), `gpu_bridge.c` (OCaml ↔ C marshalling),
-`gpu_stubs.cu` (CUDA kernels and cuBLAS wrappers).
+Nim compiles to C. CUDA interop is just C function calls — `{.importc,
+header.}` and you're done. No bridge file. No custom blocks. No bytecode
+wrappers. The entire GPU layer is one 130-line Nim file plus a 280-line
+CUDA kernel file. Half the code. No hacks.
 
-The entire CUDA backend — all kernels, the cuBLAS integration, the memory
-management, the OCaml bridge — was written in a single Claude Code session.
-I described the architecture. Claude wrote the code. We iterated on build
-errors together. From "I have a CPU-only OCaml transformer" to "103M params
-training on GPU" in one sitting.
+The results speak:
+
+| | OCaml + CUDA | Nim + CUDA |
+|---|---|---|
+| GPU bridge code | ~1,000 lines (3 files) | ~400 lines (2 files) |
+| Model init time | ~40 seconds | 1.8 seconds |
+| Forward pass (103M) | ~3 seconds/step | 0.15 seconds/step |
+| Build system | dune + nvcc rules + link hacks | `nim c` (just works) |
+| GC issues | use-after-free, forced GC sweeps | none (deterministic destructors) |
+| Compile time | ~10 seconds | 3.5 seconds |
+
+The 20x speedup isn't Nim being faster than OCaml at math — both call the same
+cuBLAS. The difference is that Nim's GPU path has no overhead. No OCaml GC
+pausing to finalize GPU buffers. No CPU↔GPU round trips for softmax (the OCaml
+version fell back to CPU for causal softmax — 32 data transfers per step). No
+FFI marshalling cost. Just direct function calls into CUDA.
 
 ---
 
@@ -130,8 +146,6 @@ Ten times more room for memories. Wider layers mean more independent subspaces
 where different facts can live without competing. This is the experiment:
 does 10x capacity give us 10x memory, or does forgetting scale differently?
 
-We don't know yet. The model is training right now.
-
 ---
 
 ## The Stack
@@ -139,21 +153,21 @@ We don't know yet. The model is training right now.
 ```
 Conversation data (37K dialogues, 25MB)
     ↓
-BPE tokenizer (2188 vocab, trained on corpus)
+BPE tokenizer (2259 vocab, trained on corpus)
     ↓
-OCaml autograd engine (computation graph)
+Nim (model definition, training loop, tokenizer)
     ↓
-CUDA kernels (cuBLAS gemm, custom element-wise ops)
+CUDA kernels (cuBLAS sgemm, GELU, RMSNorm, softmax, RoPE, Adam)
     ↓
 RTX 3060 12GB (103M params in 1.8GB VRAM)
 ```
 
-No PyTorch. No Python. No NVIDIA proprietary frameworks. The operations library
-is our code — every kernel readable, every line modifiable. This is what
-[Burn the Stack](/posts/burn-the-stack-llms-without-nvidia/) was building
-toward. When we swap the RTX 3060 for a Tenstorrent
+No PyTorch. No Python. No NVIDIA proprietary frameworks beyond cuBLAS. The
+kernels are ours — every line readable, every operation modifiable. Nim
+compiles to C, so the CUDA interop is native. When we swap the RTX 3060 for
+a Tenstorrent
 [Blackhole](/posts/sovereign-ai-on-open-silicon-why-i-need-a-blackhole/),
-the change is one C file — replace cuBLAS calls with TT-NN calls.
+the change is one file — replace cuBLAS calls with TT-NN calls.
 
 The rest of the stack doesn't move.
 
@@ -161,9 +175,9 @@ The rest of the stack doesn't move.
 
 ## What Happens Next
 
-The model trains on 37K conversations. This is thin for 103M parameters — we
-have hundreds of megabytes of additional conversation data from HuggingFace
-ready to convert. But it's enough for the memory experiments.
+The forward pass works. 103M parameters, 8 transformer layers, full attention
+with RoPE and causal masking, all on GPU in 150ms. The next step is autograd —
+wiring the backward pass so the model actually learns from the training data.
 
 Once the base model can hold a conversation:
 
@@ -178,16 +192,12 @@ the question. You don't need a symbolic dictionary or an external database.
 You need a big enough network, a smart enough gradient mask, and the patience
 to let the weights reorganise.
 
-And if it doesn't work, we still have the
-[Forth Machine](/posts/the-forth-machine-a-vision-for-symbolic-ai/) in our
-back pocket. The symbolic dictionary is implementable in OCaml whenever we
-need it.
+The biology says it should work. Brains do exactly this with synaptic
+plasticity and sleep consolidation. We're doing it with gradient masking
+and elastic pull. The difference is we can run the experiment in hours
+instead of years.
 
-But I think it'll work. The biology says it should — brains do exactly this
-with synaptic plasticity and sleep consolidation. We're just doing it with
-gradient masking and elastic pull.
-
-The model is training. We'll know soon.
+The model is running. The GPU is warm. We'll know soon.
 
 ---
 
