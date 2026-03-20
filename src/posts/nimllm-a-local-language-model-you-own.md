@@ -196,8 +196,16 @@ what should be 3-4 at convergence. Once it can hold a conversation:
    through selective retraining? Three (like the 10M model)? Thirty?
    Three hundred?
 
-4. **Open source release.** One binary. `nimllm --train yourdata.txt`.
-   `nimllm --chat`. That's the interface.
+4. **Agent mode.** Connect NimLLM to a minimal coding agent — something
+   like [Girvent](https://github.com/rolandnsharp/girvent) — so it can
+   use your bash tools. Send emails. Read files. Run CLI programs. Not
+   a chatbot trapped in a text box — an AI that can act on your machine
+   through the same tools you use. `nimllm --agent` drops into a loop
+   where it reads your request, plans a sequence of shell commands,
+   executes them, and learns from the result. Your local AI with hands.
+
+5. **Open source release.** One binary. `nimllm --train yourdata.txt`.
+   `nimllm --chat`. `nimllm --agent`. That's the interface.
 
 The code is on [GitHub](https://github.com/rolandnsharp/vidya). The
 model is training. The loss is dropping.
