@@ -236,6 +236,40 @@ Give me a Blackhole and I'll show you what it can do.
 
 ---
 
+## The Bigger Picture
+
+What we built today isn't just a model. It's a new way to build models.
+
+You sit at your machine with an AI coding agent. You describe what you
+want — an architecture, a training strategy, a memory mechanism. The
+agent writes the code. Nim compiles to C. CUDA runs on your GPU. The
+model trains. You see the loss drop. You adjust. You iterate.
+
+This is what AI-directed development looks like at the infrastructure
+level. Not "use ChatGPT to write a React component." Build a 103M
+parameter transformer from scratch in one day. Write CUDA kernels.
+Implement autograd. Watch the loss curve.
+
+The model we're training today is the beginning. It learns from
+conversations. It remembers through selective weight updates. It runs
+on hardware we own. And the entire stack — from tokenizer to tensor
+operations to training loop — is code we can read, modify, and port
+to any hardware.
+
+On a Blackhole, this same Nim codebase would train models 10x larger.
+The RISC-V cores inside the Tensix mesh could run custom inference
+logic. The open software stack means we see everything, modify
+everything, own everything.
+
+This isn't about building one model. It's about building the tool that
+builds models. A Nim framework that compiles to any silicon, directed
+by an AI agent, producing LLMs that belong to the person who trained
+them.
+
+**Our people will have compute. And now they'll have the tools to use it.**
+
+---
+
 *See also:
 [103M Parameters on a 3060](/posts/103m-parameters-on-a-3060-training-vidya-on-gpu/),
 [Burn the Stack](/posts/burn-the-stack-llms-without-nvidia/),

@@ -173,31 +173,76 @@ The rest of the stack doesn't move.
 
 ---
 
+## It's Learning
+
+```
+step     50 / 200000 | loss 11.1330 | lr 0.000003
+step    150 / 200000 | loss 11.0843 | lr 0.000009
+step    250 / 200000 | loss 10.7710 | lr 0.000015
+step    300 / 200000 | loss 10.5158 | lr 0.000018
+```
+
+Loss dropping from 11.1 to 10.5 in 300 steps. The autograd works. The
+model is learning. At 13 steps/sec with full forward+backward+Adam, one
+epoch takes about 48 minutes.
+
+We hit a gradient explosion at step 350 — the learning rate ramped too
+fast for 103M parameters. Fixed with gradient clipping and a more
+conservative learning rate. This is normal. This is what training from
+scratch looks like — you find the edges, you pull back, you try again.
+
+---
+
+## The Vision
+
+Here's what we're actually building.
+
+You sit at your machine with Claude Code. You say "I want a model that
+remembers conversations" or "I want it to know about my codebase" or
+"I want it to run on this specific hardware." Claude builds it. Not
+wraps a framework — builds the actual model, the training loop, the
+inference engine, the memory mechanism. In Nim, compiling to C, calling
+your GPU directly.
+
+The end state: a local LLM that you trained on your data, with memory
+that persists between conversations, running on hardware you own. Claude
+Code is the interface — you describe what you want, it writes the Nim
+code, compiles it, trains it, debugs it.
+
+Not a fine-tuned Llama. Not a wrapper around someone else's model. An
+LLM built from the tensor operations up, where you control every layer,
+every activation function, every training decision. If you want to
+change how attention works, you change 20 lines of Nim. If you want a
+different memory mechanism, you swap out the gradient masking strategy.
+
+Portable across hardware. Nim compiles to C. Today it calls cuBLAS on
+a 3060. Tomorrow it calls TT-NN on a
+[Blackhole](/posts/sovereign-ai-on-open-silicon-why-i-need-a-blackhole/).
+The model definition doesn't change. You swap one file and point at
+different silicon.
+
+That's what we built today. From "no GPU code" to "loss is decreasing
+on a 103M parameter transformer" in one session. The skeleton of a
+personal AI that you own completely.
+
+---
+
 ## What Happens Next
 
-The forward pass works. 103M parameters, 8 transformer layers, full attention
-with RoPE and causal masking, all on GPU in 150ms. The next step is autograd —
-wiring the backward pass so the model actually learns from the training data.
-
-Once the base model can hold a conversation:
+Once the base model converges:
 
 1. Save the base weights as an anchor
 2. Run interactive RL sessions — talk to the model, give feedback
 3. Measure: how many facts can it hold? How long do they persist?
 4. Compare against the 10M results (three facts, then forgetting)
 
-If selective retraining at 103M gives us durable memory — dozens of stable
-facts, a persistent personality, graceful forgetting — then we've answered
-the question. You don't need a symbolic dictionary or an external database.
-You need a big enough network, a smart enough gradient mask, and the patience
-to let the weights reorganise.
+If selective retraining at 103M gives us durable memory — dozens of
+stable facts, a persistent personality, graceful forgetting — then we've
+answered the question. You don't need a symbolic dictionary or an
+external database. You need a big enough network, a smart enough
+gradient mask, and the patience to let the weights reorganise.
 
-The biology says it should work. Brains do exactly this with synaptic
-plasticity and sleep consolidation. We're doing it with gradient masking
-and elastic pull. The difference is we can run the experiment in hours
-instead of years.
-
-The model is running. The GPU is warm. We'll know soon.
+The model is training. The loss is dropping. We'll know soon.
 
 ---
 
