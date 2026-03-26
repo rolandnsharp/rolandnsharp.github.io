@@ -2,7 +2,7 @@
 title: "Resonance: A Neural Network Built from One Equation"
 date: 2026-03-26
 layout: "base.njk"
-tags: post
+draft: true
 ---
 
 # Resonance: A Neural Network Built from One Equation
