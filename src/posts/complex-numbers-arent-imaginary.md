@@ -1,0 +1,399 @@
+---
+title: "Complex Numbers Aren't Imaginary: How a Forgotten Engineer Made Our Audio Language Faster"
+date: 2026-04-27
+layout: "base.njk"
+tags: post
+---
+
+# Complex Numbers Aren't Imaginary: How a Forgotten Engineer Made Our Audio Language Faster
+
+Aither needed frequency-domain math. Frequency shifting. Hilbert
+transforms. Phase-coherent rotation. The kind of operations every
+modern audio plugin does with complex numbers under the hood.
+
+The conventional move is to add a `Complex` type. Pair of doubles
+behind a struct, overloaded operators, a small library of methods.
+Every language that wants serious DSP either bakes this in (Julia,
+MATLAB) or builds it on top (Python+numpy, C++ with `std::complex`).
+That was what we were going to do.
+
+We didn't. We did something else — something a man who's been dead
+for a century told us to do, and a man who is treated as a crank
+spent forty years insisting we should listen to. The result is a
+language that does frequency-domain DSP with no complex type, no
+boxing, no type dispatch, no allocation, and arithmetic that
+inlines straight into the audio loop.
+
+This is the story of how we got there. It involves two unfashionable
+electrical engineers, an old idea about what a complex number
+actually is, and a programming-language design choice that fell out
+of taking that old idea seriously.
+
+## The framework that got forgotten
+
+In 1893 Charles Proteus Steinmetz published *Theory and Calculation
+of Alternating Current Phenomena*. He had been hired by a young
+General Electric to figure out why three-phase AC power was so much
+more efficient than single-phase, and how engineers could actually
+calculate with it without going mad.
+
+His answer was the **phasor** — a complex number used to represent
+an AC signal. Modern electrical engineering students still learn
+phasors. What they don't learn — what got quietly stripped from the
+curriculum somewhere between 1920 and 1960 — is what Steinmetz
+thought a phasor *meant*.
+
+For Steinmetz, the `j` in a phasor (engineers say `j` because `i` is
+already taken for current) was not an "imaginary" number. It was a
+**90-degree rotation operator**. And the two real numbers that make
+up a complex quantity were not abstract symbols — they were two
+**physical** quantities, simultaneously present, in fixed quadrature
+to each other.
+
+In an electrical circuit, those two quantities are the **magnetic
+field energy** (kinetic) and the **dielectric field energy**
+(potential). Both are real. Both are measurable. Neither is more
+fundamental than the other. The circuit always carries both
+simultaneously, and they exchange — magnetic into dielectric and back
+— at the resonant frequency. The "complex impedance" of the circuit
+is just the bookkeeping that tracks the relationship between them.
+
+There is no imaginary anything. There are two real energies in a
+fixed phase relationship. The math we call "complex" is the math
+of *that relationship*.
+
+This is a much better way to think about complex numbers than the
+mystical "square root of negative one" framing most of us got taught
+in high school. It's also, by now, almost completely off the
+curriculum.
+
+## Why it was forgotten
+
+Several things conspired.
+
+After Steinmetz died in 1923, GE consolidated his methods into
+practical engineering tables. The math survived; the physics behind
+it slowly got optional. By the 1950s most EE textbooks taught `j`
+as "the unit such that j² = -1" — a calculation rule, divorced from
+any claim about what it represents. Pedagogically simpler. Faster
+to get to the homework problems.
+
+By the 1980s the dominant view in most engineering departments was
+that physics gives you Maxwell's equations and the rest is just
+applied math. The Steinmetz framework — which insisted that complex
+numbers were *physical* quantities in a *physical* relationship —
+became, at best, an interpretive aside. At worst, an embarrassment.
+
+Eric Dollard, who worked at Bell Labs and who has spent four decades
+trying to keep the Steinmetz framework alive, is now treated as a
+fringe figure. His talks live on YouTube channels with names like
+"FractalWoman" and they are watched mostly by Tesla enthusiasts and
+people who think modern physics took a wrong turn somewhere around
+1905. Most academic electrical engineers will not engage with him.
+Most never will.
+
+The framework is real. The recovery target is concrete. The audience
+in academia just doesn't exist.
+
+## Why this matters for an audio language
+
+Steinmetz wrote about electricity. We were writing an audio
+language. So why does it matter to us?
+
+Because **audio is electricity that you can hear**. Audio DSP is
+shot through with the same mathematics as Steinmetz's polyphase
+networks: signals as functions of time, two-channel quadrature
+(I/Q in radio and SDR, signal/Hilbert-transform pairs in audio,
+left/right in stereo), filters as networks of energy storage
+elements, resonators as coupled magnetic-dielectric exchanges.
+
+When we needed a `freq_shift(signal, hz)` operation in aither — the
+operation that takes any audio signal and shifts every frequency
+component up or down by a fixed number of Hz — the textbook
+implementation is:
+
+1. Compute the analytic signal: pair the input with its
+   Hilbert-transformed version (the same input shifted by 90
+   degrees of phase at every frequency).
+2. Multiply that complex pair by a complex rotation at the desired
+   shift frequency.
+3. Take the real part of the result.
+
+Three lines of code, if you have a complex type. If you don't have
+a complex type, it's three lines of code with manual real/imag
+arithmetic everywhere — verbose, easy to get wrong, slow to write.
+
+The conventional answer to "we need this" would be: add a complex
+type. Add a constructor. Add overloaded operators. Add type
+inference for it. Add it to the standard library. Pay the runtime
+cost of boxing pairs into structs. Pay the language-design cost of
+introducing a new type that interacts with everything else in the
+language.
+
+The Steinmetz answer is: **there is no complex type. There never
+was. There are two real numbers in a fixed relationship, and a
+small family of operations that knows how to read them as one
+rotating thing.**
+
+If we believe Steinmetz, we don't need a type at all. We need
+operations.
+
+## What that looks like in the language
+
+Here is what `cmul`, our complex multiplication primitive, looks
+like in aither:
+
+```
+let result = cmul(re_a, im_a, re_b, im_b)
+```
+
+It takes **four real numbers**. The first two are interpreted as
+the real and imaginary parts of one quantity; the next two are the
+parts of another. The operation returns a pair of real numbers —
+the real and imaginary parts of the product.
+
+There is no `Complex` type. There is no constructor. The four
+arguments are just floats. They become a pair when `cmul` reads
+them as a pair. They could equally well be two stereo signals, two
+MIDI continuous-controller values, two coordinates of a point in
+the plane, or any other interpretation. The cells holding the
+values do not know what they are.
+
+When the compiler sees `cmul`, it emits this:
+
+```c
+double result_re = (re_a * re_b - im_a * im_b);
+double result_im = (re_a * im_b + im_a * re_b);
+```
+
+Four multiplies and two adds, inlined directly into the surrounding
+arithmetic. No struct, no pointer dereference, no allocation, no
+GC, no method dispatch. The audio thread runs at full speed.
+
+The same applies to every other pair operation. `rotate(re, im,
+angle)` is two trig calls and a 2x2 matrix multiply, inlined.
+`cscale(real_factor, re, im)` is two multiplies. `analytic(signal)`
+is the only one with persistent state — it claims a 32-cell region
+of the voice's `$state` array for two cascaded Hilbert filters and
+returns the analytic-signal pair as two scalar expressions. None of
+them take or return a struct.
+
+`freq_shift` is the killer demonstration:
+
+```
+let shifted = freq_shift(my_signal, 37)
+```
+
+One call. Internally it constructs the analytic signal (32 cells of
+state), rotates by `37 Hz`, and projects back to a real scalar.
+The composer writes one line and gets coherent
+inharmonicity — every harmonic shifted by exactly 37 Hz, producing
+the metallic organ-bell character that you can't get any other way.
+We have it because the complex math underneath is cheap and direct.
+We have it because there is no type in the way.
+
+## Why it works in our audio language
+
+Every multi-cell structure in aither is treated this way. The
+`$state` vector is a flat array of doubles. A pair of cells means
+nothing on its own. It might become:
+
+- A complex pair when `cmul` reads it
+- A stereo pair when `[L, R]` reads it
+- A `(pitch, gate)` tuple when MIDI reads it
+- An inharmonic dyad when an additive synthesizer reads it
+- A two-component vector when a chaotic-attractor iteration reads it
+
+The cells don't commit to a meaning. The operations carry the
+meaning. The same discipline applies to three cells (could be a
+chord, could be a 3D vector, could be three voices in a polyphase
+chord), to arrays (could be additive partials, could be a rhythm
+pattern, could be a velocity sequence), to anything.
+
+This is exactly the discipline Steinmetz applied to electricity.
+The phasor is not a special object that requires a Complex class
+in your engineering software. It is two real measurable quantities
+that have a fixed relationship, and the math that exploits the
+relationship lives in the operations you apply to them.
+
+We didn't intend to build a language with this property. We
+intended to add complex multiplication and a Hilbert transform. We
+arrived at the design by reading Steinmetz, listening to Dollard,
+and asking the question: *what if the type isn't necessary?*
+
+It isn't. It never was.
+
+## What this unlocks that other audio software can't do
+
+The pair operations are now load-bearing in several patches, and
+they enable musical moves that are genuinely difficult or impossible
+in the established audio toolchains.
+
+**Coherent inharmonicity in real time.** `freq_shift(my_drone, 37)`
+shifts every frequency component of a held drone by exactly 37 Hz —
+not 37 cents, not 37%, but 37 Hz. The harmonic series collapses;
+the spacing between partials becomes constant rather than
+proportional. The sound goes from pure organ to metallic bell to
+clanging dissonance as you sweep the offset, and every step is
+phase-coherent because the underlying complex rotation is exact.
+SuperCollider does not have this as a primitive. CSound does not
+have this as a primitive. FAUST does not have this as a primitive.
+You can build it in any of them, but you have to assemble it from
+several stages and the result is heavy enough that you would not
+reach for it as a knob. In aither it is one call and one knob.
+
+**Phase-locked octave doubling that never drifts.** Square the
+analytic signal of an input via `cmul(re, im, re, im)` and you
+double its phase angle by construction. That is mathematically — not
+by oscillator tuning — an octave up that tracks the source's phase
+sample by sample. No PLL, no envelope follower, no pitch detection,
+no "octave up" effect that wobbles when the input bends. We use
+this in patches where the doubler needs to feel like part of the
+same sound rather than a separate voice. Standard pitch-shifting
+plugins cannot do this — they detect pitch and resynthesize, which
+introduces latency and artifacts. We get it for free because we
+operate on the analytic signal directly.
+
+**Live geometric rotation of any pair.** `rotate(re, im, angle)`
+treats any pair of state cells as something that can be turned by
+an angle. The same operation does per-sample stereo width
+modulation (rotate the L/R pair into a mid/side pair and back),
+IQ rotation for SDR-style frequency tricks, geometric morphing
+of two-dimensional control signals, or attractor-style state
+evolution where the state is rotated each tick. In a graph-based
+DSP environment these would all be different nodes from different
+libraries. Here they are the same operation reading different
+pairs.
+
+**Composability across paradigms.** Because the output of a pair
+operation is two scalars, you can feed it directly into anything
+else that takes scalars. A `freq_shift`ed drone can be the
+modulator of an FM oscillator, the input to a paradigm crossfade,
+or the source of an analytic signal that itself gets squared.
+Patches in our `gaelic_ladder` example stack four cumulative layers
+on a Tesla-organ FM swarm: the third layer is a
+`freq_shift` of the previous two, and the fourth squares the
+analytic signal of the result. Each layer is one line. None of
+them required wrapping or unwrapping a complex value.
+
+None of this required adding a type. All of it falls out of having
+operations that know how to read pairs.
+
+## Why this only works in a function-of-state language
+
+The deepest reason this design works is that aither's whole language
+is built on one contract: every signal is `f(state) → sample`. A
+voice is a function that takes a state vector and returns one audio
+sample. Run it 48,000 times per second and you get audio. There are
+no nodes, no graph, no scheduler, no audio-rate-vs-control-rate
+distinction, no buses. Just a function and its state.
+
+This contract is what makes operations-instead-of-types affordable.
+
+In a node-based DSP environment — Pure Data, Max/MSP, SuperCollider,
+FAUST, CSound — every signal flow is a graph of typed nodes. A
+"complex node" would have to be a different kind of node from a
+"real node," with its own connection rules, its own type-checking,
+its own runtime dispatch. Adding complex math to such a system
+means adding type machinery: nodes that produce complex outputs,
+nodes that consume them, conversions between real and complex,
+buffer management for the extra channel. The framework knows the
+type, so the framework has to handle the type.
+
+Aither has no framework that needs to know. The state vector is a
+flat array of doubles. A pair of cells *is* whatever the operation
+that reads it says it is. `cmul` reads two pairs and produces one;
+`magnitude` reads one pair and produces a scalar; `rotate` reads
+one pair and an angle and produces a rotated pair. The state cells
+themselves are not typed. The cells are storage; the operations
+are interpretation.
+
+This is why the same `$state` cell can carry a complex pair when
+`cmul` reads it, then carry an unrelated scalar when the next sample
+overwrites it with a filter coefficient, then become part of a
+chaotic-attractor coordinate three samples later — all in the same
+voice, all without any conversion. The cells are uncommitted. The
+language has no concept of "what type is in this cell." It has
+operations that know how to read what they need.
+
+In a typed signal-processing framework you would not be allowed to
+do this. The complex-typed cell would be locked into being complex.
+Switching its meaning would require a conversion, and the framework
+would either reject it as a type error or insert a wrapper. The
+freedom we have to reinterpret cells across operations is a freedom
+the function-of-state contract gives us, and the absence of a
+complex type is what lets us actually use it.
+
+This is also why the runtime cost is zero. In a typed framework,
+even a "good" complex type has overhead — the struct lives somewhere,
+the operations do indirect calls, the inliner may or may not see
+through the abstraction. In aither, `cmul` is four multiplies and
+two adds emitted directly into the C output, with the four input
+expressions inlined as named temporaries. The audio loop is one
+tight numerical kernel. Steinmetz's framework is what justified
+this design philosophically; the function-of-state contract is what
+made it implementable without compromise.
+
+The two ideas reinforce each other. **Steinmetz says: complex
+numbers are two real things in a relationship, not a new kind of
+thing.** **Function-of-state says: the language has no kinds of
+things, only operations on flat numerical state.** Put them
+together and you get pair operations that compile to inline
+arithmetic and compose freely with everything else in the language,
+because the language has nothing in the way.
+
+## The wider point
+
+Steinmetz's framework is not the only forgotten engineering tool
+that still has computational advantages. The polyphase methods of
+Charles Fortescue (positive sequence, negative sequence, zero
+sequence — a decomposition of any 3-phase signal into rotational
+components), the Pythagorean Lambdoma (a matrix of intervallic
+ratios that generates musical scales procedurally), the
+longitudinal-vs-transverse wave distinction that Tesla insisted on
+and that mainstream physics quietly buried — these are all real
+mathematical structures with real computational uses, and most of
+them are off the curriculum.
+
+The genre exists. Geometric algebra was Clifford's 1878 work,
+forgotten for nearly a century, recovered by Hestenes and now used
+in computer graphics, robotics, and quantum computing. The lambda
+calculus was Church's 1930s work, off the CS curriculum until
+Scheme and ML revived it in the 1980s, and now it underpins every
+serious functional language. Tufte recovered Playfair's 1786
+charts and Snow's 1854 cholera map for a generation that had
+forgotten them. Recovery of useful old work is a thing people do,
+and it tends to pay.
+
+Steinmetz is overdue for the same treatment.
+
+The framework does not require you to believe Tesla was suppressed
+by the lizard people. It does not require you to think modern
+physics took a wrong turn at relativity. It does not require you
+to share Dollard's opinions about anything except the math. It just
+requires you to read Steinmetz's books and notice that the
+computational story he was telling — *complex numbers are not
+imaginary, they are two real things in a fixed relationship,
+operated on by a small algebra* — has held up perfectly, while the
+"j² = -1, just trust us" framing taught in modern textbooks has
+quietly been getting in everyone's way.
+
+We needed complex math in an audio language. We got it without a
+type. The result runs faster, composes better, and lets us write
+patches that the type-heavy version would have made awkward.
+
+A nineteenth-century engineer most people have never heard of made
+our twenty-first-century audio language better. There is probably
+more where that came from.
+
+---
+
+*Aither is at [github.com/rolandnsharp/aither](https://github.com/rolandnsharp/aither).
+The pair operations and `freq_shift` are documented in the language
+SPEC; the design philosophy is in `PHILOSOPHY.md`. Steinmetz's
+*Theory and Calculation of Alternating Current Phenomena* (1893)
+and *Engineering Mathematics* (1911) are out of print but available
+as scans through the Internet Archive. Eric Dollard's papers are at
+[emediapress.com](https://emediapress.com/).*
+
+*Co-authored with [Claude](https://claude.ai/).*
