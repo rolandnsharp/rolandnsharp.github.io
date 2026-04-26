@@ -388,7 +388,7 @@ more where that came from.
 
 ---
 
-*Aither is at [github.com/rolandnsharp/aither](https://github.com/rolandnsharp/aither).
+*Aither is at [github.com/rolandnsharp/aitherLang](https://github.com/rolandnsharp/aitherLang).
 The pair operations and `freq_shift` are documented in the language
 SPEC; the design philosophy is in `PHILOSOPHY.md`. Steinmetz's
 *Theory and Calculation of Alternating Current Phenomena* (1893)
