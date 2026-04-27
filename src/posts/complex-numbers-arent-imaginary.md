@@ -342,6 +342,105 @@ together and you get pair operations that compile to inline
 arithmetic and compose freely with everything else in the language,
 because the language has nothing in the way.
 
+## Which complex numbers, exactly?
+
+A reasonable critique of everything above would be: "you don't have
+a complex *type*, but you obviously have complex *values* — your
+operations produce them and consume them. You've just hidden the
+type behind the operation set. This isn't really 'no complex
+numbers,' it's just complex numbers without a name."
+
+That critique deserves a careful answer, because there is something
+subtler going on. Mathematicians genuinely disagree about what ℂ
+even is.
+
+The pluralist view — argued most explicitly by Joel David Hamkins
+and the broader tradition of mathematical pluralism — holds that
+there are at least four structurally distinct conceptions of ℂ,
+and they are not equivalent:
+
+- **The algebraic conception**: ℂ as the quotient ring
+  ℝ[x]/(x²+1). In this view i and −i are *indistinguishable* by
+  any algebraic property; there is no canonical imaginary unit,
+  only a Galois-conjugate pair.
+- **The model-theoretic conception**: ℂ as the unique algebraically
+  closed field of characteristic zero with cardinality continuum.
+  Even less canonical — even the embedding into a coordinate
+  system isn't fixed.
+- **The smooth conception**: ℂ as the real 2-manifold ℝ² equipped
+  with a complex structure J. The pair (ℝ², J), abstract.
+- **The rigid / coordinate conception**: ℂ as ℝ² with a *chosen*
+  distinguished direction labeled "i". Once you've picked which
+  axis is real and which is imaginary, there is a definite i and
+  a definite direction of positive rotation.
+
+These have different automorphism groups, different canonical
+operations, different things that count as natural. Conflating them
+is a category error that mathematicians make all the time without
+noticing — most undergraduate texts present "the complex numbers"
+as if there is one ℂ, when in fact every text has implicitly
+committed to one of these conceptions.
+
+**Aither implements the rigid conception.** When `cmul(re_a, im_a,
+re_b, im_b)` emits `(re_a*re_b - im_a*im_b, re_a*im_b + im_a*re_b)`,
+the language is committing to:
+
+- A fixed orientation — the slot order says first is real, second
+  is imaginary.
+- A fixed direction of positive rotation — the +sign in the
+  imaginary-component formula says counterclockwise is positive.
+- A definite *i* — the unit pair (0, 1).
+
+These are all choices the algebraic conception explicitly refuses
+to make. The rigid conception makes them and operationalises them
+directly. There is no Galois-conjugate ambiguity in aither because
+we have *fixed the labels*, and once the labels are fixed, all the
+operations work with them definitely.
+
+So the precise version of the claim isn't "we have no complex
+numbers." It's: **we don't reify the algebraic conception as a
+type, because the algebraic conception is the wrong one for
+engineering. We commit to the rigid conception, and the rigid
+conception only requires operations that respect a chosen
+orientation. Operations are the natural representation of the
+rigid conception. Types are the natural representation of the
+algebraic conception. We picked the engineering-appropriate
+conception, and it happens to want operations and not types.**
+
+Why is the rigid conception the right one for audio DSP? Because
+audio is physical: signals are real-valued voltages at the speaker
+cone. The "complex" structure only exists as an analytical
+convenience for talking about phase and frequency, and that
+convenience needs a *chosen* orientation — which channel is the
+cosine, which is the sine; which direction of rotation corresponds
+to positive frequency. The algebraic conception's
+Galois-symmetric pair of imaginary units is something you would
+never want in audio, because the speaker cares which is which.
+Engineering needs a definite *i*. The algebraic abstraction that
+erases the definite-ness is the wrong tool for the job.
+
+Steinmetz, in 1893, was operationalising the rigid conception
+before the algebraic-type view became culturally dominant in
+mathematics. His framework was correct for engineering for the
+same reason aither's is: engineering needs a definite *i*, and
+the abstraction that hides which-is-which is incompatible with
+the physical world the engineering is describing.
+
+The pluralist framing also explains why most type-based languages
+are awkward fits for audio DSP. Types in modern programming
+languages are descended from the algebraic-structure tradition
+in mathematics — they reify the operations a thing supports
+without committing to a coordinate system. That is exactly the
+abstraction the algebraic conception of ℂ provides, and it's
+exactly the abstraction engineering doesn't want. Languages
+with built-in `Complex` types ship the algebraic conception by
+default, and engineers have to work *against* the type system
+to get the rigid behaviour they actually need.
+
+Aither doesn't fight the type system because there is no type
+system in the way. The operations land directly on the rigid
+conception, where engineering wanted them all along.
+
 ## The wider point
 
 Steinmetz's framework is not the only forgotten engineering tool
