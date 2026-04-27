@@ -441,6 +441,95 @@ Aither doesn't fight the type system because there is no type
 system in the way. The operations land directly on the rigid
 conception, where engineering wanted them all along.
 
+## How do we know we picked the right one?
+
+Honest answer: we didn't survey the four conceptions and prove
+the rigid one was best. We picked it because it aligned with a
+tradition that had already answered the question — and only
+later, when forced to articulate the choice, did we notice the
+deeper reason it works.
+
+The reason is this: **aither is, by intention or by accident, a
+classical-field-theory programming environment.** And classical
+field theory uses the rigid conception of ℂ as its native
+language.
+
+Look at what the language actually does. A signal is a real-valued
+field at a point in time. A pair of state cells is two fields in
+fixed quadrature — exactly the magnetic + dielectric pair Steinmetz
+modelled circuits with, or the cosine + sine pair you get when you
+write down a rotating field in coordinates. The `f(state) → sample`
+contract is a local field update rule: the state at this sample
+determines the state at the next, deterministically, with no
+superposition or measurement collapse. The DHO primitive is
+literally Steinmetz's dual-energy oscillator, kinetic and potential
+exchanging energy at the resonant frequency. Filters are field
+propagation through impedance networks. Pair operations are field
+rotations and energy exchanges in the complex plane that has a
+definite orientation *because the physics has a definite
+orientation*. Audio output is the field's projection onto a
+one-dimensional physical observable — the speaker cone, which only
+knows pressure variation.
+
+Every primitive in the language fits the classical-field-theory
+frame. Nothing in aither requires quantum-style abstraction to
+understand. The mathematical commitments are coherent across the
+whole stack — from the choice of conception of ℂ, through the
+state-vector representation, up to the audio output.
+
+This is what makes the rigid conception correct *for us
+specifically*. Maxwell, Faraday, Steinmetz, every wave equation
+in the classical canon — all of it operates in coordinate-rigid
+space. E points in a direction. B is perpendicular to it. Current
+has a sign. Rotation has a hand. Classical physics is *quantities
+in space with definite directions and phase relationships*. The
+rigid conception of ℂ is the mathematical structure that natively
+expresses this kind of physics.
+
+Quantum mechanics, by contrast, is comfortable with the algebraic
+and model-theoretic conceptions. The wavefunction is happy to be
+Galois-symmetric until measurement collapses it. That's exactly
+the abstraction that makes quantum thinking unintuitive: the
+structures lose their pointing quality, and you have to think
+about them in a more abstract algebraic way.
+
+Choosing the algebraic conception for aither would have made the
+language fight its own physical interpretation. Choosing the
+smooth conception would have introduced an abstraction layer that
+has to collapse to coordinates eventually anyway. Choosing the
+rigid conception lines up the mathematical structure with the
+physical one, all the way down. The patches *think the way
+classical physics thinks*, because the underlying ℂ structure is
+the same one classical physics uses.
+
+Steinmetz, in 1893, wasn't just operationalising complex math
+for engineering. He was operationalising it *in the
+classical-field-theory tradition* where every quantity has a
+direction, a magnitude, and a phase relationship to other
+quantities. His work is downstream of Maxwell and Faraday — the
+entire 19th-century field-theory tradition that quantum mechanics
+later partly displaced. Aither inheriting his framework means
+inheriting more than a calculation method. It means inheriting a
+worldview that takes classical fields seriously as the substrate
+of physical reality.
+
+We didn't know all this when we made the choice. We picked the
+rigid conception because it was the one Steinmetz used and we
+were reading Steinmetz. Only after the language was built did
+the deeper consistency become visible. **The right conception of
+ℂ for an audio language turned out to be the right one because
+audio is classical-field-theory output, the language is a
+classical-field-theory programming environment, and the
+conception of ℂ has to match the conception of fields it's
+operating on.**
+
+That's how we know we picked right. Not by proof, but by
+coherence: the choice fits the tradition, the tradition fits
+the physics, the physics fits the medium, and the medium
+(speakers, ears, classical wave propagation in air) is
+unambiguously classical. There's no Galois-conjugate ambiguity
+in a sound wave.
+
 ## The wider point
 
 Steinmetz's framework is not the only forgotten engineering tool
