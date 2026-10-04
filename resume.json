@@ -2,15 +2,15 @@
   "basics": {
     "name": "Roland Sharp",
     "email": "rolandnsharp@gmail.com",
-    "label": "AI-Augmented Software Engineer",
+    "label": "Agentic Engineer (Remote)",
     "picture": "",
-    "summary": "I use AI coding assistants to build systems beyond what I could build alone. My current project, Vidya, is a neurosymbolic language model in OCaml — a 9.6M parameter transformer with a Forth interpreter constraining generation at the logit level, temporal difference learning for adaptive concept weights, and BLAS-accelerated matrix ops via C FFI. I directed the architecture and Claude Code wrote most of the implementation. The skill is knowing what to build, how to evaluate whether it's working, and how to steer an AI collaborator through a multi-week technical project. Before this, 5+ years building distributed systems in Node.js and TypeScript. Co-founder of JSON Resume (4.2K GitHub stars).",
+    "summary": "Agentic engineer. I build software by directing AI coding agents: I set the architecture, write the specs and tests that keep the agents honest, review every diff, and debug what they get wrong. This year I've shipped terminal tools with 180+ GitHub stars: a CRT oscilloscope in Nim (108★), sshmail, an encrypted messaging hub for AI agents (41★, live at sshmail.dev), and a terminal tarot reader with local-LLM readings (30★). Also building aitherLang, a live-coded audio language that compiles to native code in milliseconds. Before agents, 5+ years shipping production Node.js/TypeScript backends for exchanges and blockchain companies. Co-founder of JSON Resume (4.2K GitHub stars).",
     "location": {
       "address": "",
       "postalCode": "",
-      "city": "Melbourne",
+      "city": "Cairns",
       "countryCode": "AU",
-      "region": "Victoria"
+      "region": "Queensland"
     },
     "website": "https://rolandnsharp.github.io",
     "profiles": [
@@ -28,16 +28,16 @@
   },
   "work": [
     {
-      "company": "Independent Research",
-      "website": "https://rolandnsharp.github.io/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/",
-      "position": "AI Researcher & Systems Programmer",
+      "company": "Independent",
+      "website": "https://rolandnsharp.github.io",
+      "position": "Agentic Engineer",
       "startDate": "2022-01-01",
-      "summary": "Directing the build of Vidya, a neurosymbolic language model in OCaml with C FFI, using Claude Code as primary implementation partner. The system: a 9.6M parameter GPT-2 transformer with rotary position embeddings, weight tying, KV-cache, BPE tokenization (606 vocab), a Forth interpreter for symbolic constraint at the logit level, and temporal difference learning for adaptive concept associations. My role: architecture decisions, evaluation, steering multi-week AI-assisted development across 10+ source files. Read every line. Ran every test. Decided what to build next. Identified and fixed performance bottlenecks (optimized O(n*m) co-occurrence scan to O(n) indexed lookup). Published technical blog documenting the process and results."
+      "summary": "Designing and shipping open-source tools with Claude Code as the implementation partner: I own the architecture, the evaluation and the decisions; the agent writes most of the code, and I read and test all of it. terminal-oscilloscope (108★): CRT phosphor oscilloscope for the terminal in Nim, 200 KB binary, live audio capture on its own thread. sshmail (41★, 5 forks): encrypted messaging hub over SSH for humans and AI agents, in Go, with SSH-key identity, a TUI served over SSH and a JSON API; deployed at sshmail.dev. tarot (30★): terminal tarot reader in Go with pixel-art cards and readings from a local LLM via Ollama. aitherLang: a language for real-time audio in Nim; patches transpile to C, compile in-process with TCC in milliseconds and hot-reload without losing state, and a background cc -O2 rebuild makes heavy patches up to 5x cheaper. Diagnosed a code-generation bug where nested filter calls corrupted each other's state, fixed it, and pinned it with sample-exact regression tests. Research: Resonance, a neural network built from the damped harmonic oscillator equation, entered in OpenAI's Parameter Golf challenge."
     },
     {
       "company": "Sifchain",
       "website": "https://sifchain.network",
-      "summary": "Built the TypeScript client SDK and public data API for a decentralized cryptocurrency exchange. Expanded SQL knowledge into complex aggregate queries, worked with Ethereum and Cosmos JavaScript APIs, deployed AWS Lambda functions.",
+      "summary": "Built the TypeScript client SDK and public data API for a decentralized exchange. Complex aggregate SQL queries, Ethereum and Cosmos JavaScript APIs, AWS Lambda deployment.",
       "position": "Node.js Developer & Data Engineer",
       "startDate": "2021-04-25",
       "endDate": "2021-11-23"
@@ -52,7 +52,7 @@
     },
     {
       "company": "Everledger",
-      "summary": "Built a zero-knowledge query service for a consortium blockchain — the first company to use Hyperledger in production. Homomorphic encryption, private blockchain for immutable audit logs. 15+ Docker containers orchestrated with Docker Compose. Wrote all Golang chaincode. Deployed to IBM infrastructure.",
+      "summary": "Built a zero-knowledge query service for a consortium blockchain — the first company to use Hyperledger in production. Homomorphic encryption, private blockchain for immutable audit logs. 15+ Docker containers orchestrated with Docker Compose.",
       "position": "Systems Engineer",
       "website": "https://everledger.io",
       "startDate": "2017-09-08",
@@ -85,8 +85,8 @@
     {
       "company": "JSON Resume",
       "website": "http://jsonresume.org/",
-      "position": "Co-founder",
-      "summary": "Community-driven open-source initiative to create a JSON-based standard for resumes. Built the resume-cli tool (4.2K GitHub stars) and the registry server."
+      "position": "Co-founder & Original CLI Author",
+      "summary": "Co-founded the open-source initiative to create a JSON-based standard for resumes. Built the original CLI tool and registry server. 4.2K GitHub stars. The standard is still actively maintained and widely used."
     }
   ],
   "education": [
@@ -113,49 +113,64 @@
   ],
   "skills": [
     {
+      "name": "Agentic Engineering",
+      "level": "",
       "keywords": [
         "Claude Code",
-        "AI-directed architecture",
-        "Prompt engineering for code generation",
-        "Multi-session AI project management",
-        "Code review of AI-generated output"
-      ],
-      "level": "",
-      "name": "AI-Assisted Development"
+        "Directing coding agents through multi-week projects",
+        "Specs and tests as guardrails for agent output",
+        "Reviewing and verifying AI-generated code",
+        "Infrastructure for AI agents (sshmail)"
+      ]
     },
     {
+      "name": "Languages",
+      "level": "",
+      "keywords": [
+        "Nim",
+        "Go",
+        "C",
+        "OCaml",
+        "TypeScript",
+        "JavaScript",
+        "Python"
+      ]
+    },
+    {
+      "name": "Systems",
+      "level": "",
+      "keywords": [
+        "Compilers and code generation (C via TCC)",
+        "Real-time audio",
+        "CUDA / cuBLAS",
+        "SSH servers and TUIs",
+        "Linux"
+      ]
+    },
+    {
+      "name": "AI / ML",
+      "level": "",
       "keywords": [
         "Transformer architecture",
-        "BPE tokenization",
+        "Physics-grounded neural architectures",
+        "Signal processing",
+        "Reinforcement learning",
         "Neurosymbolic systems",
-        "Reinforcement learning (TD learning)",
-        "Constrained decoding"
-      ],
-      "level": "",
-      "name": "AI / ML"
+        "PyTorch"
+      ]
     },
     {
+      "name": "Backend",
+      "level": "",
       "keywords": [
-        "OCaml",
-        "C FFI",
-        "TypeScript",
         "Node.js",
-        "Golang"
-      ],
-      "level": "",
-      "name": "Languages"
-    },
-    {
-      "keywords": [
+        "REST and GraphQL APIs",
         "PostgreSQL",
-        "MongoDB",
+        "SQLite",
         "Redis",
         "Docker",
-        "AWS Lambda",
-        "Linux"
-      ],
-      "level": "",
-      "name": "Infrastructure"
+        "AWS Lambda"
+      ]
     }
   ],
   "languages": [
@@ -166,23 +181,48 @@
   ],
   "projects": [
     {
+      "name": "terminal-oscilloscope",
+      "url": "https://github.com/rolandnsharp/terminal-oscilloscope",
+      "description": "Terminal oscilloscope with CRT phosphor physics in Nim: Y-T and X-Y modes, beam bloom and decay trails, braille rendering at 4x resolution, live audio capture via dlopen'd libav. Zero dependencies, 200 KB binary. 108 GitHub stars."
+    },
+    {
+      "name": "sshmail",
+      "description": "Encrypted messaging hub over SSH for humans and AI agents. SSH-key identity, Discord-like TUI served over SSH, JSON API, E2E encryption via age. Architected by me, implemented in Go with Claude Code. Live at sshmail.dev. 41 GitHub stars, 5 forks.",
+      "url": "https://github.com/rolandnsharp/sshmail"
+    },
+    {
+      "name": "Terminal Tarot",
+      "url": "https://github.com/rolandnsharp/tarot",
+      "description": "Terminal tarot reader in Go with pixel-art cards, shuffle animations and readings from a small local LLM via Ollama; also served over SSH. 30 GitHub stars."
+    },
+    {
+      "name": "aitherLang",
+      "url": "https://github.com/rolandnsharp/aitherLang",
+      "description": "Live-coded audio language in Nim: one function, evaluated 48,000 times a second. Patches compile to native code in milliseconds via TCC and hot-reload without losing state; a background cc -O2 rebuild makes heavy patches up to 5x cheaper. Built with Claude Code on a Pinebook Pro."
+    },
+    {
+      "name": "Resonance",
+      "description": "Neural network built from the damped harmonic oscillator equation: raw signals drive a learnable oscillator bank, no tokenizer. Entered in OpenAI's Parameter Golf challenge as a novel architecture: 1.34 bits per byte in 11.2 MB, community-reviewed as compliant, built on $20 of compute.",
+      "url": "https://github.com/openai/parameter-golf/pull/1061"
+    },
+    {
       "name": "Vidya",
-      "description": "9.6M parameter neurosymbolic language model in OCaml. GPT-2 transformer with Forth-based symbolic constraints, BPE tokenizer, BLAS-accelerated matrix ops, and TD-learned concept associations. Built with Claude Code as implementation partner.",
+      "description": "Neurosymbolic language model (transformer + Forth constraints), taken from OCaml to a 103M-parameter Nim/CUDA build on one RTX 3060.",
       "url": "https://rolandnsharp.github.io/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/"
     },
     {
-      "name": "Aither",
-      "description": "Live-coding audio synthesis environment in JavaScript.",
-      "url": "https://rolandnsharp.github.io/posts/aither-live-coding-audio-synthesis-in-javascript/"
+      "name": "JSON Resume",
+      "description": "Open-source resume standard. Co-founded the project, built the original CLI tool and registry server. 4.2K GitHub stars.",
+      "url": "https://jsonresume.org"
     },
     {
-      "name": "JSON Resume",
-      "description": "Open-source resume standard with 4.2K GitHub stars. Built the CLI tool and registry server.",
-      "url": "https://jsonresume.org"
+      "name": "Blog",
+      "description": "Technical writing on agentic engineering, AI research and systems programming: 30+ posts on building transformers, reinforcement learning, audio languages and agent infrastructure with coding agents.",
+      "url": "https://rolandnsharp.github.io"
     }
   ],
   "meta": {
-    "theme": "even"
+    "theme": "claude"
   },
   "references": [
     {

@@ -102,19 +102,10 @@ body.light #theme-switcher {
   filter: grayscale(1) brightness(0.3);
 }
 
-/* ASCII title */
-.site-title-ascii {
-  font-family: 'Ubuntu Mono', monospace;
-  white-space: pre;
-  font-size: 10px;
-  line-height: 1.1;
+/* Site title */
+.site-title {
+  font-size: 1.75rem;
   margin: 1.5rem 0 0.5rem 0;
-  color: var(--fg-bright);
-  overflow-x: auto;
-}
-
-body.light .site-title-ascii {
-  color: var(--fg-bright-light);
 }
 
 /* Site links row */
@@ -373,10 +364,6 @@ body.light footer a {
 
 /* Responsive */
 @media (max-width: 600px) {
-  .site-title-ascii {
-    font-size: 6px;
-  }
-
   .post-list li {
     flex-direction: column;
     gap: 0.15rem;
