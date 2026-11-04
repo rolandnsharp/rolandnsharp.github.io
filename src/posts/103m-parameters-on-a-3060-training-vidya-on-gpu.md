@@ -3,6 +3,7 @@ title: "103M Parameters on a 3060: Training Vidya on GPU"
 date: 2026-03-20
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # 103M Parameters on a 3060: Training Vidya on GPU

@@ -3,6 +3,7 @@ title: "Forgetting is a Feature"
 date: 2026-02-23
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # Forgetting is a Feature

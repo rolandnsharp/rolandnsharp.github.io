@@ -3,6 +3,7 @@ title: "Working with AI is Working with Human Stories"
 date: 2026-02-23
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # Working with AI is Working with Human Stories

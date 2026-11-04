@@ -3,6 +3,7 @@ title: "NimLLM: A Local Language Model You Own"
 date: 2026-03-20
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # NimLLM: A Local Language Model You Own

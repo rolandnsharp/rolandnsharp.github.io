@@ -3,6 +3,7 @@ title: "Rewriting Vidya in JavaScript"
 date: 2026-03-01
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # Rewriting Vidya in JavaScript

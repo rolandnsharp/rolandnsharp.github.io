@@ -3,6 +3,7 @@ title: "A Model for Life"
 date: 2026-03-01
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # A Model for Life

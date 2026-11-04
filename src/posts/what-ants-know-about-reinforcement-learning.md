@@ -3,6 +3,7 @@ title: "What Ants Know About Reinforcement Learning"
 date: 2026-03-02
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # What Ants Know About Reinforcement Learning

@@ -3,6 +3,7 @@ title: "Designing v2: What a Small Transformer Needs in 2026"
 date: 2026-03-01
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # Designing v2: What a Small Transformer Needs in 2026

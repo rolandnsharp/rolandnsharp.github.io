@@ -3,6 +3,7 @@ title: "Six Ways to Teach Mr. Classic with Reinforcement Learning"
 date: 2026-02-28
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # Six Ways to Teach Mr. Classic with Reinforcement Learning

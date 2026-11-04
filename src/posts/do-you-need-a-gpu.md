@@ -3,6 +3,7 @@ title: "Do You Need a GPU?"
 date: 2026-02-24
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # Do You Need a GPU?

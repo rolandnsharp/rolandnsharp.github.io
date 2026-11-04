@@ -3,6 +3,7 @@ title: "SSH Is the Agent Internet"
 date: 2026-03-10
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # SSH Is the Agent Internet

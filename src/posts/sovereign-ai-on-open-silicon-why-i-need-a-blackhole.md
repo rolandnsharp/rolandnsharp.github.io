@@ -3,6 +3,7 @@ title: "Sovereign AI on Open Silicon: Why I Need a Blackhole"
 date: 2026-03-20
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # Sovereign AI on Open Silicon: Why I Need a Blackhole

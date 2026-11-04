@@ -3,6 +3,7 @@ title: "The Forth Machine: A Vision for Symbolic AI on Open Silicon"
 date: 2026-03-02
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # The Forth Machine: A Vision for Symbolic AI on Open Silicon

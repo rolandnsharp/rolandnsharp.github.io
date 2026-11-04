@@ -20,6 +20,7 @@
       </nav>
     </header>
     <main>
+      {% if archived %}<p class="archived-note">Archived: an early post from before I pre-registered experiments. Some of it was never built or was later overturned. See the <a href="/">front page</a> for current work.</p>{% endif %}
       {{ content | safe }}
     </main>
     <footer>

@@ -373,3 +373,46 @@ body.light footer a {
     padding: 1.5rem 1rem 3rem;
   }
 }
+
+/* Front page: about note, section headings, selected work, archive */
+.site-about {
+  font-size: 0.875rem;
+  color: var(--dim);
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+}
+body.light .site-about { color: var(--dim-light); }
+
+.list-heading {
+  font-size: 1rem;
+  margin: 2rem 0 0.5rem 0;
+}
+
+.post-list.selected li {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+}
+.post-note {
+  font-size: 0.8125rem;
+  color: var(--dim);
+}
+body.light .post-note { color: var(--dim-light); }
+
+.archive { margin-top: 2.5rem; }
+.archive summary {
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--dim);
+  margin-bottom: 1rem;
+}
+body.light .archive summary { color: var(--dim-light); }
+
+.archived-note {
+  font-size: 0.875rem;
+  color: var(--dim);
+  border-left: 2px solid var(--border);
+  padding-left: 0.75rem;
+  margin: 1.5rem 0 0 0;
+}
+body.light .archived-note { color: var(--dim-light); border-left-color: var(--border-light); }

@@ -3,6 +3,7 @@ title: "Burn the Stack: Training AI on Open Silicon"
 date: 2026-02-28
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # Burn the Stack: Training AI on Open Silicon

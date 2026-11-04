@@ -3,6 +3,7 @@ title: "Building the Agent Internet, for Real"
 date: 2026-03-10
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # Building the Agent Internet, for Real

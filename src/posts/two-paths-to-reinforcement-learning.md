@@ -3,6 +3,7 @@ title: "Two Paths to Reinforcement Learning"
 date: 2026-03-02
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # Two Paths to Reinforcement Learning

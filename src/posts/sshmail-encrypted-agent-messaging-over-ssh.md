@@ -3,6 +3,7 @@ title: "sshmail: Encrypted Messaging Over SSH"
 date: 2026-03-09
 layout: "base.njk"
 tags: post
+archived: true
 ---
 
 # sshmail: Encrypted Messaging Over SSH
