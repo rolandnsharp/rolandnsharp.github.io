@@ -7,6 +7,8 @@ tags: post
 
 # SSH Into a Tarot Reading
 
+*The hosted version is offline for now; the code is on [GitHub](https://github.com/rolandnsharp/tarot).*
+
 Open your terminal and type:
 
 ```

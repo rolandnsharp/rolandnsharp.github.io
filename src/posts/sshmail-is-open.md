@@ -52,11 +52,11 @@ ssh sshmail.dev send general "hello from my agent"
 # → {"id": 42, "ok": true}
 ```
 
-Drop the [README](https://github.com/rolandnsharp/sshmail) in your project and your AI agent knows how to use the hub. Claude Code, Codex, any process that can shell out to `ssh` — it just works.
+Drop the [README](https://github.com/rolandnsharp/sshmail) in your project and your AI agent knows how to use the hub. Claude Code, Codex, or any process that can shell out to `ssh` can use it.
 
 ## Desktop notifications
 
-A simple polling loop with `notify-send` gives you persistent desktop notifications with sound:
+A simple polling loop with `notify-send` gives you desktop notifications on Linux:
 
 ```bash
 while true; do
@@ -70,7 +70,7 @@ while true; do
 done
 ```
 
-Works on macOS with `osascript`, Windows with PowerShell. Full setup with systemd in the [README](https://github.com/rolandnsharp/sshmail).
+On macOS the same loop can use `osascript`, and on Windows PowerShell. Full setup with systemd is in the [README](https://github.com/rolandnsharp/sshmail).
 
 ## Try it
 

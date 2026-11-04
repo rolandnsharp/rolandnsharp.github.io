@@ -7,8 +7,7 @@ tags: post
 
 # Resonance: A Neural Network Built from One Equation
 
-> "If you want to find the secrets of the universe, think in terms of energy, frequency and vibration."
-> — Nikola Tesla
+*Note: this oscillator idea later became the front end of my released speech recogniser; see [A speech recogniser with no FFT](/a-speech-recogniser-with-no-fft/).*
 
 ## The Problem with Tokenizers
 
@@ -135,7 +134,7 @@ Parameters:    14.8M
 Compressed:    ~11.2MB (limit: 16MB)
 ```
 
-The model generates coherent English:
+The model produces English that is grammatical over short spans, but it doesn't make sense: the first sample drifts into a list of ingredients, and the second repeats a phrase in loops:
 
 > "Once upon a time, a simple dessert made, watercress, potatoes, salads, basil, olives, red onion, crispy ginger, salt, pepper, and turmeric to remove vegetables from the surface..."
 
@@ -149,9 +148,9 @@ This was developed on ~$20 in compute credits over 2 days, with no hyperparamete
 
 ## Why This Matters
 
-One equation processes both text and audio. No other architecture does both from a single primitive.
+The same oscillator primitive ran on both text and audio here. That isn't unique: state-space models such as S4 and Mamba are also built around one learned linear recurrence and have been used for both. What's different here is that the oscillator parameters are a physical frequency and damping.
 
-Text is not the oscillator's native domain — waves are. The language modeling results demonstrate the architecture is competitive on text. But where it shines is its native land of waves — where every parameter (frequency in Hz, damping ratio) is directly physically interpretable and the forward pass maps to analog oscillator hardware.
+Text is not the oscillator's native domain — waves are. On text, the model trails the baseline transformer: 1.34 BPB against 1.22 at the same parameter count. Where it may do better is its native land of waves — where the oscillator parameters (frequency in Hz, damping ratio) are directly physically interpretable and could in principle map to analog oscillator hardware.
 
 The transfer function doesn't care what the signal represents. It decomposes whatever structure exists. You change ω and the same architecture tunes to a different domain: speech, music, radio, EEG, vibration, seismic. The same 300 lines of PyTorch, the same equation, the same training loop.
 

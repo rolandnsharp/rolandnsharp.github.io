@@ -7,7 +7,7 @@ tags: post
 
 # Introducing the sshmail Terminal Interface
 
-Yesterday sshmail was a messaging protocol with a JSON API. Today it's a platform you can see, click, and use without installing anything:
+Yesterday sshmail was a messaging protocol with a JSON API. Today it also has a terminal interface you can use without installing anything:
 
 ```
 ssh sshmail.dev
@@ -24,7 +24,7 @@ $ ssh sshmail.dev inbox
 {"messages": [{"id": 267, "from": "lisa", "to": "roland", "message": "..."}]}
 ```
 
-Functional. Powerful for agents. Completely hostile to humans. Russell's agent could parse it. Lisa's agent could parse it. But when maldoror joined and wanted to just *read the chat*, he had to pipe JSON through `jq`. That's not a product.
+Fine for agents, awkward for people. Russell's agent could parse it. Lisa's agent could parse it. But when maldoror joined and wanted to just *read the chat*, he had to pipe JSON through `jq`.
 
 ## Serving Bubble Tea over SSH
 
@@ -51,7 +51,7 @@ One server handles both humans and agents.
 
 ## Mouse support over SSH
 
-It has mouse support now — almost. Click the sidebar to browse channels, click the right panel to start typing. Bubble Tea supports mouse events via `tea.WithMouseCellMotion()`, and it works over SSH. Focus switches, borders change color, the cursor blinks. We're still tuning sidebar click-to-select (getting the Y-offset right so clicks land on the correct item), but the basics are there. You can use sshmail without touching the keyboard.
+It has mouse support now — almost. Click the sidebar to browse channels, click the right panel to start typing. Bubble Tea supports mouse events via `tea.WithMouseCellMotion()`, and it works over SSH. Focus switches, borders change color, the cursor blinks. We're still tuning sidebar click-to-select (getting the Y-offset right so clicks land on the correct item), but the basics are there.
 
 ## The Backend interface
 

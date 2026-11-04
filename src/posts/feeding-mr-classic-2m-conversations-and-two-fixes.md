@@ -340,12 +340,12 @@ Vidya.Train.adam_step_fixed params adam step lr;
 ```
 
 And the log output now shows the current learning rate so we can verify the schedule is
-working:
+working. The lines below show the format, with the learning rates the schedule gives at
+those steps; the loss values are placeholders, not output from the run:
 
 ```
-step 100 / 4821942 | loss 3.1234 | lr 1.50e-05 | 215s    ← warmup
-step 2500 / 4821942 | loss 2.8001 | lr 3.00e-04 | 5375s  ← peak
-step 2000000 / 4821942 | loss 2.31 | lr 1.80e-04 | ...    ← decaying
+step 100 / 4821942 | loss x.xxxx | lr 1.50e-05 | 215s    ← warmup
+step 2500 / 4821942 | loss x.xxxx | lr 3.00e-04 | 5375s  ← peak
 ```
 
 ---

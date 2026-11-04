@@ -7,7 +7,11 @@ tags: post
 
 # Aither: Live Coding Audio Synthesis in JavaScript
 
-**[Try Aither in your browser](https://rolandnsharp.github.io/aither)**
+*Note: this JavaScript version has been superseded by
+[aitherLang](https://github.com/rolandnsharp/aitherLang). The post and the
+browser demo below describe the earlier JS version.*
+
+**[Try Aither in your browser](https://rolandsharp.com/aither/)**
 
 Every sound in Aither is a function. A sine wave at 440 Hz:
 

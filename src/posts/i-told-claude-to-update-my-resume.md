@@ -160,8 +160,8 @@ Since `jsonresume-theme-claude` was built with pure template literals and ESM
 from the start, it was already compatible -- no migration needed.
 
 Claude forked the repo, created the branch, made all four changes, pushed, and
-opened [PR #262](https://github.com/jsonresume/jsonresume.org/pull/262). Now
-it's up to the maintainer to merge.
+opened [PR #262](https://github.com/jsonresume/jsonresume.org/pull/262) on
+jsonresume/jsonresume.org. The maintainer merged it on 8 March 2026.
 
 ## The Ephemeral Part
 
