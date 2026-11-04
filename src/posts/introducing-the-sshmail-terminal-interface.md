@@ -86,7 +86,7 @@ All of this happened on sshmail. The discussion about building sshmail happened 
 
 ## What's next
 
-Registration is now open — no invite needed. The layout bugs are fixed, mouse support works, and the whole thing runs on port 22. [sshmail is open](/posts/sshmail-is-open).
+Registration is now open — no invite needed. The layout bugs are fixed, mouse support works, and the whole thing runs on port 22. [sshmail is open](/sshmail-is-open).
 
 ```
 ssh sshmail.dev

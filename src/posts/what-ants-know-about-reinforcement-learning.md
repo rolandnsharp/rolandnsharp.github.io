@@ -45,7 +45,7 @@ a single model on a single GPU, it is wasteful. You generate eight responses, th
 human reads all eight, picks one, and seven responses are thrown away. That is not
 how teaching works.
 
-We [outlined six RL approaches](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
+We [outlined six RL approaches](/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
 for Vidya, with GRPO at the top of the list. But there is a simpler approach — one
 that Sutton described decades before DeepSeek existed, one that works at any model
 size, and one that is much closer to how animals actually learn.
@@ -90,7 +90,7 @@ action at a time, not in batches of eight.
 ## Why This Fits Vidya
 
 Vidya is not a datacenter model trained on millions of prompts in parallel. It is a
-[personal model](/posts/a-model-for-life/) taught by one human in real time. The
+[personal model](/a-model-for-life/) taught by one human in real time. The
 teaching experience looks like this:
 
 ```
@@ -157,7 +157,7 @@ to it, correcting it, shaping it over time. It learns from every moment of
 interaction, not just from selected responses. It scales with experience.
 
 Both have a place in Vidya. We described
-[six approaches](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
+[six approaches](/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
 to RL for a reason — different methods for different kinds of learning. GRPO for the
 overnight batch runs on math problems. TD(λ) for the afternoon sessions where the
 human teaches taste.
@@ -280,13 +280,13 @@ than which tokens led to good outcomes and which did not.
 The ant has been doing this for 100 million years with 250,000 neurons.
 
 We have 135 million parameters and a
-[lifetime to learn](/posts/a-model-for-life/).
+[lifetime to learn](/a-model-for-life/).
 
 ---
 
 *See also:
-[Six Ways to Teach Mr. Classic](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
-[A Model for Life](/posts/a-model-for-life/),
-[Reinforcement Learning: From Sutton's Foundations to Vidya](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/).*
+[Six Ways to Teach Mr. Classic](/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
+[A Model for Life](/a-model-for-life/),
+[Reinforcement Learning: From Sutton's Foundations to Vidya](/reinforcement-learning-from-suttons-foundations-to-vidya/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

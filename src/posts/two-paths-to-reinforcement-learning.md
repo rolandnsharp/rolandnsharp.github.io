@@ -8,7 +8,7 @@ tags: post
 # Two Paths to Reinforcement Learning
 
 We have been going back and forth on how to build RL into Vidya. Not which algorithm
-— we [covered six of those](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
+— we [covered six of those](/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
 already. The question is deeper: **how does the RL code relate to the neural network
 code?**
 
@@ -142,7 +142,7 @@ This path is slow to start and easy to grow.
 
 ## The Contradiction
 
-In the [last post](/posts/what-ants-know-about-reinforcement-learning/), we argued that
+In the [last post](/what-ants-know-about-reinforcement-learning/), we argued that
 TD(λ) with eligibility traces is the natural algorithm for Vidya — one action at a time,
 temporal credit assignment, continuous learning from a single stream of experience.
 
@@ -298,8 +298,8 @@ network stays clean. The learning stays simple.
 ---
 
 *See also:
-[What Ants Know About Reinforcement Learning](/posts/what-ants-know-about-reinforcement-learning/),
-[Six Ways to Teach Mr. Classic](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
-[A Model for Life](/posts/a-model-for-life/).*
+[What Ants Know About Reinforcement Learning](/what-ants-know-about-reinforcement-learning/),
+[Six Ways to Teach Mr. Classic](/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
+[A Model for Life](/a-model-for-life/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

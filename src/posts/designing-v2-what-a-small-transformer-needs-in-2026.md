@@ -7,10 +7,10 @@ tags: post
 
 # Designing v2: What a Small Transformer Needs in 2026
 
-We have been [building a language model from scratch](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/)
+We have been [building a language model from scratch](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/)
 for six weeks. The current model is 49 million parameters, 12 layers deep, with a
 256-token context window and a 2,188-token vocabulary. It trains on CPU. It generates
-coherent English. It [learns from human feedback](/posts/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/).
+coherent English. It [learns from human feedback](/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/).
 It works.
 
 But the field has moved. In the time since GPT-2 defined what a small transformer looks
@@ -19,7 +19,7 @@ million parameters that would embarrass GPT-2 at ten times the size. They did it
 five architectural changes and a different philosophy about training data.
 
 This post is the technical blueprint for v2 — the
-[model for life](/posts/a-model-for-life/). What needs to change, what stays the same,
+[model for life](/a-model-for-life/). What needs to change, what stays the same,
 and why.
 
 ---
@@ -174,7 +174,7 @@ layers at 576 dimensions.
 Our current model has 12 layers. That was appropriate for 10M parameters. At 135M, it
 should be 30.
 
-We [wrote previously](/posts/a-model-for-life/) about starting at 24 layers. The
+We [wrote previously](/a-model-for-life/) about starting at 24 layers. The
 research says 30. The HuggingFace optimal architecture study tested configurations
 systematically and found 30-32 layers optimal for the 70M-200M range. We will start
 at 30.
@@ -185,7 +185,7 @@ conversations, and reflect on feedback, depth is the dimension that matters.
 
 We cannot add depth to a trained model without disrupting the learned computation
 chain. Width expansion works — we
-[proved that](/posts/growing-mr-classic-from-10m-to-50m/). Depth expansion is harder.
+[proved that](/growing-mr-classic-from-10m-to-50m/). Depth expansion is harder.
 This means v2 starts at 30 layers and stays there. The depth is permanent. Growth
 happens by widening.
 
@@ -226,7 +226,7 @@ We will target 32,000 tokens. This is large enough for efficient tokenization of
 English and leaves room for other languages without dominating the parameter budget.
 The tokenizer will be trained on a representative corpus — conversation, the owner's
 domain, any languages they might need — before the
-[irreversible line](/posts/a-model-for-life/).
+[irreversible line](/a-model-for-life/).
 
 ---
 
@@ -249,7 +249,7 @@ distances. We will use theta=100,000 for v2.
 
 At 2,048 tokens, the model can see about 10-15 exchanges of conversation history. At
 8,192, it can see an entire chapter of a book. For a
-[model that learns from reading](/posts/a-model-for-life/), context length determines
+[model that learns from reading](/a-model-for-life/), context length determines
 how much the model can understand about what it reads.
 
 ---
@@ -281,7 +281,7 @@ embedding strategy. Same bias-free design. But deeper, with a modern FFN, effici
 attention, a real vocabulary, and a context window that can hold a conversation.
 
 This is the starting configuration. The
-[growth path](/posts/a-model-for-life/) widens from here:
+[growth path](/a-model-for-life/) widens from here:
 
 ```
 v2.0:  30 layers, 576 dim    (~135M params)   <- start here
@@ -352,7 +352,7 @@ and knowledge structure.
 **RL is the differentiator.** No other small model at this scale has interactive
 human-in-the-loop reinforcement learning. SmolLM2 is trained once and frozen.
 MobileLLM is trained once and frozen. Our model
-[keeps learning](/posts/a-model-for-life/) — from books, from conversation, from its
+[keeps learning](/a-model-for-life/) — from books, from conversation, from its
 owner's corrections. The pre-training data gives it a foundation. The RL makes it
 personal. A smaller foundation with years of targeted RL may outperform a larger
 foundation with none.
@@ -379,7 +379,7 @@ All five changes break checkpoint compatibility. This is expected — v2 is a ne
 trained from scratch. The current v1 weights are an experiment. The lessons from v1 —
 about training schedules, data pipelines, RL infrastructure, weight expansion — carry
 forward. The weights do not. We have not yet crossed the
-[irreversible line](/posts/a-model-for-life/).
+[irreversible line](/a-model-for-life/).
 
 The order of implementation:
 
@@ -387,7 +387,7 @@ The order of implementation:
 2. **Depth + vocabulary + context** — configuration changes
 3. **Retrain tokenizer** on a broad corpus at 32K tokens
 4. **Train from scratch** on GPU (RTX 3060 first, then
-   [Tenstorrent Blackhole](/posts/burn-the-stack-llms-without-nvidia/))
+   [Tenstorrent Blackhole](/burn-the-stack-llms-without-nvidia/))
 5. **Validate with RL** — test that interactive teaching still works at 135M
 6. **Cross the line** — begin the irreversible phase of personal RL teaching
 
@@ -402,9 +402,9 @@ model we learned on.
 v2 is the model we keep. Same OCaml framework. Same philosophy — small, dense, open,
 personal. But built to the standard of 2026, not 2020. Deeper. Wider vocabulary.
 Longer context. Modern attention. Modern activation. Designed from day one to be
-[widened without losing knowledge](/posts/a-model-for-life/), taught through
-[reinforcement learning](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
-and run on [open silicon](/posts/burn-the-stack-llms-without-nvidia/).
+[widened without losing knowledge](/a-model-for-life/), taught through
+[reinforcement learning](/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
+and run on [open silicon](/burn-the-stack-llms-without-nvidia/).
 
 The architecture is not exotic. It is SmolLM2 and MobileLLM's proven configuration,
 implemented from scratch in OCaml, with no dependencies that could disappear. The
@@ -415,9 +415,9 @@ That starts with getting the foundation right.
 
 ---
 
-*See also: [A Model for Life](/posts/a-model-for-life/),
-[Six Ways to Teach Mr. Classic](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
-[Burn the Stack](/posts/burn-the-stack-llms-without-nvidia/),
-[Feeding Mr. Classic](/posts/feeding-mr-classic-2m-conversations-and-two-fixes/).*
+*See also: [A Model for Life](/a-model-for-life/),
+[Six Ways to Teach Mr. Classic](/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
+[Burn the Stack](/burn-the-stack-llms-without-nvidia/),
+[Feeding Mr. Classic](/feeding-mr-classic-2m-conversations-and-two-fixes/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

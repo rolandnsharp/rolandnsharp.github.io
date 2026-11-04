@@ -7,12 +7,12 @@ tags: post
 
 # Why Reinforcement Learning Broke at 50M Parameters
 
-In the [first RL post](/posts/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/),
+In the [first RL post](/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/),
 we described a simple method: generate five responses, human picks the best one,
 update the weights. At 10 million parameters, it worked. The model learned from
 the human. Responses got better. You could feel it.
 
-Then we [grew Mr . Classic to 49M parameters](/posts/growing-mr-classic-from-10m-to-50m/).
+Then we [grew Mr . Classic to 49M parameters](/growing-mr-classic-from-10m-to-50m/).
 The same RL method stopped working. Not "worked slowly." Stopped. Every attempt
 to teach the model online made it worse. We tried eight different approaches over
 two days. None of them worked.
@@ -327,7 +327,7 @@ taking one human selection and doing a gradient step.
 that can rate thousands of responses per minute. This converts batch-size-1
 human judgment into batch-size-256 automated judgment.
 
-All of these are [documented and planned](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/).
+All of these are [documented and planned](/six-ways-to-teach-mr-classic-with-reinforcement-learning/).
 They require more engineering. Some require a GPU for speed. None are impossible.
 
 The lesson isn't "RL doesn't work on small models." It's "single-example RL
@@ -339,8 +339,8 @@ the RL.
 *Vidya is written from scratch in OCaml. The source is at
 [github.com/rolandnsharp/vidya](https://github.com/rolandnsharp/vidya).
 See also:
-[Mr . Classic](/posts/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/),
-[Six Ways to Teach Mr . Classic](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
-[Growing Mr . Classic from 10M to 50M](/posts/growing-mr-classic-from-10m-to-50m/).*
+[Mr . Classic](/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/),
+[Six Ways to Teach Mr . Classic](/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
+[Growing Mr . Classic from 10M to 50M](/growing-mr-classic-from-10m-to-50m/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

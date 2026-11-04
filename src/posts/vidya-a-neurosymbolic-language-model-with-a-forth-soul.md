@@ -117,7 +117,7 @@ gradient descent, one extracted through counting and co-occurrence.
 ## Why Forth
 
 For the full case for Forth as a computing substrate, see
-[Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/).
+[Forth9](/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/).
 Here's why it matters specifically for neurosymbolic generation.
 
 ### Verification in microseconds
@@ -183,7 +183,7 @@ meaningful?). Reinforcement learning could provide this missing signal.
 For the full RL roadmap — average-reward formulation, Dyna-style planning
 with the Forth knowledge layer, TD-learned concept associations, and six
 concrete approaches — see
-[Reinforcement Learning: From Sutton's Foundations to Vidya](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/).
+[Reinforcement Learning: From Sutton's Foundations to Vidya](/reinforcement-learning-from-suttons-foundations-to-vidya/).
 
 ### Growing Lisp Features Into Forth
 

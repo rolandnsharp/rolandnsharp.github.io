@@ -166,7 +166,7 @@ No PyTorch. No Python. No NVIDIA proprietary frameworks beyond cuBLAS. The
 kernels are ours — every line readable, every operation modifiable. Nim
 compiles to C, so the CUDA interop is native. When we swap the RTX 3060 for
 a Tenstorrent
-[Blackhole](/posts/sovereign-ai-on-open-silicon-why-i-need-a-blackhole/),
+[Blackhole](/sovereign-ai-on-open-silicon-why-i-need-a-blackhole/),
 the change is one file — replace cuBLAS calls with TT-NN calls.
 
 The rest of the stack doesn't move.
@@ -217,7 +217,7 @@ different memory mechanism, you swap out the gradient masking strategy.
 
 Portable across hardware. Nim compiles to C. Today it calls cuBLAS on
 a 3060. Tomorrow it calls TT-NN on a
-[Blackhole](/posts/sovereign-ai-on-open-silicon-why-i-need-a-blackhole/).
+[Blackhole](/sovereign-ai-on-open-silicon-why-i-need-a-blackhole/).
 The model definition doesn't change. You swap one file and point at
 different silicon.
 
@@ -247,9 +247,9 @@ The model is training. The loss is dropping. We'll know soon.
 ---
 
 *See also:
-[Sovereign AI on Open Silicon](/posts/sovereign-ai-on-open-silicon-why-i-need-a-blackhole/),
-[Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
-[Burn the Stack](/posts/burn-the-stack-llms-without-nvidia/),
-[Six Ways to Teach Mr. Classic](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/).*
+[Sovereign AI on Open Silicon](/sovereign-ai-on-open-silicon-why-i-need-a-blackhole/),
+[Vidya](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
+[Burn the Stack](/burn-the-stack-llms-without-nvidia/),
+[Six Ways to Teach Mr. Classic](/six-ways-to-teach-mr-classic-with-reinforcement-learning/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

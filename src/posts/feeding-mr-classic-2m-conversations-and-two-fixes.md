@@ -7,7 +7,7 @@ tags: post
 
 # Feeding Mr. Classic: 2.4 Million Conversations and Two Training Fixes
 
-In the [last post](/posts/growing-mr-classic-from-10m-to-50m/), we grew Mr. Classic from
+In the [last post](/growing-mr-classic-from-10m-to-50m/), we grew Mr. Classic from
 10 million to 49 million parameters by widening his weight matrices. Bigger brain, same
 knowledge. The new dimensions were full of noise and needed training to become useful.
 

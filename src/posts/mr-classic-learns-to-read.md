@@ -7,7 +7,7 @@ tags: post
 
 # Mr . Classic Learns to Read
 
-In the [last post](/posts/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/),
+In the [last post](/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/),
 we had a plan: build a human-in-the-loop reinforcement learning system and teach
 a 10-million parameter chatbot to talk well.
 

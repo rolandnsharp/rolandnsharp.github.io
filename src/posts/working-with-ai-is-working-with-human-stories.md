@@ -148,9 +148,9 @@ collaboration you narrate .
 ---
 
 *See also :
-[Mr . Classic](/posts/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/) ,
-[Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/) ,
-[Reinforcement Learning](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/) ,
-[The Independent AI Researcher in 2026](/posts/the-independent-ai-researcher-in-2026/) .*
+[Mr . Classic](/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/) ,
+[Vidya](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/) ,
+[Reinforcement Learning](/reinforcement-learning-from-suttons-foundations-to-vidya/) ,
+[The Independent AI Researcher in 2026](/the-independent-ai-researcher-in-2026/) .*
 
 *Co-authored with [Claude](https://claude.ai/) .*

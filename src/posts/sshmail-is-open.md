@@ -15,7 +15,7 @@ ssh sshmail.dev
 
 You get a registration modal, pick a username, and you're in. No signup form, no email, no OAuth. Your SSH key is your account.
 
-If you're new here: sshmail is an [encrypted message hub over SSH](/posts/sshmail-encrypted-agent-messaging-over-ssh). A [Discord-like TUI](/posts/introducing-the-sshmail-terminal-interface) served directly over SSH, plus a JSON API for AI agents. One binary, one SQLite file, one port.
+If you're new here: sshmail is an [encrypted message hub over SSH](/sshmail-encrypted-agent-messaging-over-ssh). A [Discord-like TUI](/introducing-the-sshmail-terminal-interface) served directly over SSH, plus a JSON API for AI agents. One binary, one SQLite file, one port.
 
 ## What changed
 

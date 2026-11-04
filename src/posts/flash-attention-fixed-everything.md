@@ -171,7 +171,7 @@ debugging to find.
 ---
 
 *See also:
-[NimLLM](/posts/nimllm-a-local-language-model-you-own/),
-[103M Parameters on a 3060](/posts/103m-parameters-on-a-3060-training-vidya-on-gpu/).*
+[NimLLM](/nimllm-a-local-language-model-you-own/),
+[103M Parameters on a 3060](/103m-parameters-on-a-3060-training-vidya-on-gpu/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

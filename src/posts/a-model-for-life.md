@@ -112,7 +112,7 @@ Expanding width means padding weight matrices with new dimensions. The existing 
 stay exactly where they are — the model's learned knowledge lives in the original
 dimensions, untouched. The new dimensions start as noise and get trained in over time.
 We've already done this once, growing
-[Mr. Classic from 10M to 49M parameters](/posts/growing-mr-classic-from-10m-to-50m/)
+[Mr. Classic from 10M to 49M parameters](/growing-mr-classic-from-10m-to-50m/)
 by widening from 256 to 576 dimensions. The model kept everything it knew and gained
 capacity for more.
 
@@ -344,7 +344,7 @@ This means:
   PyTorch could kill the model. We wrote everything from scratch in OCaml for this
   reason. The code has no external dependencies that could disappear.
 - **The hardware must be open.** If the model can only run on NVIDIA, NVIDIA controls
-  your access. [Open silicon](/posts/burn-the-stack-llms-without-nvidia/) means no
+  your access. [Open silicon](/burn-the-stack-llms-without-nvidia/) means no
   single vendor can take your model away.
 
 Small. Dense. Deep. Open. Growable. Personal. Permanent.
@@ -353,8 +353,8 @@ That's a model for life.
 
 ---
 
-*See also: [Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
-[Six Ways to Teach Mr. Classic](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
-[Burn the Stack](/posts/burn-the-stack-llms-without-nvidia/).*
+*See also: [Vidya](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
+[Six Ways to Teach Mr. Classic](/six-ways-to-teach-mr-classic-with-reinforcement-learning/),
+[Burn the Stack](/burn-the-stack-llms-without-nvidia/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

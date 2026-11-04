@@ -23,7 +23,7 @@ language IS the intelligence.
 ## The Hardware
 
 A desktop with an AMD CPU and one or more
-[Tenstorrent Blackhole](/posts/burn-the-stack-llms-without-nvidia/) cards. The AMD
+[Tenstorrent Blackhole](/burn-the-stack-llms-without-nvidia/) cards. The AMD
 runs the host Forth — your operating system, your REPL, your symbolic reasoning. The
 Blackhole cards run tensor Forth — matrix multiplies, embeddings, attention, all the
 numerical heavy lifting.
@@ -959,8 +959,8 @@ simplest possible computing system might be the right foundation for intelligenc
 ---
 
 *See also:
-[Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/),
-[Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
-[Burn the Stack](/posts/burn-the-stack-llms-without-nvidia/).*
+[Forth9](/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/),
+[Vidya](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
+[Burn the Stack](/burn-the-stack-llms-without-nvidia/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

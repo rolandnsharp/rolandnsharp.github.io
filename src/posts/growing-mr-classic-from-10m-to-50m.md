@@ -8,7 +8,7 @@ draft: false
 
 # Growing Mr . Classic from 10M to 50M Parameters
 
-In the [last post](/posts/mr-classic-learns-to-read/), we hit a wall. Mr . Classic
+In the [last post](/mr-classic-learns-to-read/), we hit a wall. Mr . Classic
 at 10 million parameters could hold about three things in his head: his name, his
 love of smoking, and basic greetings. Ask him anything else and the answers fell
 apart. We tried books, RL, experience replay. The model was full.

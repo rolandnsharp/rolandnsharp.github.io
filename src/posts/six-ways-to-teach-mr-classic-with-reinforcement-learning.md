@@ -7,7 +7,7 @@ tags: post
 
 # Six Ways to Teach Mr. Classic with Reinforcement Learning
 
-We've been [teaching Mr. Classic with human-in-the-loop RL](/posts/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/) —
+We've been [teaching Mr. Classic with human-in-the-loop RL](/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/) —
 generate five responses, pick the best one, update the weights. It works. The model
 gets better. And it feels like something — you can feel the model learning from you,
 shifting toward your preferences, becoming more *yours* with every interaction.
@@ -43,7 +43,7 @@ Vidya's current RL is a multi-armed bandit with human feedback:
 5. Repeat
 ```
 
-This is [Sutton's gradient bandit](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/)
+This is [Sutton's gradient bandit](/reinforcement-learning-from-suttons-foundations-to-vidya/)
 applied to language generation. Actions that beat the baseline get reinforced. Actions
 below it get suppressed. The human is the reward function.
 
@@ -322,7 +322,7 @@ actions that contributed to the good outcome. Actions closest to the reward get 
 most credit (high eligibility trace), but earlier enabling actions still get some.
 
 We already have the building blocks —
-[TD learning, eligibility traces, gradient bandits](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/)
+[TD learning, eligibility traces, gradient bandits](/reinforcement-learning-from-suttons-foundations-to-vidya/)
 are all documented in our Sutton reference post. The implementation in OCaml would
 follow the same patterns, just applied to token sequences instead of gridworld states.
 
@@ -408,7 +408,7 @@ The starting point is clear: automated rewards on GSM8K with GRPO. One prompt, e
 completions, one reward function, one update rule. Everything else builds on that
 foundation.
 
-The [RTX 3060](/posts/burn-the-stack-llms-without-nvidia/) arrives next week. Once
+The [RTX 3060](/burn-the-stack-llms-without-nvidia/) arrives next week. Once
 Mr. Classic is training on GPU, generating eight completions per prompt becomes fast
 enough to run GRPO at scale. That's when RL gets serious.
 
@@ -433,14 +433,14 @@ parameters, every weight is already working hard just to predict language.
 Either way, the experiment is worth running. If RL works at 49M, that's a genuinely
 new finding. If it doesn't, we'll know the boundary — and we'll know exactly what to
 try when Mr. Classic grows to 500M on
-[Tenstorrent Blackhole](/posts/burn-the-stack-llms-without-nvidia/).
+[Tenstorrent Blackhole](/burn-the-stack-llms-without-nvidia/).
 
 ---
 
 *This post is a research journal — notes for future implementation, not a report on
 completed work. See also:
-[Mr. Classic](/posts/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/),
-[Reinforcement Learning: From Sutton's Foundations to Vidya](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/),
-[Feeding Mr. Classic](/posts/feeding-mr-classic-2m-conversations-and-two-fixes/).*
+[Mr. Classic](/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/),
+[Reinforcement Learning: From Sutton's Foundations to Vidya](/reinforcement-learning-from-suttons-foundations-to-vidya/),
+[Feeding Mr. Classic](/feeding-mr-classic-2m-conversations-and-two-fixes/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

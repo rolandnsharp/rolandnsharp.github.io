@@ -241,8 +241,8 @@ Your intelligence. Your hardware. Your data. Your model.
 ---
 
 *See also:
-[103M Parameters on a 3060](/posts/103m-parameters-on-a-3060-training-vidya-on-gpu/),
-[Sovereign AI on Open Silicon](/posts/sovereign-ai-on-open-silicon-why-i-need-a-blackhole/),
-[Burn the Stack](/posts/burn-the-stack-llms-without-nvidia/).*
+[103M Parameters on a 3060](/103m-parameters-on-a-3060-training-vidya-on-gpu/),
+[Sovereign AI on Open Silicon](/sovereign-ai-on-open-silicon-why-i-need-a-blackhole/),
+[Burn the Stack](/burn-the-stack-llms-without-nvidia/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

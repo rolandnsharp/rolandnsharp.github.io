@@ -7,7 +7,7 @@ tags: post
 
 # Reinforcement Learning: From Sutton's Foundations to Vidya
 
-[Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/) is
+[Vidya](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/) is
 a neurosymbolic language model: a small transformer constrained by a Forth
 interpreter. The neural model learns what token sequences are likely. The
 symbolic layer enforces what's valid. But neither side evaluates whether

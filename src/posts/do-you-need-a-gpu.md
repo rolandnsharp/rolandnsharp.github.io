@@ -358,8 +358,8 @@ from the first gradient step to the last .
 ---
 
 *See also :
-[Mr . Classic](/posts/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/) ,
-[Forgetting is a Feature](/posts/forgetting-is-a-feature/) ,
-[Reinforcement Learning](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/) .*
+[Mr . Classic](/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/) ,
+[Forgetting is a Feature](/forgetting-is-a-feature/) ,
+[Reinforcement Learning](/reinforcement-learning-from-suttons-foundations-to-vidya/) .*
 
 *Co-authored with [Claude Code](https://claude.ai/).*

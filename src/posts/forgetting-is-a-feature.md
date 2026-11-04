@@ -186,8 +186,8 @@ forgetting , it learns .
 ---
 
 *See also :
-[Working with AI is Working with Human Stories](/posts/working-with-ai-is-working-with-human-stories/) ,
-[Mr . Classic](/posts/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/) ,
-[Reinforcement Learning](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/) .*
+[Working with AI is Working with Human Stories](/working-with-ai-is-working-with-human-stories/) ,
+[Mr . Classic](/mr-classic-teaching-a-10m-parameter-chatbot-with-reinforcement-learning/) ,
+[Reinforcement Learning](/reinforcement-learning-from-suttons-foundations-to-vidya/) .*
 
 *Co-authored with [Claude](https://claude.ai/) .*

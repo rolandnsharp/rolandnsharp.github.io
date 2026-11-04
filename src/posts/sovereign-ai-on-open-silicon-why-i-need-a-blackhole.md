@@ -114,7 +114,7 @@ Ten times more room for memories. We're running the experiment now on the
 inspect and modify the compute graph at runtime.
 
 We've already built the reinforcement learning methods:
-[six different RL approaches](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
+[six different RL approaches](/six-ways-to-teach-mr-classic-with-reinforcement-learning/)
 — reward shaping, curriculum learning, self-play, experience replay.
 Implemented, tested, documented. On a Blackhole, they run on tensor
 hardware in real time.
@@ -159,7 +159,7 @@ in a language most people haven't heard of. From "no GPU code" to "94
 steps/sec on 103M params" in one day, directed by Claude Code.
 
 **I build in public.** Every step is documented. The
-[blog post](/posts/103m-parameters-on-a-3060-training-vidya-on-gpu/)
+[blog post](/103m-parameters-on-a-3060-training-vidya-on-gpu/)
 about today's work went live while the model was still training. The code
 is on [GitHub](https://github.com/rolandnsharp/vidya). You can judge
 whether this is credible.
@@ -271,9 +271,9 @@ them.
 ---
 
 *See also:
-[103M Parameters on a 3060](/posts/103m-parameters-on-a-3060-training-vidya-on-gpu/),
-[Burn the Stack](/posts/burn-the-stack-llms-without-nvidia/),
-[Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
-[Six Ways to Teach Mr. Classic](/posts/six-ways-to-teach-mr-classic-with-reinforcement-learning/).*
+[103M Parameters on a 3060](/103m-parameters-on-a-3060-training-vidya-on-gpu/),
+[Burn the Stack](/burn-the-stack-llms-without-nvidia/),
+[Vidya](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
+[Six Ways to Teach Mr. Classic](/six-ways-to-teach-mr-classic-with-reinforcement-learning/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

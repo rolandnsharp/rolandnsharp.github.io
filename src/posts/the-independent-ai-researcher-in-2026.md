@@ -9,7 +9,7 @@ tags: post
 
 Andrej Karpathy released microGPT.py — a minimal transformer in one
 file. Starting from that reference implementation, we built
-[Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/) —
+[Vidya](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/) —
 a neurosymbolic language model written in OCaml with a Forth interpreter
 that constrains generation at the logit level. It trains on a single CPU
 in 30 minutes. The process: Claude Code wrote most of the implementation,
@@ -142,9 +142,9 @@ plugged in, pushing cycles.
 
 ---
 
-*See also: [Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
-[Reinforcement Learning](/posts/reinforcement-learning-from-suttons-foundations-to-vidya/),
-[Forth9](/posts/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/),
-[Aither](/posts/aither-live-coding-audio-synthesis-in-javascript/).*
+*See also: [Vidya](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
+[Reinforcement Learning](/reinforcement-learning-from-suttons-foundations-to-vidya/),
+[Forth9](/forth9-the-lisp-forth-machine-that-fits-in-your-pocket/),
+[Aither](/aither-live-coding-audio-synthesis-in-javascript/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

@@ -7,7 +7,7 @@ tags: post
 
 # Burn the Stack: Training AI on Open Silicon
 
-We've been [training a language model from scratch](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/)
+We've been [training a language model from scratch](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/)
 in OCaml. No PyTorch, no Python, no frameworks. Hand-rolled autograd, hand-rolled
 transformer, hand-rolled BPE tokenizer. The whole model is one binary that talks to OpenBLAS
 for matrix multiplies and nothing else.
@@ -19,8 +19,8 @@ expect: it made us see how little of the standard AI stack is actually necessary
 
 ## The CUDA Tax
 
-When we [grew Mr. Classic to 49 million parameters](/posts/growing-mr-classic-from-10m-to-50m/)
-and pointed him at [2.4 million conversations](/posts/feeding-mr-classic-2m-conversations-and-two-fixes/),
+When we [grew Mr. Classic to 49 million parameters](/growing-mr-classic-from-10m-to-50m/)
+and pointed him at [2.4 million conversations](/feeding-mr-classic-2m-conversations-and-two-fixes/),
 we hit a wall. Training on CPU takes 60 days per epoch. We needed a GPU.
 
 So we went shopping. Here's what we found:
@@ -288,8 +288,8 @@ Everything else is kindling.
 
 ---
 
-*See also: [Vidya](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
-[Growing Mr. Classic](/posts/growing-mr-classic-from-10m-to-50m/),
-[Feeding Mr. Classic](/posts/feeding-mr-classic-2m-conversations-and-two-fixes/).*
+*See also: [Vidya](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/),
+[Growing Mr. Classic](/growing-mr-classic-from-10m-to-50m/),
+[Feeding Mr. Classic](/feeding-mr-classic-2m-conversations-and-two-fixes/).*
 
 *Co-authored with [Claude](https://claude.ai/).*

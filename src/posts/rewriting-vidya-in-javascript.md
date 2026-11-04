@@ -11,7 +11,7 @@ We are rewriting Vidya in plain JavaScript on Deno.
 
 This is not a decision we made lightly. The OCaml codebase works. The autograd engine
 is correct. The training loop runs. The model learns. We have spent six weeks building
-a [from-scratch transformer framework](/posts/vidya-a-neurosymbolic-language-model-with-a-forth-soul/)
+a [from-scratch transformer framework](/vidya-a-neurosymbolic-language-model-with-a-forth-soul/)
 in OCaml and it does everything we asked of it.
 
 We are rewriting it anyway, because the next phase of this project demands something
@@ -21,7 +21,7 @@ the current codebase cannot give us: fluency.
 
 ## Why Now
 
-The [v2 architecture](/posts/designing-v2-what-a-small-transformer-needs-in-2026/) is
+The [v2 architecture](/designing-v2-what-a-small-transformer-needs-in-2026/) is
 designed. Five changes to the model: SwiGLU activation, Grouped Query Attention, 30
 layers, a 32,000-token vocabulary, and a 2,048-token context window. Every one of these
 touches the forward pass, the backward pass, and the checkpoint format. The v1 model
@@ -32,7 +32,7 @@ fast in. The framework code — autograd, optimizer, tokenizer — carries forwa
 concept but not in syntax. The total rewrite is about 2,000 lines.
 
 This is the last moment before the
-[irreversible line](/posts/a-model-for-life/). Once we start teaching the model with
+[irreversible line](/a-model-for-life/). Once we start teaching the model with
 reinforcement learning, the weights become irreplaceable. Before that line, the code is
 the thing we can afford to change. After it, the weights are the thing we cannot.
 
@@ -133,10 +133,10 @@ Deno is a minimal JavaScript runtime with built-in FFI, a built-in test runner, 
 no configuration files. It runs `.js` files directly. That philosophy — small tools,
 no ceremony, everything built in — matches how we build Vidya.
 
-We are also porting [Aither](/posts/aither-live-coding-audio-synthesis-in-javascript/)
+We are also porting [Aither](/aither-live-coding-audio-synthesis-in-javascript/)
 to Deno for its JACK audio FFI support. One runtime for all our projects means one set
 of patterns, one FFI interface, one test runner. When we eventually port Vidya to
-[Tenstorrent Blackhole](/posts/burn-the-stack-llms-without-nvidia/), the FFI call to
+[Tenstorrent Blackhole](/burn-the-stack-llms-without-nvidia/), the FFI call to
 TT-NN looks exactly like the FFI call to OpenBLAS — `Deno.dlopen` with a different
 library name.
 
@@ -176,7 +176,7 @@ The escape hatch exists. We do not expect to need it.
 ## What We Test This Time
 
 The OCaml codebase has no tests. That was fine for an experiment. It is not fine for a
-model we intend to [keep for life](/posts/a-model-for-life/).
+model we intend to [keep for life](/a-model-for-life/).
 
 The rewrite adds targeted tests for the things that fail silently and expensively. Not
 100% coverage — that would be ceremony for a 3,000-line codebase. Just the tests that
@@ -275,7 +275,7 @@ The rewrite follows the dependency order of the framework:
 
 Each file is written and tested before moving to the next. The autograd engine comes
 first because everything depends on it. The model definition uses the
-[v2 architecture](/posts/designing-v2-what-a-small-transformer-needs-in-2026/) from
+[v2 architecture](/designing-v2-what-a-small-transformer-needs-in-2026/) from
 the start — SwiGLU, GQA, 30 layers, 32K vocabulary, 2,048-token context. There is no
 intermediate step of reimplementing v1 in JavaScript. We go straight to v2.
 
@@ -298,15 +298,15 @@ intermediate step of reimplementing v1 in JavaScript. We go straight to v2.
 - The architecture philosophy. Small, dense, open, growable.
 - The training approach. Book training, human-in-the-loop RL, interactive teaching.
 - The hardware path. OpenBLAS now, TT-NN on Blackhole later.
-- The vision. A [model for life](/posts/a-model-for-life/).
+- The vision. A [model for life](/a-model-for-life/).
 
 The framework is a vehicle. The model is the destination. We are switching vehicles
 before the road gets steep.
 
 ---
 
-*See also: [Designing v2](/posts/designing-v2-what-a-small-transformer-needs-in-2026/),
-[A Model for Life](/posts/a-model-for-life/),
-[Burn the Stack](/posts/burn-the-stack-llms-without-nvidia/).*
+*See also: [Designing v2](/designing-v2-what-a-small-transformer-needs-in-2026/),
+[A Model for Life](/a-model-for-life/),
+[Burn the Stack](/burn-the-stack-llms-without-nvidia/).*
 
 *Co-authored with [Claude](https://claude.ai/).*
