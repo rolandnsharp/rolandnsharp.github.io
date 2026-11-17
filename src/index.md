@@ -18,7 +18,8 @@ layout: "base.njk"
 <h2 class="list-heading">Selected work</h2>
 
 <ul class="post-list selected">
-  <li><a href="/a-speech-recogniser-with-no-fft/">A speech recogniser with no FFT</a><span class="post-note">Streaming speech recognition from learned oscillators: 10.4M parameters, 9.1% WER on LibriSpeech, trained for $7.37, 1.4× faster than sherpa-onnx on a Cortex-A53. <a href="https://huggingface.co/rolandnsharp/oscillator-asr">On Hugging Face.</a></span></li>
+  <li><a href="/a-speech-recogniser-with-no-fft/">A speech recogniser with no FFT</a><span class="post-note">Streaming speech recognition from learned oscillators: 10.4M parameters, 8.7% WER on LibriSpeech test-clean, trained for $7.37, the fastest of six recognisers tested on one Cortex-A53 core. <a href="https://huggingface.co/rolandnsharp/oscillator-asr">On Hugging Face.</a></span></li>
+  <li><a href="/four-ideas-my-experiments-turned-down/">Four ideas my experiments turned down</a><span class="post-note">Six pre-registered experiments after the release: a benchmark that shrank my headline, a free decoder win, and four refuted ideas for about $25.</span></li>
   <li><a href="/holding-a-coding-agent-to-the-scientific-method/">Holding a coding agent to the scientific method</a><span class="post-note">37 pre-registered experiments in twelve days, and the four times a written prediction changed the outcome.</span></li>
   <li><a href="/why-reinforcement-learning-broke-at-50m-parameters/">Why reinforcement learning broke at 50M parameters</a><span class="post-note">Eight attempts at online RL on a small chatbot, and what each one showed.</span></li>
   <li><a href="/i-told-claude-to-update-my-resume/">I told Claude to update my resume</a><span class="post-note">An agent designs a JSON Resume theme, publishes it to npm and opens an upstream PR.</span></li>

@@ -7,6 +7,10 @@ tags: post
 
 # A Speech Recogniser With No FFT: 10M Parameters, One C File, Faster Than Sherpa on a Handheld
 
+*Update, 17 November: a larger benchmark of six recognisers puts the speed lead over sherpa-onnx at
+1.2×, not 1.4×, and a better language model brings test-clean to 8.7%. See
+[Four ideas my experiments turned down](/four-ideas-my-experiments-turned-down/).*
+
 ```
 $ zara-dictate
 STUFFERD INTO YOU HIS BELLY COUNSELED HIM
