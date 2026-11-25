@@ -37,14 +37,3 @@ layout: "base.njk"
 {% endunless %}{% endfor %}
 </ul>
 
-<details class="archive">
-<summary>Archive: early exploration, February–March 2026</summary>
-<p class="site-about">Early plans and experiments from before I pre-registered my work. Some were never built, and some conclusions were later overturned. They're kept as a record.</p>
-<ul class="post-list">
-{% for post in sorted %}{% if post.data.archived %}{% unless post.data.draft %}
-  <li>
-    <a href="{{ post.url }}">{{ post.data.title }}</a> <span class="post-date">{{ post.date | date: "%Y-%m-%d" }}</span>
-  </li>
-{% endunless %}{% endif %}{% endfor %}
-</ul>
-</details>
